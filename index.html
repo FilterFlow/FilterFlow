@@ -1,0 +1,468 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FilterFlow — Simple help for busy small businesses</title>
+<meta name="description" content="FilterFlow helps small local businesses stop missing calls and messages, without needing to know anything technical." />
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --navy: #132C5C;
+    --teal: #12B3A0;
+    --coral: #E74D5A;
+    --paper: #FAF8F4;
+    --paper-alt: #F3F0E9;
+    --ink: #1E2733;
+    --ink-soft: #4B5563;
+    --border: #E4E0D6;
+    --max: 760px;
+    --max-wide: 920px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 18px;
+    line-height: 1.75;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3 {
+    font-family: 'Quicksand', sans-serif;
+    color: var(--navy);
+    margin: 0 0 0.6em 0;
+    line-height: 1.3;
+  }
+
+  p { margin: 0 0 1.1em 0; max-width: 620px; }
+
+  a { color: var(--teal); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  img, video { max-width: 100%; display: block; }
+
+  /* ---------- Layout helpers ---------- */
+
+  .wrap {
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .wrap-wide {
+    max-width: var(--max-wide);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  section {
+    padding: 88px 0;
+  }
+
+  .center { text-align: center; }
+  .center p { margin-left: auto; margin-right: auto; }
+
+  .kicker {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-size: 14px;
+    color: var(--teal);
+    margin-bottom: 14px;
+    display: block;
+  }
+
+  /* ---------- Divider motif: a thin flowing line, echoing the brand ---------- */
+
+  .flow-divider {
+    display: block;
+    width: 100%;
+    height: 28px;
+    margin: 0;
+  }
+
+  /* ---------- Header / Nav ---------- */
+
+  header {
+    padding: 28px 0 0;
+  }
+
+  .nav-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 16px;
+    max-width: var(--max-wide);
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  .wordmark {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: 0.01em;
+  }
+  .wordmark span:first-child { color: var(--navy); }
+  .wordmark span:last-child { color: var(--teal); }
+
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 32px;
+    margin: 0;
+    padding: 0;
+    flex-wrap: wrap;
+  }
+
+  nav a {
+    color: var(--ink);
+    font-weight: 600;
+    font-size: 16px;
+  }
+  nav a:hover { color: var(--teal); text-decoration: none; }
+
+  /* ---------- Hero ---------- */
+
+  .hero {
+    padding-top: 56px;
+    padding-bottom: 70px;
+  }
+
+  .hero .kicker { display: block; text-align: center; }
+
+  .hero h1 {
+    text-align: center;
+    font-size: 40px;
+    max-width: 640px;
+    margin: 0 auto 40px;
+  }
+
+  .video-frame {
+    max-width: var(--max-wide);
+    margin: 0 auto;
+    border: 2px solid var(--navy);
+    border-radius: 6px;
+    overflow: hidden;
+    background: var(--navy);
+  }
+
+  .video-frame video {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: var(--navy);
+    display: block;
+  }
+
+  .video-caption {
+    text-align: center;
+    font-size: 15px;
+    color: var(--ink-soft);
+    margin-top: 18px;
+  }
+
+  /* ---------- How it works ---------- */
+
+  .steps {
+    display: flex;
+    gap: 56px;
+    margin-top: 56px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .step {
+    flex: 1 1 220px;
+    max-width: 260px;
+    text-align: left;
+  }
+
+  .step-num {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--navy);
+    color: #fff;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 19px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+
+  .step h3 {
+    font-size: 20px;
+    margin-bottom: 8px;
+  }
+
+  .step p {
+    font-size: 17px;
+    color: var(--ink-soft);
+    margin: 0;
+  }
+
+  /* ---------- FAQ ---------- */
+
+  .faq-list {
+    margin-top: 44px;
+  }
+
+  details {
+    border-bottom: 1px solid var(--border);
+    padding: 22px 0;
+  }
+
+  details:first-child {
+    border-top: 1px solid var(--border);
+  }
+
+  summary {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 600;
+    font-size: 19px;
+    color: var(--navy);
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  summary::-webkit-details-marker { display: none; }
+
+  summary .plus {
+    font-size: 24px;
+    color: var(--teal);
+    font-weight: 600;
+    flex-shrink: 0;
+    transition: transform 0.2s ease;
+  }
+
+  details[open] summary .plus { transform: rotate(45deg); }
+
+  details p {
+    margin-top: 14px;
+    color: var(--ink-soft);
+    max-width: 640px;
+  }
+
+  /* ---------- Contact ---------- */
+
+  .contact-box {
+    margin-top: 44px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+    align-items: center;
+    text-align: center;
+  }
+
+  .contact-line {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--navy);
+  }
+
+  .contact-line a { color: var(--navy); }
+  .contact-line a:hover { color: var(--teal); }
+
+  .btn {
+    display: inline-block;
+    background: var(--coral);
+    color: #fff;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 600;
+    font-size: 17px;
+    padding: 14px 34px;
+    border-radius: 4px;
+    margin-top: 8px;
+  }
+  .btn:hover {
+    background: #d43e4e;
+    text-decoration: none;
+  }
+
+  .placeholder-note {
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin-top: 6px;
+    font-style: italic;
+  }
+
+  /* ---------- Section background alternation (subtle, flat, no shadow) ---------- */
+
+  .bg-alt { background: var(--paper-alt); }
+
+  /* ---------- Footer ---------- */
+
+  footer {
+    padding: 40px 0 48px;
+    text-align: center;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+
+  /* ---------- Responsive ---------- */
+
+  @media (max-width: 640px) {
+    section { padding: 64px 0; }
+    .hero h1 { font-size: 30px; }
+    .steps { gap: 40px; }
+    body { font-size: 17px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="nav-row">
+    <div class="wordmark"><span>Filter</span><span>Flow</span></div>
+    <nav aria-label="Main">
+      <ul>
+        <li><a href="#how-it-works">How It Works</a></li>
+        <li><a href="#faq">FAQ</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="wrap-wide center">
+    <span class="kicker">Hi, I'm Madden</span>
+    <h1>Never miss a customer's call again.</h1>
+
+    <div class="video-frame">
+      <!--
+        PLACEHOLDER VIDEO — replace src="" below with your real video file
+        (or an embed) once it's ready. User-initiated only: controls are on,
+        autoplay is intentionally left off per the brief.
+      -->
+      <video controls preload="metadata" poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='450' viewBox='0 0 800 450'%3E%3Crect width='800' height='450' fill='%23132C5C'/%3E%3Ccircle cx='400' cy='225' r='46' fill='%23E74D5A'/%3E%3Cpolygon points='386,203 386,247 424,225' fill='white'/%3E%3C/svg%3E">
+        <source src="" type="video/mp4">
+        Your browser doesn't support embedded video — you can still reach us using the contact info below.
+      </video>
+    </div>
+    <p class="video-caption">Press play — it's just me, talking plainly, for about a minute.</p>
+  </div>
+</section>
+
+<div class="wrap-wide">
+  <svg class="flow-divider" viewBox="0 0 920 28" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,14 C 150,-6 300,34 460,14 C 620,-6 770,34 920,14" fill="none" stroke="#12B3A0" stroke-width="2"/>
+  </svg>
+</div>
+
+<!-- ============ HOW IT WORKS ============ -->
+<section id="how-it-works" class="bg-alt">
+  <div class="wrap center">
+    <span class="kicker">How It Works</span>
+    <h2>Three simple steps. No tech talk.</h2>
+  </div>
+
+  <div class="wrap-wide">
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>We have a chat</h3>
+        <p>You tell me what's eating up your time — missed calls, messy follow-up, whatever it is. No jargon, just a normal conversation.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>I build one quiet fix</h3>
+        <p>I set up a small, specific tool that handles that one thing automatically, in the background. You don't touch anything technical.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>You get your time back</h3>
+        <p>Customers get looked after even when you're busy or closed — and you get to stop worrying about the thing that used to slip through the cracks.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="wrap-wide">
+  <svg class="flow-divider" viewBox="0 0 920 28" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,14 C 150,34 300,-6 460,14 C 620,34 770,-6 920,14" fill="none" stroke="#12B3A0" stroke-width="2"/>
+  </svg>
+</div>
+
+<!-- ============ FAQ ============ -->
+<section id="faq">
+  <div class="wrap">
+    <span class="kicker">Questions People Usually Ask</span>
+    <h2>You're allowed to be a little skeptical.</h2>
+    <p style="color: var(--ink-soft);">Here are the honest answers to what most people ask me first.</p>
+
+    <div class="faq-list">
+      <details>
+        <summary>Is this actually safe?<span class="plus">+</span></summary>
+        <p>Yes. Anything that connects to one of your accounts uses that company's own official login screen — the same one you'd see anywhere else. I never see or hold your password, and you can disconnect it yourself, anytime, with one click.</p>
+      </details>
+
+      <details>
+        <summary>Do I need to know anything technical?<span class="plus">+</span></summary>
+        <p>No. You won't need to learn any new software or touch a single setting after we set things up. If anything ever needs your attention, I'll explain it in plain language — no acronyms, no assumed knowledge.</p>
+      </details>
+
+      <details>
+        <summary>What happens to my data?<span class="plus">+</span></summary>
+        <p>Whatever we set up only ever looks at the one thing it's built for — like a single inbox folder or a call log — never your whole account or unrelated files. Before we connect anything, we'll look at exactly what it's asking for permission to do, together.</p>
+      </details>
+
+      <details>
+        <summary>What if I try it and don't like it?<span class="plus">+</span></summary>
+        <p>Then we turn it off. Nothing here locks you in, and disconnecting anything is always just as easy as connecting it was in the first place.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<div class="wrap-wide">
+  <svg class="flow-divider" viewBox="0 0 920 28" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,14 C 150,-6 300,34 460,14 C 620,-6 770,34 920,14" fill="none" stroke="#12B3A0" stroke-width="2"/>
+  </svg>
+</div>
+
+<!-- ============ CONTACT ============ -->
+<section id="contact" class="bg-alt">
+  <div class="wrap center">
+    <span class="kicker">Get In Touch</span>
+    <h2>Let's talk — however's easiest for you.</h2>
+    <p style="margin-left:auto;margin-right:auto;">No pressure, no sales pitch. Just tell me what's going on and we'll figure out if I can help.</p>
+
+    <div class="contact-box">
+      <!-- PLACEHOLDER CONTACT INFO — swap for your real business email/phone before publishing -->
+      <div class="contact-line">📞 <a href="tel:+12045550134">(204) 555-0134</a></div>
+      <div class="contact-line">✉️ <a href="mailto:hello@filterflow.ca">hello@filterflow.ca</a></div>
+
+      <a class="btn" href="mailto:hello@filterflow.ca">Send an Email</a>
+      <p class="placeholder-note">Phone number and email above are placeholders — replace with your real business contact details.</p>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wordmark" style="justify-content:center; display:inline-flex;"><span>Filter</span><span>Flow</span></div>
+  <p style="max-width:none; margin: 10px 0 0;">Built in Winnipeg, Manitoba.</p>
+</footer>
+
+</body>
+</html>
