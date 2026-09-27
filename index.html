@@ -8,24 +8,22 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Source+Sans+3:wght@400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 
 <style>
   :root {
     --navy: #132C5C;
-    --teal: #12B3A0;
+    --navy-soft: #2C4570;
     --coral: #E74D5A;
     --paper: #FAF8F4;
-    --paper-alt: #F3F0E9;
+    --paper-alt: #F1EDE3;
     --ink: #1E2733;
-    --ink-soft: #4B5563;
-    --border: #E4E0D6;
-    --max: 760px;
-    --max-wide: 920px;
+    --ink-soft: #4B5568;
+    --border: #DFDACB;
+    --max: 1080px;
   }
 
   * { box-sizing: border-box; }
-
   html { scroll-behavior: smooth; }
 
   body {
@@ -35,125 +33,98 @@
     font-family: 'Source Sans 3', sans-serif;
     font-size: 18px;
     line-height: 1.75;
-    -webkit-font-smoothing: antialiased;
   }
 
   h1, h2, h3 {
     font-family: 'Quicksand', sans-serif;
     color: var(--navy);
-    margin: 0 0 0.6em 0;
-    line-height: 1.3;
+    margin: 0 0 0.5em 0;
+    line-height: 1.25;
   }
 
-  p { margin: 0 0 1.1em 0; max-width: 620px; }
-
-  a { color: var(--teal); text-decoration: none; }
-  a:hover { text-decoration: underline; }
-
+  p { margin: 0 0 1.1em 0; }
+  a { color: var(--navy); text-decoration: none; }
+  a:hover { color: var(--coral); }
   img, video { max-width: 100%; display: block; }
 
-  /* ---------- Layout helpers ---------- */
+  .wrap { max-width: var(--max); margin: 0 auto; padding: 0 28px; }
 
-  .wrap {
-    max-width: var(--max);
-    margin: 0 auto;
-    padding: 0 24px;
-  }
-
-  .wrap-wide {
-    max-width: var(--max-wide);
-    margin: 0 auto;
-    padding: 0 24px;
-  }
-
-  section {
-    padding: 88px 0;
-  }
-
-  .center { text-align: center; }
-  .center p { margin-left: auto; margin-right: auto; }
+  section { padding: 96px 0; }
+  .bg-alt { background: var(--paper-alt); }
 
   .kicker {
     font-family: 'Quicksand', sans-serif;
     font-weight: 600;
-    letter-spacing: 0.06em;
+    letter-spacing: 0.07em;
     text-transform: uppercase;
-    font-size: 14px;
-    color: var(--teal);
-    margin-bottom: 14px;
+    font-size: 13px;
+    color: var(--coral);
+    margin-bottom: 16px;
     display: block;
   }
 
-  /* ---------- Divider motif: a thin flowing line, echoing the brand ---------- */
-
+  /* ---------- Flowing-line divider motif ---------- */
   .flow-divider {
     display: block;
     width: 100%;
-    height: 28px;
-    margin: 0;
+    height: 30px;
   }
 
-  /* ---------- Header / Nav ---------- */
-
-  header {
-    padding: 28px 0 0;
-  }
+  /* ---------- Header ---------- */
+  header { padding: 30px 0 0; }
 
   .nav-row {
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 0 28px;
     display: flex;
     align-items: center;
     justify-content: space-between;
     flex-wrap: wrap;
     gap: 16px;
-    max-width: var(--max-wide);
-    margin: 0 auto;
-    padding: 0 24px;
   }
 
   .wordmark {
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
     font-size: 22px;
-    letter-spacing: 0.01em;
+    color: var(--navy);
   }
-  .wordmark span:first-child { color: var(--navy); }
-  .wordmark span:last-child { color: var(--teal); }
+  .wordmark span { color: var(--coral); }
 
   nav ul {
     list-style: none;
     display: flex;
-    gap: 32px;
+    gap: 34px;
     margin: 0;
     padding: 0;
     flex-wrap: wrap;
   }
+  nav a { font-weight: 600; font-size: 16px; color: var(--ink); }
+  nav a:hover { color: var(--coral); }
 
-  nav a {
-    color: var(--ink);
-    font-weight: 600;
-    font-size: 16px;
-  }
-  nav a:hover { color: var(--teal); text-decoration: none; }
+  /* ---------- HERO: asymmetric two-column ---------- */
+  .hero { padding: 60px 0 78px; }
 
-  /* ---------- Hero ---------- */
-
-  .hero {
-    padding-top: 56px;
-    padding-bottom: 70px;
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: 56px;
+    align-items: center;
   }
 
-  .hero .kicker { display: block; text-align: center; }
+  .hero-text h1 {
+    font-size: 38px;
+    max-width: 460px;
+  }
 
-  .hero h1 {
-    text-align: center;
-    font-size: 40px;
-    max-width: 640px;
-    margin: 0 auto 40px;
+  .hero-text .intro {
+    font-size: 19px;
+    color: var(--ink-soft);
+    max-width: 380px;
   }
 
   .video-frame {
-    max-width: var(--max-wide);
-    margin: 0 auto;
     border: 2px solid var(--navy);
     border-radius: 6px;
     overflow: hidden;
@@ -162,74 +133,84 @@
 
   .video-frame video {
     width: 100%;
-    aspect-ratio: 16 / 9;
+    aspect-ratio: 4 / 3;
     background: var(--navy);
     display: block;
   }
 
   .video-caption {
-    text-align: center;
-    font-size: 15px;
+    font-size: 14px;
     color: var(--ink-soft);
-    margin-top: 18px;
+    margin-top: 14px;
+    margin-bottom: 0;
   }
 
-  /* ---------- How it works ---------- */
+  /* ---------- HOW IT WORKS: staggered, unequal weight ---------- */
+  .how-heading { max-width: 480px; }
 
-  .steps {
-    display: flex;
-    gap: 56px;
-    margin-top: 56px;
-    flex-wrap: wrap;
-    justify-content: center;
-  }
+  .steps { margin-top: 60px; }
 
   .step {
-    flex: 1 1 220px;
-    max-width: 260px;
-    text-align: left;
+    display: flex;
+    gap: 28px;
+    position: relative;
+    padding-left: 4px;
+  }
+
+  .step + .step { margin-top: 8px; }
+
+  .step-line {
+    position: absolute;
+    left: 29px;
+    top: 66px;
+    bottom: -8px;
+    width: 2px;
+    background: var(--border);
   }
 
   .step-num {
-    width: 52px;
-    height: 52px;
+    flex-shrink: 0;
     border-radius: 50%;
     background: var(--navy);
     color: #fff;
     font-family: 'Quicksand', sans-serif;
     font-weight: 700;
-    font-size: 19px;
     display: flex;
     align-items: center;
     justify-content: center;
-    margin-bottom: 20px;
   }
 
-  .step h3 {
-    font-size: 20px;
-    margin-bottom: 8px;
-  }
+  /* Step 1 gets more visual weight: bigger circle, bigger text, no indent */
+  .step.step-1 { margin-left: 0; }
+  .step.step-1 .step-num { width: 60px; height: 60px; font-size: 22px; }
+  .step.step-1 h3 { font-size: 23px; }
+  .step.step-1 p { font-size: 18px; max-width: 520px; }
 
-  .step p {
-    font-size: 17px;
-    color: var(--ink-soft);
-    margin: 0;
-  }
+  /* Steps 2 & 3 progressively indented + smaller = staggered, secondary */
+  .step.step-2 { margin-left: 8%; }
+  .step.step-2 .step-num { width: 46px; height: 46px; font-size: 17px; background: var(--navy-soft); }
+  .step.step-2 h3 { font-size: 20px; }
+  .step.step-2 p { font-size: 17px; max-width: 440px; color: var(--ink-soft); }
+
+  .step.step-3 { margin-left: 15%; }
+  .step.step-3 .step-num { width: 46px; height: 46px; font-size: 17px; background: var(--navy-soft); }
+  .step.step-3 h3 { font-size: 20px; }
+  .step.step-3 p { max-width: 420px; font-size: 17px; color: var(--ink-soft); }
+
+  .step h3 { margin-bottom: 6px; }
+  .step p { margin: 0; }
 
   /* ---------- FAQ ---------- */
+  .faq-section .wrap { max-width: 800px; }
+  .faq-heading { max-width: 460px; }
 
-  .faq-list {
-    margin-top: 44px;
-  }
+  .faq-list { margin-top: 48px; }
 
   details {
     border-bottom: 1px solid var(--border);
-    padding: 22px 0;
+    padding: 24px 0;
   }
-
-  details:first-child {
-    border-top: 1px solid var(--border);
-  }
+  details:first-of-type { border-top: 1px solid var(--border); }
 
   summary {
     font-family: 'Quicksand', sans-serif;
@@ -241,90 +222,94 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 16px;
+    gap: 20px;
   }
-
   summary::-webkit-details-marker { display: none; }
 
   summary .plus {
     font-size: 24px;
-    color: var(--teal);
+    color: var(--coral);
     font-weight: 600;
     flex-shrink: 0;
     transition: transform 0.2s ease;
   }
-
   details[open] summary .plus { transform: rotate(45deg); }
 
   details p {
-    margin-top: 14px;
+    margin-top: 16px;
     color: var(--ink-soft);
-    max-width: 640px;
+    max-width: 620px;
   }
 
-  /* ---------- Contact ---------- */
-
-  .contact-box {
-    margin-top: 44px;
-    display: flex;
-    flex-direction: column;
-    gap: 22px;
-    align-items: center;
-    text-align: center;
+  /* ---------- CONTACT: asymmetric two-column ---------- */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: 64px;
+    align-items: start;
   }
+
+  .contact-info .kicker { margin-bottom: 20px; }
 
   .contact-line {
-    font-size: 20px;
+    font-size: 21px;
     font-weight: 600;
     color: var(--navy);
+    margin-bottom: 16px;
   }
-
   .contact-line a { color: var(--navy); }
-  .contact-line a:hover { color: var(--teal); }
-
-  .btn {
-    display: inline-block;
-    background: var(--coral);
-    color: #fff;
-    font-family: 'Quicksand', sans-serif;
-    font-weight: 600;
-    font-size: 17px;
-    padding: 14px 34px;
-    border-radius: 4px;
-    margin-top: 8px;
-  }
-  .btn:hover {
-    background: #d43e4e;
-    text-decoration: none;
-  }
+  .contact-line a:hover { color: var(--coral); }
 
   .placeholder-note {
     font-size: 14px;
     color: var(--ink-soft);
-    margin-top: 6px;
     font-style: italic;
+    margin-top: 10px;
   }
 
-  /* ---------- Section background alternation (subtle, flat, no shadow) ---------- */
+  .closing-note {
+    padding-top: 36px;
+  }
 
-  .bg-alt { background: var(--paper-alt); }
+  .quote-mark {
+    font-family: 'Quicksand', sans-serif;
+    font-size: 64px;
+    color: var(--coral);
+    line-height: 1;
+    display: block;
+    margin-bottom: 6px;
+  }
+
+  .closing-note p {
+    font-size: 20px;
+    font-style: italic;
+    color: var(--navy-soft);
+    max-width: 420px;
+  }
 
   /* ---------- Footer ---------- */
-
   footer {
-    padding: 40px 0 48px;
+    padding: 44px 0 50px;
     text-align: center;
     font-size: 14px;
     color: var(--ink-soft);
   }
 
   /* ---------- Responsive ---------- */
+  @media (max-width: 860px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 40px; }
+    .hero-text h1, .hero-text .intro { max-width: none; }
+    .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+    .step.step-2 { margin-left: 4%; }
+    .step.step-3 { margin-left: 8%; }
+  }
 
-  @media (max-width: 640px) {
+  @media (max-width: 560px) {
     section { padding: 64px 0; }
-    .hero h1 { font-size: 30px; }
-    .steps { gap: 40px; }
     body { font-size: 17px; }
+    .hero-text h1 { font-size: 30px; }
+    .step { gap: 18px; }
+    .step.step-2, .step.step-3 { margin-left: 0; }
   }
 </style>
 </head>
@@ -332,7 +317,7 @@
 
 <header>
   <div class="nav-row">
-    <div class="wordmark"><span>Filter</span><span>Flow</span></div>
+    <div class="wordmark">Filter<span>Flow</span></div>
     <nav aria-label="Main">
       <ul>
         <li><a href="#how-it-works">How It Works</a></li>
@@ -343,73 +328,88 @@
   </div>
 </header>
 
-<!-- ============ HERO ============ -->
+<!-- ============ HERO — asymmetric two-column ============ -->
 <section class="hero">
-  <div class="wrap-wide center">
-    <span class="kicker">Hi, I'm Madden</span>
-    <h1>Never miss a customer's call again.</h1>
+  <div class="wrap">
+    <div class="hero-grid">
+      <div class="hero-text">
+        <span class="kicker">Hi, I'm Madden</span>
+        <h1>Never miss a customer's call again.</h1>
+        <p class="intro">One minute, plain talk, no jargon — press play.</p>
+      </div>
 
-    <div class="video-frame">
-      <!--
-        PLACEHOLDER VIDEO — replace src="" below with your real video file
-        (or an embed) once it's ready. User-initiated only: controls are on,
-        autoplay is intentionally left off per the brief.
-      -->
-      <video controls preload="metadata" poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='450' viewBox='0 0 800 450'%3E%3Crect width='800' height='450' fill='%23132C5C'/%3E%3Ccircle cx='400' cy='225' r='46' fill='%23E74D5A'/%3E%3Cpolygon points='386,203 386,247 424,225' fill='white'/%3E%3C/svg%3E">
-        <source src="" type="video/mp4">
-        Your browser doesn't support embedded video — you can still reach us using the contact info below.
-      </video>
+      <div class="hero-video">
+        <div class="video-frame">
+          <!--
+            PLACEHOLDER VIDEO — swap src="" for your real video file once
+            it's recorded. Autoplay intentionally left off; user must click play.
+          -->
+          <video controls preload="metadata" poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='800' height='600' viewBox='0 0 800 600'%3E%3Crect width='800' height='600' fill='%23132C5C'/%3E%3Ccircle cx='400' cy='300' r='50' fill='%23E74D5A'/%3E%3Cpolygon points='384,275 384,325 426,300' fill='white'/%3E%3C/svg%3E">
+            <source src="" type="video/mp4">
+            Your browser doesn't support embedded video — you can still reach us using the contact info below.
+          </video>
+        </div>
+        <p class="video-caption">Just me, explaining what this actually is.</p>
+      </div>
     </div>
-    <p class="video-caption">Press play — it's just me, talking plainly, for about a minute.</p>
   </div>
 </section>
 
-<div class="wrap-wide">
-  <svg class="flow-divider" viewBox="0 0 920 28" preserveAspectRatio="none" aria-hidden="true">
-    <path d="M0,14 C 150,-6 300,34 460,14 C 620,-6 770,34 920,14" fill="none" stroke="#12B3A0" stroke-width="2"/>
+<div class="wrap">
+  <svg class="flow-divider" viewBox="0 0 1080 30" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,15 C 180,-8 360,38 540,15 C 720,-8 900,38 1080,15" fill="none" stroke="#132C5C" stroke-opacity="0.25" stroke-width="2"/>
   </svg>
 </div>
 
-<!-- ============ HOW IT WORKS ============ -->
+<!-- ============ HOW IT WORKS — staggered, unequal weight ============ -->
 <section id="how-it-works" class="bg-alt">
-  <div class="wrap center">
-    <span class="kicker">How It Works</span>
-    <h2>Three simple steps. No tech talk.</h2>
-  </div>
+  <div class="wrap">
+    <div class="how-heading">
+      <span class="kicker">How It Works</span>
+      <h2>Three steps. Nothing technical.</h2>
+    </div>
 
-  <div class="wrap-wide">
     <div class="steps">
-      <div class="step">
+      <div class="step step-1">
         <div class="step-num">1</div>
-        <h3>We have a chat</h3>
-        <p>You tell me what's eating up your time — missed calls, messy follow-up, whatever it is. No jargon, just a normal conversation.</p>
+        <div>
+          <h3>We have a normal conversation</h3>
+          <p>You tell me what's eating up your time — a missed call, a forgotten follow-up, whatever it is. That's genuinely the hardest part, and it's just a chat, not a meeting full of tech talk.</p>
+        </div>
       </div>
-      <div class="step">
+
+      <div class="step step-2">
         <div class="step-num">2</div>
-        <h3>I build one quiet fix</h3>
-        <p>I set up a small, specific tool that handles that one thing automatically, in the background. You don't touch anything technical.</p>
+        <div>
+          <h3>I quietly build the fix</h3>
+          <p>I put together a small tool that handles that one thing automatically. You never have to open, learn, or touch anything technical yourself.</p>
+        </div>
       </div>
-      <div class="step">
+
+      <div class="step step-3">
         <div class="step-num">3</div>
-        <h3>You get your time back</h3>
-        <p>Customers get looked after even when you're busy or closed — and you get to stop worrying about the thing that used to slip through the cracks.</p>
+        <div>
+          <h3>You get your time back</h3>
+          <p>Customers get looked after even when you're busy — and the thing that used to slip through the cracks just... doesn't anymore.</p>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<div class="wrap-wide">
-  <svg class="flow-divider" viewBox="0 0 920 28" preserveAspectRatio="none" aria-hidden="true">
-    <path d="M0,14 C 150,34 300,-6 460,14 C 620,34 770,-6 920,14" fill="none" stroke="#12B3A0" stroke-width="2"/>
+<div class="wrap">
+  <svg class="flow-divider" viewBox="0 0 1080 30" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,15 C 180,38 360,-8 540,15 C 720,38 900,-8 1080,15" fill="none" stroke="#132C5C" stroke-opacity="0.25" stroke-width="2"/>
   </svg>
 </div>
 
 <!-- ============ FAQ ============ -->
-<section id="faq">
+<section id="faq" class="faq-section">
   <div class="wrap">
-    <span class="kicker">Questions People Usually Ask</span>
-    <h2>You're allowed to be a little skeptical.</h2>
-    <p style="color: var(--ink-soft);">Here are the honest answers to what most people ask me first.</p>
+    <div class="faq-heading">
+      <span class="kicker">Questions People Usually Ask</span>
+      <h2>You're allowed to be a little skeptical.</h2>
+    </div>
 
     <div class="faq-list">
       <details>
@@ -424,7 +424,7 @@
 
       <details>
         <summary>What happens to my data?<span class="plus">+</span></summary>
-        <p>Whatever we set up only ever looks at the one thing it's built for — like a single inbox folder or a call log — never your whole account or unrelated files. Before we connect anything, we'll look at exactly what it's asking for permission to do, together.</p>
+        <p>Whatever we set up only ever looks at the one thing it's built for — like a single inbox folder or a call log — never your whole account or unrelated files. Before we connect anything, we'll look at exactly what it's asking permission to do, together.</p>
       </details>
 
       <details>
@@ -435,33 +435,36 @@
   </div>
 </section>
 
-<div class="wrap-wide">
-  <svg class="flow-divider" viewBox="0 0 920 28" preserveAspectRatio="none" aria-hidden="true">
-    <path d="M0,14 C 150,-6 300,34 460,14 C 620,-6 770,34 920,14" fill="none" stroke="#12B3A0" stroke-width="2"/>
+<div class="wrap">
+  <svg class="flow-divider" viewBox="0 0 1080 30" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,15 C 180,-8 360,38 540,15 C 720,-8 900,38 1080,15" fill="none" stroke="#132C5C" stroke-opacity="0.25" stroke-width="2"/>
   </svg>
 </div>
 
-<!-- ============ CONTACT ============ -->
+<!-- ============ CONTACT — asymmetric two-column ============ -->
 <section id="contact" class="bg-alt">
-  <div class="wrap center">
-    <span class="kicker">Get In Touch</span>
-    <h2>Let's talk — however's easiest for you.</h2>
-    <p style="margin-left:auto;margin-right:auto;">No pressure, no sales pitch. Just tell me what's going on and we'll figure out if I can help.</p>
+  <div class="wrap">
+    <div class="contact-grid">
+      <div class="contact-info">
+        <span class="kicker">Get In Touch</span>
+        <h2>Let's talk — however's easiest.</h2>
+        <!-- PLACEHOLDER CONTACT INFO — swap for your real business email/phone before publishing -->
+        <div class="contact-line">📞 <a href="tel:+12045550134">(204) 555-0134</a></div>
+        <div class="contact-line">✉️ <a href="mailto:hello@filterflow.ca">hello@filterflow.ca</a></div>
+        <p class="placeholder-note">Phone number and email above are placeholders — replace with your real business contact details.</p>
+      </div>
 
-    <div class="contact-box">
-      <!-- PLACEHOLDER CONTACT INFO — swap for your real business email/phone before publishing -->
-      <div class="contact-line">📞 <a href="tel:+12045550134">(204) 555-0134</a></div>
-      <div class="contact-line">✉️ <a href="mailto:hello@filterflow.ca">hello@filterflow.ca</a></div>
-
-      <a class="btn" href="mailto:hello@filterflow.ca">Send an Email</a>
-      <p class="placeholder-note">Phone number and email above are placeholders — replace with your real business contact details.</p>
+      <div class="closing-note">
+        <span class="quote-mark">&ldquo;</span>
+        <p>It's okay to feel unsure about this. Most people I talk to do, at first — I'm happy to explain anything as many times as you need, for as long as it takes to feel comfortable.</p>
+      </div>
     </div>
   </div>
 </section>
 
 <footer>
-  <div class="wordmark" style="justify-content:center; display:inline-flex;"><span>Filter</span><span>Flow</span></div>
-  <p style="max-width:none; margin: 10px 0 0;">Built in Winnipeg, Manitoba.</p>
+  <div class="wordmark" style="display:inline-block;">Filter<span>Flow</span></div>
+  <p style="margin: 10px 0 0;">Built in Winnipeg, Manitoba.</p>
 </footer>
 
 </body>
