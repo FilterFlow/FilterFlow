@@ -1,0 +1,357 @@
+<title>Reliquo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400&family=Kalam:wght@400;700&display=swap">
+<style>
+/* Layout: a calm conversation. The page is organized as the plain questions an owner would ask over coffee; one wide, quiet reading column with lots of empty space. Only navy and cream, plus tints mixed from the two. */
+:root {
+  --cream: #F7F2E8;
+  --navy: #132C5C;
+
+  --bg: var(--cream);
+  --fg: var(--navy);
+  --soft: color-mix(in srgb, var(--fg) 74%, var(--bg));
+  --faint: color-mix(in srgb, var(--fg) 45%, var(--bg));
+  --line: color-mix(in srgb, var(--fg) 16%, var(--bg));
+  --tint: color-mix(in srgb, var(--fg) 5%, var(--bg));
+  --paper: color-mix(in srgb, #FFFFFF 55%, var(--bg));
+
+  --display: "Young Serif", "Iowan Old Style", Georgia, serif;
+  --body: "Atkinson Hyperlegible", "Verdana", system-ui, sans-serif;
+  --hand: "Kalam", "Bradley Hand", "Segoe Print", cursive;
+
+  --col: 1120px;
+  --read: 38rem;
+  --gutter: clamp(20px, 5vw, 64px);
+  --space: clamp(112px, 16vw, 220px);
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: var(--navy);
+    --fg: var(--cream);
+    --paper: color-mix(in srgb, var(--cream) 7%, var(--navy));
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: var(--navy);
+  --fg: var(--cream);
+  --paper: color-mix(in srgb, var(--cream) 7%, var(--navy));
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--body);
+  font-size: 1.25rem;
+  line-height: 1.6;
+}
+h1, h2, h3 { font-family: var(--display); font-weight: 400; margin: 0; text-wrap: balance; color: var(--fg); }
+p, ul, ol { margin: 0; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--fg); outline-offset: 4px; border-radius: 4px; }
+
+.wrap { max-width: var(--col); margin-inline: auto; padding-inline: var(--gutter); }
+
+/* Top bar */
+.top { border-bottom: 1px solid var(--line); background: var(--bg); }
+@media (min-width: 760px) { .top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; } }
+.top .wrap { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 32px; padding-block: 18px; }
+.name { font-family: var(--display); font-size: 1.75rem; text-decoration: none; line-height: 1; }
+.menu { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 28px; font-size: 1.05rem; }
+.menu a { text-decoration: none; padding-block: 4px; border-bottom: 2px solid transparent; }
+.menu a:hover, .menu a[aria-current="true"] { border-bottom-color: var(--fg); }
+.menu .talk { border: 2px solid var(--fg); border-radius: 999px; padding: 8px 20px; font-weight: 700; }
+.menu .talk:hover { background: var(--fg); color: var(--bg); }
+@media (max-width: 759px) {
+  .menu { width: 100%; gap: 6px 20px; font-size: 1rem; }
+  .menu .talk { margin-left: auto; }
+}
+
+/* Hero */
+.hero { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: clamp(48px, 7vw, 112px); align-items: center; padding-block: clamp(72px, 11vw, 160px) var(--space); }
+@media (max-width: 880px) { .hero { grid-template-columns: 1fr; } }
+.hero h1 { font-size: clamp(3rem, 7.4vw, 6rem); line-height: 1.02; letter-spacing: -0.02em; }
+.hero-copy { display: grid; gap: 32px; min-width: 0; }
+.hero-copy p { font-size: 1.35rem; color: var(--soft); max-width: 30ch; }
+.buttons { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 28px; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--fg); color: var(--bg);
+  font: 700 1.15rem/1 var(--body);
+  padding: 20px 32px; border-radius: 999px; border: 0; cursor: pointer;
+  text-decoration: none;
+}
+.btn:hover { background: var(--soft); }
+.quiet { font-weight: 700; text-underline-offset: 6px; text-decoration-thickness: 2px; }
+
+/* Notepad */
+.note {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 28px 30px 30px;
+  transform: rotate(-1.6deg);
+  box-shadow: 0 22px 40px -28px color-mix(in srgb, var(--navy) 60%, transparent);
+  font-family: var(--hand);
+  max-width: 420px;
+  justify-self: center;
+  width: 100%;
+}
+.note h2 { font-family: var(--hand); font-weight: 700; font-size: 1.6rem; margin-bottom: 10px; }
+.note ul { list-style: none; padding: 0; display: grid; }
+.note li {
+  position: relative; width: fit-content; max-width: 100%; white-space: nowrap;
+  font-size: 1.3rem; line-height: 1.35; padding-block: 9px;
+}
+.note li.done { color: var(--faint); }
+.note li.done::after {
+  content: ""; position: absolute; left: -4px; right: -6px; top: 52%;
+  height: 2.5px; background: var(--fg); border-radius: 2px;
+  transform-origin: left center; transform: rotate(-1.2deg) scaleX(1);
+  animation: strike 0.45s cubic-bezier(.6,.1,.3,1) both;
+}
+.note li.done:nth-child(2)::after { animation-delay: 0.7s; }
+.note li.done:nth-child(3)::after { animation-delay: 1.1s; }
+.note li.done:nth-child(4)::after { animation-delay: 1.5s; }
+.note li.done:nth-child(5)::after { animation-delay: 1.9s; }
+.note li.done:nth-child(1)::after { animation-delay: 0.3s; }
+@keyframes strike { from { transform: rotate(-1.2deg) scaleX(0); } }
+@media (prefers-reduced-motion: reduce) { .note li.done::after { animation: none; } }
+.note li.keep { font-weight: 700; color: var(--fg); }
+.note li.keep span { border: 2px solid var(--fg); border-radius: 50% / 60%; padding: 2px 10px; margin-left: -10px; }
+.note-caption { margin-top: 16px; font-family: var(--body); font-size: 1rem; color: var(--soft); }
+
+/* Question sections */
+.q { padding-block: 0 var(--space); scroll-margin-top: 100px; }
+.q-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr); gap: clamp(32px, 6vw, 96px); align-items: start; }
+@media (max-width: 880px) { .q-grid { grid-template-columns: 1fr; } }
+.q h2 { font-size: clamp(2.3rem, 4.4vw, 3.5rem); line-height: 1.08; letter-spacing: -0.01em; }
+.answer { display: grid; gap: 22px; min-width: 0; }
+.answer > p { max-width: var(--read); }
+.lead { font-size: 1.45rem; line-height: 1.5; }
+
+/* Help list */
+.help { list-style: none; padding: 0; display: grid; border-top: 1px solid var(--line); }
+.help li { display: grid; gap: 6px; padding-block: 28px; border-bottom: 1px solid var(--line); }
+.help h3 { font-size: 1.65rem; line-height: 1.2; }
+.help p { color: var(--soft); max-width: var(--read); }
+
+/* Steps: a real sequence */
+.steps { list-style: none; padding: 0; display: grid; gap: 40px; counter-reset: s; }
+.steps li { display: grid; grid-template-columns: 3.2rem minmax(0, 1fr); gap: 4px 20px; counter-increment: s; }
+.steps li::before {
+  content: counter(s); grid-row: span 2;
+  font-family: var(--display); font-size: 1.5rem; line-height: 1;
+  width: 3.2rem; height: 3.2rem; border-radius: 50%;
+  border: 2px solid var(--fg); display: grid; place-items: center;
+}
+.steps h3 { font-size: 1.55rem; line-height: 1.25; padding-top: 6px; }
+.steps p { color: var(--soft); max-width: var(--read); }
+
+/* The big No */
+.no { font-family: var(--display); font-size: clamp(6rem, 20vw, 13rem); line-height: 0.85; letter-spacing: -0.03em; }
+
+/* Safety */
+.promises { list-style: none; padding: 0; display: grid; gap: 22px; }
+.promises li { padding-left: 34px; position: relative; max-width: var(--read); }
+.promises li::before { content: ""; position: absolute; left: 0; top: 0.55em; width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--fg); }
+.promises b { display: block; }
+.promises span { color: var(--soft); }
+
+/* Cost */
+.prices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 48px; }
+@media (max-width: 560px) { .prices { grid-template-columns: 1fr; } }
+.price { display: grid; gap: 6px; align-content: start; }
+.amount { font-family: var(--display); font-size: clamp(3rem, 6vw, 4.4rem); line-height: 1; font-variant-numeric: tabular-nums; }
+.price p { color: var(--soft); }
+.small { font-size: 1.05rem; color: var(--soft); max-width: var(--read); }
+
+/* Contact */
+.contact { background: var(--tint); border-radius: 28px; padding: clamp(40px, 8vw, 104px) clamp(24px, 7vw, 104px); display: grid; gap: 28px; justify-items: start; }
+.contact h2 { font-size: clamp(2.6rem, 6vw, 4.8rem); line-height: 1.02; max-width: 16ch; }
+.contact p { max-width: var(--read); }
+.email-row { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 20px; }
+.email { font-family: var(--display); font-size: clamp(1.5rem, 3.4vw, 2.2rem); user-select: all; overflow-wrap: anywhere; }
+.copy-btn { background: transparent; color: var(--fg); border: 2px solid var(--fg); border-radius: 999px; padding: 12px 22px; font: 700 1.05rem/1 var(--body); cursor: pointer; }
+.copy-btn:hover { background: var(--fg); color: var(--bg); }
+#copy-status { font-size: 1rem; min-height: 1.5em; color: var(--soft); }
+
+footer .wrap { display: flex; flex-wrap: wrap; gap: 12px 32px; justify-content: space-between; padding-block: 40px 56px; font-size: 1rem; color: var(--soft); border-top: 1px solid var(--line); }
+</style>
+
+<header class="top">
+  <div class="wrap">
+    <a class="name" href="#top">Reliquo</a>
+    <nav class="menu" aria-label="Main">
+      <a href="#help">What I do</a>
+      <a href="#how">How it works</a>
+      <a href="#safe">Is it safe?</a>
+      <a href="#cost">Cost</a>
+      <a class="talk" href="#contact">Get in touch</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <section class="wrap hero">
+    <div class="hero-copy">
+      <h1>Let the little jobs take care of themselves.</h1>
+      <p>I set up simple helpers that answer missed calls, reply to messages and sort your email. You keep running your business. There's nothing new to learn.</p>
+      <div class="buttons">
+        <a class="btn" href="#contact">Let's talk over coffee</a>
+        <a class="quiet" href="#help">See what I can help with</a>
+      </div>
+    </div>
+
+    <div class="note" role="img" aria-label="A handwritten to-do list. Five chores are crossed off: call back a missed number, reply to a website message, follow up on a quote, sort 43 emails, and ask for a review. The last item, home for supper by six, is circled.">
+      <h2>Monday</h2>
+      <ul aria-hidden="true">
+        <li class="done">Call back missed number</li>
+        <li class="done">Answer website message</li>
+        <li class="done">Follow up on Henderson quote</li>
+        <li class="done">Sort 43 emails</li>
+        <li class="done">Ask Mrs. Patel for a review</li>
+        <li class="keep"><span>Home for supper by 6</span></li>
+      </ul>
+      <p class="note-caption">Five of these can happen on their own.</p>
+    </div>
+  </section>
+
+  <section id="help" class="wrap q">
+    <div class="q-grid">
+      <h2>What can you help me with?</h2>
+      <div class="answer">
+        <p class="lead">The small, repeat jobs that fill up your day. Each helper does one of them, the same way, every time.</p>
+        <ul class="help">
+          <li><h3>Missed calls</h3><p>When you can't pick up, the caller gets a friendly text right away. They know you'll call back, so they don't ring the next business on the list.</p></li>
+          <li><h3>Unanswered messages</h3><p>Questions from your website get a helpful reply with your real hours, prices and service area, even at 9 at night.</p></li>
+          <li><h3>Follow-ups</h3><p>Sent a quote and heard nothing? A polite reminder goes out a few days later, so you don't have to remember.</p></li>
+          <li><h3>A messy inbox</h3><p>Each email is filed in the right folder, and anything you need to act on is flagged at the top.</p></li>
+          <li><h3>Asking for reviews</h3><p>After a job is done, your customer gets a thank-you text with a link to leave a Google review.</p></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="how" class="wrap q">
+    <div class="q-grid">
+      <h2>How does it work?</h2>
+      <div class="answer">
+        <ol class="steps">
+          <li><h3>We talk it through</h3><p>A free, no-pressure chat. You tell me what eats up your time, and I tell you honestly if I can help.</p></li>
+          <li><h3>I build it and test it</h3><p>I set it up using pretend information first, so nothing touches your real accounts until it works.</p></li>
+          <li><h3>We switch it on together</h3><p>I walk you through each screen. You sign in yourself, with your own password.</p></li>
+          <li><h3>It runs quietly in the background</h3><p>You get on with your day. If you ever want it off, it takes one click.</p></li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap q">
+    <div class="q-grid">
+      <h2>Do I need to be good with computers?</h2>
+      <div class="answer">
+        <p class="no">No.</p>
+        <p class="lead">If you can read a text message, you're set. I do the setting up, and I explain everything in plain words. You never have to open anything technical.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="safe" class="wrap q">
+    <div class="q-grid">
+      <h2>Is it safe?</h2>
+      <div class="answer">
+        <p class="lead">Yes, and I'm careful about it. The most important part: I never see your passwords.</p>
+        <ul class="promises">
+          <li><b>You type your own password.</b><span>Always, even when I'm sitting right next to you.</span></li>
+          <li><b>You sign in on the real Google or Microsoft page.</b><span>Not a page I made. You can check it yourself before you continue.</span></li>
+          <li><b>A helper only sees what it needs.</b><span>One inbox or one folder, never your whole account.</span></li>
+          <li><b>You can turn it off anytime.</b><span>One click, and it's disconnected.</span></li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <section id="cost" class="wrap q">
+    <div class="q-grid">
+      <h2>What does it cost?</h2>
+      <div class="answer">
+        <div class="prices">
+          <div class="price"><span class="amount">$75–100</span><p>for one helper</p></div>
+          <div class="price"><span class="amount">$200</span><p>for three or more</p></div>
+        </div>
+        <p>You pay once, when it's set up and working. Some helpers use services with small running costs, like sending text messages. I'll tell you exactly what those are before we start.</p>
+        <p class="small">These are introductory prices while I build up reviews. They'll go up over time, and I'll always tell you the price before any work starts.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="wrap q">
+    <div class="q-grid">
+      <h2>Who are you?</h2>
+      <div class="answer">
+        <p class="lead">I'm Madden. I live in Winnipeg, and I build these helpers for local businesses.</p>
+        <p>My first real project sorts the inbox of a busy non-profit consultant. Every morning, each new email is filed, anything she needs to act on is flagged, and a copy of every email is saved to a backup list so nothing ever gets lost.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="wrap q">
+    <div class="contact">
+      <h2>How do we get started?</h2>
+      <p class="lead">Send me an email with a line or two about your business. I'll write back and we'll find a time to talk.</p>
+      <div class="email-row">
+        <span class="email" id="email">hello@reliquo.ca</span>
+        <button class="copy-btn" id="copy" type="button">Copy email</button>
+      </div>
+      <p id="copy-status" role="status"></p>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Reliquo, Winnipeg, Manitoba</span>
+    <a href="#top">Back to top</a>
+  </div>
+</footer>
+
+<script>
+  (function () {
+    var btn = document.getElementById('copy');
+    var status = document.getElementById('copy-status');
+    var email = document.getElementById('email');
+    function selectIt() {
+      var r = document.createRange(); r.selectNodeContents(email);
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+      status.textContent = 'Email selected. Press Ctrl+C (or Cmd+C) to copy it.';
+    }
+    btn.addEventListener('click', function () {
+      try {
+        navigator.clipboard.writeText(email.textContent).then(function () {
+          status.textContent = 'Email copied.';
+        }, selectIt);
+      } catch (e) { selectIt(); }
+    });
+
+    var links = document.querySelectorAll('.menu a[href^="#"]:not(.talk)');
+    if ('IntersectionObserver' in window) {
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (en) {
+          if (!en.isIntersecting) return;
+          links.forEach(function (a) {
+            a.setAttribute('aria-current', a.getAttribute('href') === '#' + en.target.id ? 'true' : 'false');
+          });
+        });
+      }, { rootMargin: '-40% 0px -55% 0px' });
+      ['help', 'how', 'safe', 'cost'].forEach(function (id) {
+        var el = document.getElementById(id); if (el) io.observe(el);
+      });
+    }
+  })();
+</script>
