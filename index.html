@@ -1,0 +1,665 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>FilterFlow — Never miss a customer's call again</title>
+<meta name="description" content="FilterFlow sets up small, simple helpers for local businesses so calls, messages and follow-ups stop slipping through the cracks. No technical knowledge needed." />
+
+<link rel="preload" href="fonts/quicksand-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="fonts/fonts.css">
+
+<style>
+  :root {
+    --tan: #C9A97A;          /* main brand colour: big panels */
+    --tan-deep: #93693A;     /* tan that stays readable as text on cream */
+    --tan-light: #EFE5D3;    /* quiet section background */
+    --cream: #FAF7F1;        /* page background */
+    --black: #171412;        /* accents, headings */
+    --ink: #1F1B17;          /* body text */
+    --ink-soft: #5A5148;     /* secondary text */
+    --rule: #DCCFBA;         /* thin dividers */
+
+    --max: 1120px;
+    --pad: 28px;
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    background: var(--cream);
+    color: var(--ink);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 19px;
+    line-height: 1.7;
+    overflow-x: clip;
+  }
+
+  h1, h2, h3 {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    color: var(--black);
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  p { margin: 0 0 1em; }
+  a { color: inherit; }
+
+  :focus-visible {
+    outline: 3px solid var(--black);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  .wrap {
+    max-width: var(--max);
+    margin: 0 auto;
+    padding: 0 var(--pad);
+  }
+
+  .label {
+    display: block;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    margin-bottom: 18px;
+  }
+
+  /* ---------- Header ---------- */
+
+  .site-header .wrap {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px 40px;
+    padding-top: 34px;
+    padding-bottom: 10px;
+  }
+
+  .wordmark {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 26px;
+    color: var(--black);
+    text-decoration: none;
+  }
+  .wordmark span { color: var(--tan-deep); }
+
+  .site-nav ul {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 34px;
+    margin: 0;
+    padding: 0;
+  }
+
+  .site-nav a {
+    font-weight: 600;
+    font-size: 17px;
+    color: var(--ink);
+    text-decoration: none;
+    padding: 4px 0;
+    border-bottom: 2px solid transparent;
+  }
+  .site-nav a:hover { border-bottom-color: var(--tan); }
+
+  /* ---------- HERO: short headline, video is the focus ---------- */
+
+  .hero .wrap {
+    display: grid;
+    grid-template-columns: 4fr 8fr;
+    gap: 56px;
+    align-items: center;
+    padding-top: 40px;
+  }
+
+  .hero h1 {
+    font-size: 44px;
+    letter-spacing: -0.01em;
+  }
+
+  /* Tan panel runs off the right edge of the screen */
+  .hero-panel {
+    background: var(--tan);
+    margin-right: calc(-1 * var(--pad) - max(0px, (100vw - var(--max)) / 2));
+    padding: 56px 56px 40px;
+  }
+
+  .video-wrap {
+    max-width: 720px;
+    background: var(--black);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+
+  .video-wrap video {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: var(--black);
+  }
+
+  .video-note {
+    color: var(--black);
+    font-size: 16px;
+    margin: 16px 0 0;
+    max-width: 720px;
+  }
+
+  /* ---------- TIME STATS ---------- */
+
+  .stats .wrap { padding-top: 120px; padding-bottom: 110px; }
+
+  .stats-head {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 56px;
+    align-items: end;
+    margin-bottom: 48px;
+  }
+
+  .stats h2 { font-size: 40px; max-width: 12em; }
+  .stats-head p { color: var(--ink-soft); max-width: 24em; margin: 0; }
+
+  .stat-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border-top: 2px solid var(--black);
+  }
+
+  .stat-row {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1.2fr;
+    gap: 32px;
+    align-items: baseline;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+
+  .stat-task {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 21px;
+    color: var(--black);
+  }
+
+  .stat-before {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 26px;
+    color: var(--tan-deep);
+    white-space: nowrap;
+  }
+  .stat-before small {
+    font-size: 16px;
+    font-weight: 600;
+  }
+
+  .stat-after {
+    font-size: 18px;
+    color: var(--ink);
+  }
+  .stat-after::before {
+    content: "→ ";
+    color: var(--tan-deep);
+    font-weight: 600;
+  }
+
+  .stat-total {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1.2fr;
+    gap: 32px;
+    align-items: baseline;
+    padding: 28px 0 0;
+  }
+  .stat-total .stat-task { font-size: 19px; color: var(--ink-soft); }
+  .stat-total .stat-before { font-size: 34px; color: var(--black); }
+
+  .fine-print {
+    font-size: 16px;
+    color: var(--ink-soft);
+    margin-top: 36px;
+    max-width: 40em;
+  }
+
+  /* ---------- HOW IT WORKS ---------- */
+
+  .how { background: var(--tan-light); }
+  .how .wrap { padding-top: 120px; padding-bottom: 110px; }
+
+  .how h2 { font-size: 40px; max-width: 13em; }
+
+  .how-grid {
+    display: grid;
+    grid-template-columns: 1.35fr 1fr;
+    gap: 72px;
+    margin-top: 64px;
+  }
+
+  .step-num {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    line-height: 1;
+    display: block;
+    color: var(--black);
+  }
+
+  /* Step 1 is the one a visitor acts on, so it carries the weight */
+  .step-first .step-num { font-size: 120px; color: var(--tan-deep); margin-bottom: 18px; }
+  .step-first h3 { font-size: 32px; margin-bottom: 16px; max-width: 12em; }
+  .step-first p { font-size: 20px; max-width: 26em; }
+
+  .step-first .aside {
+    font-size: 17px;
+    color: var(--ink-soft);
+    border-left: 3px solid var(--black);
+    padding-left: 16px;
+    margin: 26px 0 30px;
+  }
+
+  .text-link {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: var(--black);
+    text-decoration: none;
+    border-bottom: 3px solid var(--tan);
+    padding-bottom: 3px;
+  }
+  .text-link:hover { border-bottom-color: var(--black); }
+
+  /* Steps 2 and 3 sit lower and quieter, like what naturally follows */
+  .steps-after { padding-top: 150px; }
+
+  .step-later + .step-later {
+    margin-top: 44px;
+    padding-top: 40px;
+    border-top: 1px solid var(--rule);
+    margin-left: 36px;
+  }
+
+  .step-later { display: grid; grid-template-columns: 48px 1fr; gap: 18px; }
+  .step-later .step-num { font-size: 34px; padding-top: 2px; }
+  .step-later h3 { font-size: 22px; margin-bottom: 8px; }
+  .step-later p { font-size: 18px; color: var(--ink-soft); margin: 0; }
+
+  /* ---------- FAQ ---------- */
+
+  .faq .wrap {
+    padding-top: 110px;
+    padding-bottom: 120px;
+    display: grid;
+    grid-template-columns: 1fr 1.7fr;
+    gap: 72px;
+    align-items: start;
+  }
+
+  .faq h2 { font-size: 36px; margin-bottom: 22px; }
+  .faq-side p { color: var(--ink-soft); max-width: 17em; }
+
+  .faq-list { border-top: 2px solid var(--black); }
+
+  details { border-bottom: 1px solid var(--rule); }
+
+  summary {
+    list-style: none;
+    cursor: pointer;
+    display: grid;
+    grid-template-columns: 1fr 32px;
+    gap: 20px;
+    align-items: center;
+    padding: 26px 0;
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 21px;
+    color: var(--black);
+  }
+  summary::-webkit-details-marker { display: none; }
+
+  .toggle {
+    width: 32px;
+    height: 32px;
+    border: 2px solid var(--black);
+    border-radius: 50%;
+    position: relative;
+  }
+  .toggle::before, .toggle::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    background: var(--black);
+    transform: translate(-50%, -50%);
+  }
+  .toggle::before { width: 12px; height: 2px; }
+  .toggle::after  { width: 2px; height: 12px; }
+  details[open] .toggle::after { display: none; }
+
+  .answer { padding: 0 52px 28px 0; }
+  .answer p { max-width: 34em; }
+  .answer p:last-child { margin-bottom: 0; }
+
+  /* ---------- CONTACT (tan) ---------- */
+
+  .contact { background: var(--tan); }
+
+  .contact .wrap {
+    padding-top: 120px;
+    padding-bottom: 100px;
+    display: grid;
+    grid-template-columns: 1.25fr 1fr;
+    gap: 72px;
+    align-items: start;
+  }
+
+  .contact .label { color: var(--black); }
+  .contact h2 { font-size: 44px; margin-bottom: 48px; }
+
+  .reach { margin-bottom: 34px; }
+  .reach-kind {
+    display: block;
+    font-size: 16px;
+    color: var(--black);
+    margin-bottom: 4px;
+  }
+  .reach a {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 700;
+    font-size: 32px;
+    color: var(--black);
+    text-decoration: none;
+    border-bottom: 3px solid var(--black);
+    padding-bottom: 2px;
+    overflow-wrap: anywhere;
+  }
+  .reach a:hover { border-bottom-color: var(--cream); }
+
+  .reach-hours { color: var(--black); font-size: 17px; margin-top: 8px; }
+
+  .closing { padding-top: 150px; }
+  .closing p {
+    font-size: 23px;
+    line-height: 1.6;
+    font-style: italic;
+    color: var(--black);
+    max-width: 17em;
+  }
+  .closing .sig {
+    font-family: 'Quicksand', sans-serif;
+    font-weight: 600;
+    font-style: normal;
+    font-size: 18px;
+  }
+
+  .site-footer { background: var(--black); color: var(--tan-light); font-size: 15px; }
+  .site-footer .wrap {
+    padding-top: 26px;
+    padding-bottom: 36px;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 8px 24px;
+  }
+
+  /* ---------- Smaller screens ---------- */
+
+  @media (max-width: 960px) {
+    .hero .wrap,
+    .stats-head,
+    .how-grid,
+    .faq .wrap,
+    .contact .wrap { grid-template-columns: 1fr; }
+
+    .hero .wrap { gap: 32px; padding-top: 48px; }
+    .hero-panel { padding: 32px 28px 28px; }
+    .stats-head { gap: 20px; }
+    .steps-after { padding-top: 0; }
+    .closing { padding-top: 0; }
+    .faq .wrap, .contact .wrap { gap: 40px; }
+  }
+
+  @media (max-width: 720px) {
+    .stat-row, .stat-total {
+      grid-template-columns: 1fr auto;
+      gap: 4px 20px;
+    }
+    .stat-row .stat-after { grid-column: 1 / -1; }
+    .stat-total { grid-template-columns: 1fr auto; }
+  }
+
+  @media (max-width: 640px) {
+    :root { --pad: 20px; }
+    body { font-size: 18px; }
+    .hero h1 { font-size: 34px; }
+    .stats h2, .how h2 { font-size: 31px; }
+    .faq h2 { font-size: 30px; }
+    .contact h2 { font-size: 34px; }
+    .stats .wrap, .how .wrap, .faq .wrap, .contact .wrap { padding-top: 72px; padding-bottom: 72px; }
+    .stat-task { font-size: 19px; }
+    .stat-before { font-size: 22px; }
+    .stat-total .stat-before { font-size: 28px; }
+    .step-first .step-num { font-size: 84px; }
+    .step-first h3 { font-size: 27px; }
+    .reach a { font-size: 25px; }
+    .closing p { font-size: 20px; }
+    .step-later + .step-later { margin-left: 0; }
+    summary { font-size: 19px; }
+    .answer { padding-right: 0; }
+    .site-nav ul { gap: 6px 22px; }
+    .site-nav a { font-size: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= HEADER ================= -->
+<header class="site-header">
+  <div class="wrap">
+    <a class="wordmark" href="#top" id="top">Filter<span>Flow</span></a>
+    <nav class="site-nav" aria-label="Main">
+      <ul>
+        <li><a href="#time">Time saved</a></li>
+        <li><a href="#how-it-works">How it works</a></li>
+        <li><a href="#questions">Questions</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<!-- ================= HERO ================= -->
+<section class="hero" aria-label="Introduction">
+  <div class="wrap">
+    <h1>Meet Lisa. She got her evenings back.</h1>
+
+    <div class="hero-panel">
+      <div class="video-wrap">
+        <!--
+          PLACEHOLDER VIDEO: the Lisa flower-shop story.
+          When it's ready, add it like this inside the <video> tag:
+            <source src="lisa-flower-shop.mp4" type="video/mp4">
+          It will NOT autoplay. Visitors press play themselves.
+        -->
+        <video controls preload="none" playsinline
+          poster="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 900'%3E%3Crect width='1600' height='900' fill='%23171412'/%3E%3Ccircle cx='800' cy='450' r='84' fill='%23C9A97A'/%3E%3Cpolygon points='772,404 772,496 852,450' fill='%23171412'/%3E%3C/svg%3E">
+          Your browser can't play this video. You can still reach me using the phone number or email further down the page.
+        </video>
+      </div>
+      <p class="video-note">A short story about Lisa, who runs a (made-up) flower shop. It only plays when you press play.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= TIME SAVED ================= -->
+<section class="stats" id="time">
+  <div class="wrap">
+    <div class="stats-head">
+      <div>
+        <span class="label">Where the time goes</span>
+        <h2>The small jobs that quietly eat your week.</h2>
+      </div>
+      <p>Lisa's story isn't unusual. These are the tasks most small shops handle by hand, and roughly how long each one takes.</p>
+    </div>
+
+    <ul class="stat-list">
+      <li class="stat-row">
+        <span class="stat-task">Sorting and filing emails</span>
+        <span class="stat-before">~1 hr <small>/ week</small></span>
+        <span class="stat-after">Filed as they arrive</span>
+      </li>
+      <li class="stat-row">
+        <span class="stat-task">Calling back missed calls</span>
+        <span class="stat-before">~1 hr <small>/ week</small></span>
+        <span class="stat-after">Customer gets a text right away</span>
+      </li>
+      <li class="stat-row">
+        <span class="stat-task">Answering "what are your hours?"</span>
+        <span class="stat-before">~45 min <small>/ week</small></span>
+        <span class="stat-after">Answered with your real details</span>
+      </li>
+      <li class="stat-row">
+        <span class="stat-task">Copying contact forms into a list</span>
+        <span class="stat-before">~30 min <small>/ week</small></span>
+        <span class="stat-after">Added to your list automatically</span>
+      </li>
+      <li class="stat-row">
+        <span class="stat-task">Asking customers for reviews</span>
+        <span class="stat-before">~20 min <small>/ week</small></span>
+        <span class="stat-after">Sent after every order</span>
+      </li>
+    </ul>
+
+    <div class="stat-total">
+      <span class="stat-task">All together, roughly</span>
+      <span class="stat-before">3½ hrs <small>/ week</small></span>
+    </div>
+
+    <p class="fine-print">These are typical estimates for a small business, not promises. Your own numbers will depend on how busy you are, and we'd look at them together before setting anything up.</p>
+  </div>
+</section>
+
+<!-- ================= HOW IT WORKS ================= -->
+<section class="how" id="how-it-works">
+  <div class="wrap">
+    <span class="label">How it works</span>
+    <h2>Three steps, and you only do the first one.</h2>
+
+    <div class="how-grid">
+      <div class="step-first">
+        <span class="step-num" aria-hidden="true">1</span>
+        <h3>We have a normal conversation.</h3>
+        <p>You tell me what keeps slipping through the cracks. Maybe it's calls you miss while you're busy, or customers you meant to get back to.</p>
+        <p class="aside">No forms, no tech talk. A phone call or a coffee is fine.</p>
+        <a class="text-link" href="#contact">Start that conversation</a>
+      </div>
+
+      <div class="steps-after">
+        <div class="step-later">
+          <span class="step-num" aria-hidden="true">2</span>
+          <div>
+            <h3>I set it up for you.</h3>
+            <p>For example: when you miss a call, the customer gets a friendly text right away, so they don't call someone else.</p>
+          </div>
+        </div>
+
+        <div class="step-later">
+          <span class="step-num" aria-hidden="true">3</span>
+          <div>
+            <h3>It quietly does its job.</h3>
+            <p>You keep working the way you always have. There's nothing new to learn or check.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= QUESTIONS ================= -->
+<section class="faq" id="questions">
+  <div class="wrap">
+    <div class="faq-side">
+      <span class="label">Questions</span>
+      <h2>It's fair to be a little wary.</h2>
+      <p>These are the things people ask me most. If yours isn't here, just ask. No question is too basic.</p>
+    </div>
+
+    <div class="faq-list">
+      <details>
+        <summary>Is this safe?<span class="toggle" aria-hidden="true"></span></summary>
+        <div class="answer">
+          <p>Yes. When anything connects to your email or phone, you sign in yourself on that company's own official screen, like Google's or Microsoft's.</p>
+          <p>I never see your password. You can switch the connection off yourself, any time.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>Do I need to know anything about computers or AI?<span class="toggle" aria-hidden="true"></span></summary>
+        <div class="answer">
+          <p>No. I do all the setting up. After that, there's nothing for you to open, learn or keep an eye on.</p>
+          <p>If something ever needs your attention, I'll explain it in plain words.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>What happens to my information?<span class="toggle" aria-hidden="true"></span></summary>
+        <div class="answer">
+          <p>Each helper only sees the one thing it's for, like new messages in one inbox. It doesn't see the rest of your account or your files.</p>
+          <p>Before we connect anything, we'll read the permission screen together, so you know exactly what it can and can't do.</p>
+        </div>
+      </details>
+
+      <details>
+        <summary>What if I try it and don't like it?<span class="toggle" aria-hidden="true"></span></summary>
+        <div class="answer">
+          <p>Then we switch it off. There's no contract to get out of, and turning it off is as easy as turning it on was.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section class="contact" id="contact">
+  <div class="wrap">
+    <div>
+      <span class="label">Contact</span>
+      <h2>Let's talk.</h2>
+
+      <!-- PLACEHOLDER CONTACT DETAILS: replace the number and email below (both the text and the link) -->
+      <div class="reach">
+        <span class="reach-kind">Call or text</span>
+        <a href="tel:+12045550134">(204) 555-0134</a>
+        <p class="reach-hours">If I can't pick up, I'll call you back the same day.</p>
+      </div>
+
+      <div class="reach">
+        <span class="reach-kind">Email</span>
+        <a href="mailto:hello@filterflow.ca">hello@filterflow.ca</a>
+      </div>
+    </div>
+
+    <div class="closing">
+      <p>You don't need to know what you need yet. Tell me what's frustrating you, and we'll work out together whether I can help.</p>
+      <p class="sig">— Madden, FilterFlow</p>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="wrap">
+    <span>FilterFlow · Winnipeg, Manitoba</span>
+    <span>© 2026</span>
+  </div>
+</footer>
+
+</body>
+</html>
