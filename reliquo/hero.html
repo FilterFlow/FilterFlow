@@ -98,25 +98,46 @@ a { color: inherit; }
 button { font: inherit; color: inherit; }
 :focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
 
-/* Draft-only pickers: always light so they read on every photo */
-.draft {
-  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 28px;
-  padding: 10px var(--side);
-  background: #F4EEE8; color: #5E4637;
-  font-size: 0.85rem;
+/* Draft-only picker: a floating panel so it can't be missed */
+.picker {
+  position: fixed; z-index: 50;
+  left: 50%; transform: translateX(-50%);
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  width: max-content; max-width: calc(100% - 32px);
+  background: #FFFFFF; color: #3A2A1F;
+  border: 1px solid rgba(58, 42, 31, 0.18);
+  box-shadow: 0 18px 40px -18px rgba(30, 20, 10, 0.45);
+  padding: 14px 16px 16px;
+  display: grid; gap: 12px;
+  font: 500 0.9rem/1.2 var(--sans);
 }
-.draft .group { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
-.draft .group > span { margin-right: 6px; }
-.draft button { background: transparent; border: 1px solid rgba(58, 42, 31, 0.32); color: #3A2A1F; padding: 5px 12px; cursor: pointer; font-size: 0.85rem; border-radius: 0; }
-.draft button[aria-pressed="true"] { background: #3A2A1F; color: var(--cream); border-color: #3A2A1F; }
-.draft button[data-v="bodoni"] { font-family: "Bodoni Moda", serif; font-style: italic; }
-.draft button[data-v="fraunces"] { font-family: "Fraunces", serif; font-variation-settings: "SOFT" 100, "WONK" 1; }
-.draft button[data-v="jost"] { font-family: "Jost", sans-serif; letter-spacing: 0.02em; }
-.draft button[data-v="shrikhand"] { font-family: "Shrikhand", serif; }
+.picker-head { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.picker-head b { font-weight: 600; font-size: 0.95rem; }
+.picker .toggle { background: none; border: 0; padding: 4px 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; color: #5E4637; font-size: 0.85rem; }
+.picker .group { display: flex; gap: 10px; align-items: flex-start; overflow-x: auto; padding-bottom: 2px; }
+.picker .group > span { flex: none; width: 3.6rem; padding-top: 6px; color: #5E4637; font-size: 0.85rem; }
+.picker .thumbs button {
+  flex: none; display: grid; gap: 5px; justify-items: center;
+  background: none; border: 0; padding: 0; cursor: pointer; color: #3A2A1F; font-size: 0.78rem;
+}
+.picker .thumbs img { width: 56px; height: 76px; object-fit: cover; display: block; outline: 2px solid transparent; outline-offset: 2px; }
+.picker .thumbs button[aria-pressed="true"] img { outline-color: #3A2A1F; }
+.picker .thumbs button[aria-pressed="true"] { font-weight: 700; }
+.picker .fonts button {
+  flex: none; background: transparent; border: 1px solid rgba(58, 42, 31, 0.3); color: #3A2A1F;
+  padding: 7px 14px; cursor: pointer; font-size: 1rem; border-radius: 0;
+}
+.picker .fonts button[aria-pressed="true"] { background: #3A2A1F; color: var(--cream); border-color: #3A2A1F; }
+.picker button[data-v="bodoni"] { font-family: "Bodoni Moda", serif; font-style: italic; }
+.picker button[data-v="fraunces"] { font-family: "Fraunces", serif; font-variation-settings: "SOFT" 100, "WONK" 1; }
+.picker button[data-v="jost"] { font-family: "Jost", sans-serif; }
+.picker button[data-v="shrikhand"] { font-family: "Shrikhand", serif; }
+.picker.closed { padding: 10px 16px; }
+.picker.closed .group { display: none; }
 
 .hero {
   position: relative;
-  min-height: max(calc(100svh - 46px), 720px);
+  min-height: max(100svh, 720px);
   overflow: hidden;
   isolation: isolate;
   display: grid;
@@ -223,16 +244,17 @@ h1 .big { font-weight: 800; }
 }
 </style>
 
-<div class="draft">
-  <div class="group" role="group" aria-label="Try a photo (draft only)" data-group="img">
-    <span>Draft photo</span>
-    <button type="button" data-v="peach" aria-pressed="false">Peach</button>
-    <button type="button" data-v="curtain" aria-pressed="true">Curtains</button>
-    <button type="button" data-v="sunlit" aria-pressed="false">Evening sun</button>
-    <button type="button" data-v="lamp" aria-pressed="false">Lamp glow</button>
-    <button type="button" data-v="columns" aria-pressed="false">Columns</button>
+<div class="picker" id="picker" role="region" aria-label="Draft picker">
+  <div class="picker-head"><b>Try a photo and a font</b><button type="button" class="toggle" id="picker-toggle">Hide</button></div>
+  <div class="group thumbs" role="group" aria-label="Photo" data-group="img">
+    <span>Photo</span>
+    <button type="button" data-v="peach" aria-pressed="false"><img src="hero-peach.png" alt="">Peach</button>
+    <button type="button" data-v="curtain" aria-pressed="true"><img src="hero-curtain.png" alt="">Curtains</button>
+    <button type="button" data-v="sunlit" aria-pressed="false"><img src="hero-sunlit.png" alt="">Evening sun</button>
+    <button type="button" data-v="lamp" aria-pressed="false"><img src="hero-lamp.png" alt="">Lamp glow</button>
+    <button type="button" data-v="columns" aria-pressed="false"><img src="hero-columns.png" alt="">Columns</button>
   </div>
-  <div class="group" role="group" aria-label="Try a headline font (draft only)" data-group="font">
+  <div class="group fonts" role="group" aria-label="Headline font" data-group="font">
     <span>Font</span>
     <button type="button" data-v="bodoni" aria-pressed="true">Bodoni</button>
     <button type="button" data-v="fraunces" aria-pressed="false">Fraunces</button>
@@ -288,7 +310,7 @@ h1 .big { font-weight: 800; }
       });
       try { localStorage.setItem('reliquo-' + group, v); } catch (e) {}
     }
-    document.querySelectorAll('.draft [data-group]').forEach(function (g) {
+    document.querySelectorAll('.picker [data-group]').forEach(function (g) {
       g.querySelectorAll('button').forEach(function (b) {
         b.addEventListener('click', function () { pick(g.dataset.group, b.dataset.v); });
       });
@@ -297,6 +319,12 @@ h1 .big { font-weight: 800; }
       var v = start[group];
       try { v = localStorage.getItem('reliquo-' + group) || v; } catch (e) {}
       pick(group, v);
+    });
+    var panel = document.getElementById('picker');
+    var toggle = document.getElementById('picker-toggle');
+    toggle.addEventListener('click', function () {
+      var closed = panel.classList.toggle('closed');
+      toggle.textContent = closed ? 'Show' : 'Hide';
     });
   })();
 </script>
