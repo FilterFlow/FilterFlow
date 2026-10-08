@@ -3,11 +3,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Unbounded:wght@300;500;800&family=Shrikhand&family=Big+Shoulders+Display:wght@500;800;900&family=Hanken+Grotesk:wght@400;500;600&family=Quicksand:wght@700&display=swap">
 <style>
-/* Layout: one calm peach room. The pedestal photo sits on the right and its seamless backdrop continues across the whole screen, so the left side is open space for the logo, headline and button. The video frame floats in the empty air above the short pedestal. Nothing else. Single warm-light look by choice. */
+/* Layout: one calm room. A photo sits on the right and its own backdrop continues across the screen, so the left side is open space for the logo, headline and button. The video frame floats in the photo's empty space. Draft bar lets Madden swap photos and headline fonts. Single light look by choice. */
 :root {
-  --peach-top: #E0C0AB;
-  --peach-mid: #E5C8B5;
-  --peach-low: #E5CEBE;
   --brown: #3A2A1F;
   --brown-soft: #5E4637;
   --clay: #8A5A3A;
@@ -19,39 +16,65 @@
   --brand: "Quicksand", "Nunito", sans-serif;
 
   --side: clamp(20px, 4.2vw, 80px);
+
+  /* Photo: peach pedestals (default) */
+  --img: url("hero-peach.png");
+  --ratio: 500 / 889;
+  --art-pos: center bottom;
+  --page: linear-gradient(180deg, #E0C0AB 0%, #E2C0AA 40%, #E5C8B5 60%, #E2CABA 85%, #E5CEBE 100%);
+  --page-solid: #E0C0AB;
+  --vx: -22%; --vy: 19%; --vw: 80%;
+  --m-pos: center 60%;
   color-scheme: light;
+}
+/* Photo: white curtains (mirrored so the vase sits on the right) */
+:root[data-img="curtain"] {
+  --img: url("hero-curtain.png");
+  --ratio: 500 / 750;
+  --art-pos: center bottom;
+  --page: linear-gradient(180deg, #EEEEEC 0%, #ECECEA 40%, #E8E8E4 72%, #E3E2DD 82%, #B8B1A5 89%, #B4ADA1 100%);
+  --page-solid: #EEEEEC;
+  --vx: -20%; --vy: 13%; --vw: 72%;
+  --m-pos: center bottom;
+}
+/* Photo: hallway with chairs (left wall panel cropped off) */
+:root[data-img="hallway"] {
+  --img: url("hero-hallway.png");
+  --ratio: 395 / 734;
+  --art-pos: right center;
+  --page: linear-gradient(180deg, #C9B697 0%, #CDBA9B 15%, #C3AD88 30%, #C5B293 50%, #BBA685 75%, #AE9572 90%, #A3855A 100%);
+  --page-solid: #C9B697;
+  --vx: -14%; --vy: 24%; --vw: 70%;
+  --m-pos: center bottom;
+  --brown-soft: #4A372A;
+  --clay: #6E4528;
 }
 :root[data-font="unbounded"] { --display: "Unbounded", "Arial Black", sans-serif; }
 :root[data-font="shrikhand"] { --display: "Shrikhand", "Cooper Black", serif; }
 :root[data-font="shoulders"] { --display: "Big Shoulders Display", "Impact", sans-serif; }
 
 * { box-sizing: border-box; }
-html { background: var(--peach-low); }
-body {
-  min-height: 100vh;
-  background: linear-gradient(180deg, var(--peach-top) 0%, #E2C0AA 40%, var(--peach-mid) 60%, #E2CABA 85%, var(--peach-low) 100%);
-  color: var(--brown);
-  font-family: var(--sans);
-  -webkit-font-smoothing: antialiased;
-}
+html { background: var(--page-solid); }
+body { min-height: 100vh; background: var(--page-solid); color: var(--brown); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
 a { color: inherit; }
 button { font: inherit; color: inherit; }
 :focus-visible { outline: 2px solid var(--brown); outline-offset: 4px; }
 
-/* Draft-only font picker */
+/* Draft-only pickers */
 .draft {
-  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px;
+  display: flex; flex-wrap: wrap; align-items: center; gap: 8px 28px;
   padding: 10px var(--side);
   background: rgba(58, 42, 31, 0.08); color: var(--brown-soft);
   font-size: 0.85rem;
 }
-.draft .opts { display: flex; flex-wrap: wrap; gap: 6px; }
+.draft .group { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
+.draft .group > span { margin-right: 6px; }
 .draft button { background: transparent; border: 1px solid var(--frame); color: var(--brown); padding: 5px 12px; cursor: pointer; font-size: 0.85rem; border-radius: 0; }
 .draft button[aria-pressed="true"] { background: var(--brown); color: var(--cream); border-color: var(--brown); }
-.draft button[data-f="bodoni"] { font-family: "Bodoni Moda", serif; font-style: italic; }
-.draft button[data-f="unbounded"] { font-family: "Unbounded", sans-serif; }
-.draft button[data-f="shrikhand"] { font-family: "Shrikhand", serif; }
-.draft button[data-f="shoulders"] { font-family: "Big Shoulders Display", sans-serif; font-weight: 800; letter-spacing: 0.04em; }
+.draft button[data-v="bodoni"] { font-family: "Bodoni Moda", serif; font-style: italic; }
+.draft button[data-v="unbounded"] { font-family: "Unbounded", sans-serif; }
+.draft button[data-v="shrikhand"] { font-family: "Shrikhand", serif; }
+.draft button[data-v="shoulders"] { font-family: "Big Shoulders Display", sans-serif; font-weight: 800; letter-spacing: 0.04em; }
 
 .hero {
   position: relative;
@@ -62,22 +85,26 @@ button { font: inherit; color: inherit; }
   grid-template-rows: auto 1fr;
   padding-inline: var(--side);
   padding-bottom: 48px;
+  background: var(--page);
 }
 
 /* ---------- Photo + video stage (sized to the photo) ---------- */
 .stage {
   position: absolute; z-index: 0; top: 0; right: 0; bottom: 0;
-  aspect-ratio: 500 / 889; height: 100%;
+  aspect-ratio: var(--ratio); height: 100%;
 }
 .art {
   position: absolute; inset: 0;
-  background: url("hero-peach.png") center bottom / cover no-repeat;
+  background-image: var(--img);
+  background-size: cover;
+  background-position: var(--art-pos);
+  background-repeat: no-repeat;
   -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.7) 14%, #000 32%);
           mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.7) 14%, #000 32%);
 }
 .video {
   position: absolute; z-index: 1;
-  left: -22%; top: 19%; width: 80%;
+  left: var(--vx); top: var(--vy); width: var(--vw);
   margin: 0; display: grid; gap: 10px;
 }
 .video .frame {
@@ -142,21 +169,27 @@ h1 .big { font-weight: 800; }
 @media (max-width: 860px) {
   .hero { min-height: auto; grid-template-rows: auto auto auto; padding-bottom: 0; }
   .main { max-width: none; padding-bottom: 28px; }
-  .stage { position: relative; inset: auto; aspect-ratio: auto; height: auto; display: grid; gap: 0; margin-inline: calc(-1 * var(--side)); }
+  .stage { position: relative; inset: auto; aspect-ratio: auto; height: auto; display: grid; margin-inline: calc(-1 * var(--side)); }
   .video { position: relative; left: auto; top: auto; width: auto; margin: 0 var(--side) 8px; }
-  .art { position: relative; inset: auto; height: 440px; background-size: cover; background-position: center 60%;
+  .art { position: relative; inset: auto; height: 440px; background-position: var(--m-pos);
     -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 30%);
             mask-image: linear-gradient(180deg, transparent 0%, #000 30%); }
 }
 </style>
 
-<div class="draft" role="group" aria-label="Try a headline font (draft only)">
-  <span>Draft: try a headline font</span>
-  <div class="opts">
-    <button type="button" data-f="bodoni" aria-pressed="true">Bodoni</button>
-    <button type="button" data-f="unbounded" aria-pressed="false">Unbounded</button>
-    <button type="button" data-f="shrikhand" aria-pressed="false">Shrikhand</button>
-    <button type="button" data-f="shoulders" aria-pressed="false">Big Shoulders</button>
+<div class="draft">
+  <div class="group" role="group" aria-label="Try a photo (draft only)" data-group="img">
+    <span>Draft photo</span>
+    <button type="button" data-v="peach" aria-pressed="false">Peach</button>
+    <button type="button" data-v="curtain" aria-pressed="true">Curtains</button>
+    <button type="button" data-v="hallway" aria-pressed="false">Hallway</button>
+  </div>
+  <div class="group" role="group" aria-label="Try a headline font (draft only)" data-group="font">
+    <span>Font</span>
+    <button type="button" data-v="bodoni" aria-pressed="true">Bodoni</button>
+    <button type="button" data-v="unbounded" aria-pressed="false">Unbounded</button>
+    <button type="button" data-v="shrikhand" aria-pressed="false">Shrikhand</button>
+    <button type="button" data-v="shoulders" aria-pressed="false">Big Shoulders</button>
   </div>
 </div>
 
@@ -194,13 +227,24 @@ h1 .big { font-weight: 800; }
 <script>
   (function () {
     var root = document.documentElement;
-    var buttons = document.querySelectorAll('.draft button');
-    function pick(f) {
-      if (f === 'bodoni') root.removeAttribute('data-font'); else root.setAttribute('data-font', f);
-      buttons.forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.f === f ? 'true' : 'false'); });
-      try { localStorage.setItem('reliquo-font', f); } catch (e) {}
+    var defaults = { img: 'peach', font: 'bodoni' };
+    function pick(group, v) {
+      if (v === defaults[group]) root.removeAttribute('data-' + group); else root.setAttribute('data-' + group, v);
+      document.querySelectorAll('[data-group="' + group + '"] button').forEach(function (b) {
+        b.setAttribute('aria-pressed', b.dataset.v === v ? 'true' : 'false');
+      });
+      try { localStorage.setItem('reliquo-' + group, v); } catch (e) {}
     }
-    buttons.forEach(function (b) { b.addEventListener('click', function () { pick(b.dataset.f); }); });
-    try { var saved = localStorage.getItem('reliquo-font'); if (saved) pick(saved); } catch (e) {}
+    document.querySelectorAll('.draft [data-group]').forEach(function (g) {
+      g.querySelectorAll('button').forEach(function (b) {
+        b.addEventListener('click', function () { pick(g.dataset.group, b.dataset.v); });
+      });
+    });
+    var start = { img: 'curtain', font: 'bodoni' };
+    ['img', 'font'].forEach(function (group) {
+      var v = start[group];
+      try { v = localStorage.getItem('reliquo-' + group) || v; } catch (e) {}
+      pick(group, v);
+    });
   })();
 </script>
