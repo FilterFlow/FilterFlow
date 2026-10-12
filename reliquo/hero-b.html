@@ -1,0 +1,180 @@
+<title>Reliquo Hero B</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600&family=Atkinson+Hyperlegible:wght@400;700&family=Quicksand:wght@700&display=swap">
+<style>
+/*
+  Option B: "Fresh pine"
+  Brief: same as A. Simple, warm, safe; reads as quiet, helpful automation rather than luxury.
+  Color: peach backdrop from the photo, deep pine #134A44 ink (fresh and calm, "things are running fine"), soft pine #2C5650, white #FFFFFF card, mint #2FA388 checks.
+  Type: Lexend (a typeface designed to make reading easier) for the headline; Atkinson Hyperlegible for everything else.
+  Layout: the left column stays very quiet (headline, one sentence, one button). On the right, the video floats above the short pedestal, and a small "Today" checklist is tucked over its lower corner, ticking itself off.
+
+    [Reliquo]          How it works  Pricing  Questions   (Book a free chat)
+                                     .---------------------.
+    Get your                         |         (>)         |
+    evenings back.             .-----+------.--------------'
+    I set up small helpers...  | Today      |               ||
+    (Book a free chat)         | (v) ...    |        ==     ||
+                               '------------'        ==     ||
+
+  Principles: one quiet column, one living detail (the checklist), nothing shouts.
+*/
+:root {
+  --peach-top: #E0C0AB;
+  --pine: #134A44;
+  --pine-soft: #2C5650;
+  --white: #FFFFFF;
+  --mint: #2FA388;
+
+  --display: "Lexend", "Avenir Next", "Segoe UI", sans-serif;
+  --body: "Atkinson Hyperlegible", "Verdana", system-ui, sans-serif;
+  --brand: "Quicksand", "Nunito", sans-serif;
+
+  --side: clamp(20px, 4.2vw, 80px);
+  color-scheme: light;
+}
+* { box-sizing: border-box; }
+html { background: var(--peach-top); }
+body { min-height: 100vh; margin: 0; background: var(--peach-top); color: var(--pine); font-family: var(--body); -webkit-font-smoothing: antialiased; }
+a { color: inherit; }
+:focus-visible { outline: 3px solid var(--pine); outline-offset: 4px; border-radius: 6px; }
+
+.hero {
+  position: relative;
+  min-height: max(100svh, 720px);
+  overflow: hidden;
+  isolation: isolate;
+  display: grid;
+  grid-template-rows: auto 1fr;
+  padding-inline: var(--side);
+  padding-bottom: 48px;
+  background: linear-gradient(180deg, #E0C0AB 0%, #E2C0AA 40%, #E5C8B5 60%, #E2CABA 85%, #E5CEBE 100%);
+}
+
+/* Photo + video stage, sized to the photo */
+.stage { position: absolute; z-index: 0; top: 0; right: 0; bottom: 0; aspect-ratio: 500 / 889; height: 100%; }
+.art {
+  position: absolute; inset: 0;
+  background: url("hero-peach.png") center bottom / cover no-repeat;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.7) 14%, #000 32%);
+          mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.7) 14%, #000 32%);
+}
+.video { position: absolute; z-index: 1; left: -22%; top: 17%; width: 80%; margin: 0; display: grid; gap: 10px; }
+.video .frame {
+  aspect-ratio: 16 / 9; max-width: 100%;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.40);
+  backdrop-filter: blur(6px);
+  display: grid; place-items: center;
+}
+.play { width: 64px; height: 64px; border-radius: 50%; background: var(--pine); display: grid; place-items: center; }
+.play svg { width: 22px; height: 22px; margin-left: 4px; color: var(--white); }
+.video figcaption { font-size: 0.95rem; color: var(--pine-soft); justify-self: end; }
+/* When the video is ready, swap the .frame div for:
+   <video class="frame" controls preload="none" playsinline poster="poster.jpg">
+     <source src="your-video.mp4" type="video/mp4">
+   </video> */
+video.frame { width: 100%; height: auto; display: block; object-fit: cover; }
+
+/* Today checklist, tucked over the video's lower-left corner */
+.today {
+  position: absolute; z-index: 2; left: -36%; top: 37%;
+  width: 290px;
+  background: var(--white); border-radius: 16px;
+  padding: 18px 20px 16px;
+  box-shadow: 0 24px 48px -24px rgba(19, 74, 68, 0.45);
+}
+.today h2 { margin: 0 0 8px; font: 600 1.05rem/1.2 var(--display); color: var(--pine); }
+.today ul { list-style: none; margin: 0; padding: 0; display: grid; }
+.today li { display: flex; align-items: center; gap: 12px; padding-block: 7px; font-size: 0.98rem; }
+.today li + li { border-top: 1px solid rgba(19, 74, 68, 0.10); }
+.tick { width: 22px; height: 22px; flex: none; border-radius: 50%; background: var(--mint); display: grid; place-items: center; animation: tick 0.4s cubic-bezier(.2,.9,.3,1.3) both; }
+.tick svg { width: 12px; height: 12px; color: var(--white); }
+.today li:nth-child(1) .tick { animation-delay: 0.4s; }
+.today li:nth-child(2) .tick { animation-delay: 0.8s; }
+.today li:nth-child(3) .tick { animation-delay: 1.2s; }
+.today li:nth-child(4) .tick { animation-delay: 1.6s; }
+@keyframes tick { from { transform: scale(0.2); background: rgba(19, 74, 68, 0.12); } }
+@media (prefers-reduced-motion: reduce) { .tick { animation: none; } }
+
+/* Nav */
+.nav { position: relative; z-index: 3; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-block: 24px; }
+.logo { display: flex; align-items: center; min-height: 44px; font-family: var(--brand); font-weight: 700; font-size: 1.6rem; text-decoration: none; }
+.links { display: flex; gap: 36px; font-size: 1.02rem; font-weight: 700; }
+.links a { text-decoration: none; }
+.links a:hover { text-decoration: underline; text-underline-offset: 6px; text-decoration-thickness: 2px; }
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--pine); color: var(--white);
+  font: 700 1.05rem/1 var(--body);
+  padding: 17px 26px; border-radius: 999px; text-decoration: none; white-space: nowrap;
+}
+.btn:hover { background: var(--pine-soft); }
+@media (max-width: 1100px) { .links { display: none; } }
+@media (max-width: 960px) { .nav .btn { padding: 13px 18px; font-size: 0.95rem; } }
+
+/* Main copy: one quiet column */
+.main { position: relative; z-index: 2; align-self: center; display: grid; gap: 28px; padding-block: 16px 40px; max-width: min(48%, 660px); }
+h1 {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 500;
+  font-size: clamp(3rem, 6.2vw, 6.4rem);
+  line-height: 1.02;
+  letter-spacing: -0.045em;
+  text-wrap: balance;
+  max-width: 8.5ch;
+}
+.lead { margin: 0; font-size: clamp(1.15rem, 1.5vw, 1.35rem); line-height: 1.5; color: var(--pine-soft); max-width: 30ch; }
+
+/* Phones and small tablets */
+@media (max-width: 860px) {
+  .hero { min-height: auto; grid-template-rows: auto auto auto; padding-bottom: 0; }
+  .main { max-width: none; padding-bottom: 28px; }
+  .stage { position: relative; inset: auto; aspect-ratio: auto; height: auto; display: grid; gap: 16px; margin-inline: calc(-1 * var(--side)); }
+  .video, .today { position: relative; left: auto; top: auto; width: auto; margin: 0 var(--side); }
+  .video figcaption { justify-self: start; }
+  .art { position: relative; inset: auto; height: 400px; background-size: cover; background-position: center 60%;
+    -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 30%);
+            mask-image: linear-gradient(180deg, transparent 0%, #000 30%); }
+}
+</style>
+
+<section class="hero">
+  <header class="nav">
+    <!-- Logo spot: swap the wordmark for <img src="logo.svg" alt="Reliquo" height="44"> when the logo is ready -->
+    <a class="logo" href="#">Reliquo</a>
+    <nav class="links" aria-label="Main">
+      <a href="#">How it works</a>
+      <a href="#">Pricing</a>
+      <a href="#">Questions</a>
+    </nav>
+    <a class="btn" href="#">Book a free chat</a>
+  </header>
+
+  <div class="main">
+    <h1>Get your evenings back.</h1>
+    <p class="lead">I set up small helpers that answer missed calls, reply to messages and sort your email. No tech skills needed.</p>
+    <div><a class="btn" href="#">Book a free chat</a></div>
+  </div>
+
+  <div class="stage">
+    <figure class="video">
+      <div class="frame" aria-label="Video space, coming soon">
+        <span class="play"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M4 2.5v11l9-5.5-9-5.5Z"/></svg></span>
+      </div>
+      <figcaption>Video coming soon</figcaption>
+    </figure>
+    <div class="today">
+      <h2>Today</h2>
+      <ul>
+        <li><span class="tick"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m3 8.5 3 3 7-7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Missed caller got a text</li>
+        <li><span class="tick"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m3 8.5 3 3 7-7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Website question answered</li>
+        <li><span class="tick"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m3 8.5 3 3 7-7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>Review request sent</li>
+        <li><span class="tick"><svg viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="m3 8.5 3 3 7-7" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span>41 emails sorted</li>
+      </ul>
+    </div>
+    <div class="art" aria-hidden="true"></div>
+  </div>
+</section>
