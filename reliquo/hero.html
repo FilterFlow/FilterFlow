@@ -3,93 +3,84 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,100..900,0..100,0..1;1,9..144,100..900,0..100,0..1&family=Jost:ital,wght@0,300..600;1,300..500&family=Shrikhand&family=Hanken+Grotesk:wght@400;500;600&family=Quicksand:wght@700&display=swap">
 <style>
-/* Layout: one calm room. A photo sits on the right and its own backdrop continues across the screen, so the left side is open space for the logo, headline and button. The video frame floats in the photo's empty space. Draft bar lets Madden swap photos and headline fonts. Single light look by choice. */
+/* Layout: three calm columns that each own their space. Headline and button on the left, a tall vertical video frame dead centre, and the photo grounded in the bottom-right corner (its backdrop continues across the whole screen). Nothing overlaps: the headline is sized to fit its own column. Single light look by choice. */
 :root {
   --cream: #FBF4EE;
   --display: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
   --sans: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
   --brand: "Quicksand", "Nunito", sans-serif;
   --side: clamp(20px, 4.2vw, 80px);
+  --gap: clamp(28px, 4vw, 72px);
 
-  /* Text and controls (defaults suit the light photos) */
+  /* Text and controls */
   --brown: #3A2A1F;
   --brown-soft: #5E4637;
   --clay: #8A5A3A;
   --nav-fg: var(--brown);
   --navbtn-bg: var(--brown); --navbtn-fg: var(--cream);
   --btn-bg: var(--brown); --btn-fg: var(--cream);
-  --frame: rgba(58, 42, 31, 0.32);
-  --frame-fill: rgba(251, 244, 238, 0.28);
-  --play: var(--brown);
-  --cap: var(--brown-soft);
+  --frame: rgba(58, 42, 31, 0.34);
+  --frame-fill: rgba(251, 244, 238, 0.30);
 
-  /* Photo: peach pedestals (default) */
+  /* Headline fit: share of the left column's width per font */
+  --fit: 23.5cqi;
+
+  /* Photo: peach pedestals (default). Photo fills the bottom 88% of the hero, so the backdrop gradient is offset to match. */
   --img: url("hero-peach.png");
   --ratio: 500 / 889;
   --art-pos: center bottom;
-  --page: linear-gradient(180deg, #E0C0AB 0%, #E2C0AA 40%, #E5C8B5 60%, #E2CABA 85%, #E5CEBE 100%);
+  --page: linear-gradient(180deg, #E0C0AB 0%, #E0C0AB 12%, #E2C0AA 47%, #E5C8B5 65%, #E2CABA 87%, #E5CEBE 100%);
   --page-solid: #E0C0AB;
-  --vx: -22%; --vy: 19%; --vw: 80%;
   --m-pos: center 60%;
   --fade-a: 14%; --fade-b: 32%;
   color-scheme: light;
 }
-/* Photo: white curtains (mirrored so the vase sits on the right) */
 :root[data-img="curtain"] {
   --img: url("hero-curtain.png");
   --ratio: 500 / 750;
-  --page: linear-gradient(180deg, #EEEEEC 0%, #ECECEA 40%, #E8E8E4 72%, #E3E2DD 82%, #B8B1A5 89%, #B4ADA1 100%);
+  --page: linear-gradient(180deg, #EEEEEC 0%, #EEEEEC 12%, #ECECEA 47%, #E8E8E4 75%, #E3E2DD 84%, #B8B1A5 90%, #B4ADA1 100%);
   --page-solid: #EEEEEC;
-  --vx: -20%; --vy: 13%; --vw: 72%;
   --m-pos: center bottom;
 }
-/* Photo: evening sun on a wall, couch and stool */
 :root[data-img="sunlit"] {
   --img: url("hero-sunlit.png");
   --ratio: 645 / 1030;
   --art-pos: right bottom;
   --fade-a: 28%; --fade-b: 52%;
-  --page: linear-gradient(180deg, #DFBC91 0%, #E4C399 25%, #E7C79F 45%, #DBB68A 65%, #D3AD80 78%, #A88459 100%);
+  --page: linear-gradient(180deg, #DFBC91 0%, #DFBC91 12%, #E4C399 34%, #E7C79F 52%, #DBB68A 69%, #D3AD80 81%, #A88459 100%);
   --page-solid: #DFBC91;
-  --vx: -20%; --vy: 14%; --vw: 72%;
   --m-pos: center 80%;
 }
-/* Photo: orange lamp glow (mirrored so the lamp sits on the right) */
 :root[data-img="lamp"] {
   --img: url("hero-lamp.png");
   --ratio: 500 / 750;
-  --page: linear-gradient(180deg, #7A3E08 0%, #A85203 14%, #D06C04 28%, #EB8410 45%, #F49A30 62%, #EE9025 80%, #C86A12 100%);
-  --page-solid: #7A3E08;
-  --vx: -20%; --vy: 12%; --vw: 70%;
-  --m-pos: center 70%;
   --fade-a: 32%; --fade-b: 58%;
+  --page: linear-gradient(180deg, #7A3E08 0%, #7A3E08 12%, #A85203 24%, #D06C04 37%, #EB8410 52%, #F49A30 67%, #EE9025 82%, #C86A12 100%);
+  --page-solid: #7A3E08;
+  --m-pos: center 70%;
   --brown: #2A1A0E;
   --brown-soft: #3A2414;
   --clay: #5A2C0C;
   --nav-fg: #FFF1DE;
   --navbtn-bg: #FFF1DE; --navbtn-fg: #2A1A0E;
-  --frame: rgba(255, 241, 222, 0.55);
-  --frame-fill: rgba(255, 241, 222, 0.10);
-  --play: #FFF1DE;
-  --cap: #FFF1DE;
+  --frame: rgba(42, 26, 14, 0.42);
+  --frame-fill: rgba(255, 241, 222, 0.14);
 }
-/* Photo: beige columns with flower reliefs */
 :root[data-img="columns"] {
   --img: url("hero-columns.png");
   --ratio: 551 / 980;
   --art-pos: right center;
-  --page: linear-gradient(180deg, #988A6F 0%, #9E8F73 35%, #A39274 60%, #B3A285 78%, #93856A 88%, #AD9F84 100%);
+  --page: linear-gradient(180deg, #988A6F 0%, #988A6F 12%, #9E8F73 43%, #A39274 65%, #B3A285 81%, #93856A 89%, #AD9F84 100%);
   --page-solid: #988A6F;
-  --vx: 2%; --vy: 41%; --vw: 60%;
   --m-pos: center 40%;
   --brown: #24180F;
   --brown-soft: #2E2016;
   --clay: #4A2A15;
-  --frame: rgba(36, 24, 15, 0.38);
+  --frame: rgba(36, 24, 15, 0.40);
 }
-:root[data-font="fraunces"] { --display: "Fraunces", "Iowan Old Style", Georgia, serif; }
-:root[data-font="jost"] { --display: "Jost", "Futura", "Century Gothic", sans-serif; }
-:root[data-font="shrikhand"] { --display: "Shrikhand", "Cooper Black", serif; }
+:root[data-font="fraunces"] { --display: "Fraunces", "Iowan Old Style", Georgia, serif; --fit: 26cqi; }
+:root[data-font="jost"] { --display: "Jost", "Futura", "Century Gothic", sans-serif; --fit: 22.5cqi; }
+:root[data-font="shrikhand"] { --display: "Shrikhand", "Cooper Black", serif; --fit: 19cqi; }
 
 * { box-sizing: border-box; }
 html { background: var(--page-solid); }
@@ -98,43 +89,30 @@ a { color: inherit; }
 button { font: inherit; color: inherit; }
 :focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
 
-/* Draft-only picker: a floating panel so it can't be missed */
+/* ---------- Draft-only picker (top strip, never covers the page) ---------- */
 .picker {
-  position: fixed; z-index: 50;
-  left: 50%; transform: translateX(-50%);
-  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
-  width: max-content; max-width: calc(100% - 32px);
+  display: flex; flex-wrap: wrap; align-items: center; gap: 10px 28px;
+  padding: 12px var(--side);
   background: #FFFFFF; color: #3A2A1F;
-  border: 1px solid rgba(58, 42, 31, 0.18);
-  box-shadow: 0 18px 40px -18px rgba(30, 20, 10, 0.45);
-  padding: 14px 16px 16px;
-  display: grid; gap: 12px;
-  font: 500 0.9rem/1.2 var(--sans);
+  border-bottom: 1px solid rgba(58, 42, 31, 0.14);
+  font: 500 0.88rem/1.2 var(--sans);
 }
-.picker-head { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
-.picker-head b { font-weight: 600; font-size: 0.95rem; }
-.picker .toggle { background: none; border: 0; padding: 4px 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; color: #5E4637; font-size: 0.85rem; }
-.picker .group { display: flex; gap: 10px; align-items: flex-start; overflow-x: auto; padding-bottom: 2px; }
-.picker .group > span { flex: none; width: 3.6rem; padding-top: 6px; color: #5E4637; font-size: 0.85rem; }
-.picker .thumbs button {
-  flex: none; display: grid; gap: 5px; justify-items: center;
-  background: none; border: 0; padding: 0; cursor: pointer; color: #3A2A1F; font-size: 0.78rem;
-}
-.picker .thumbs img { width: 56px; height: 76px; object-fit: cover; display: block; outline: 2px solid transparent; outline-offset: 2px; }
-.picker .thumbs button[aria-pressed="true"] img { outline-color: #3A2A1F; }
-.picker .thumbs button[aria-pressed="true"] { font-weight: 700; }
-.picker .fonts button {
-  flex: none; background: transparent; border: 1px solid rgba(58, 42, 31, 0.3); color: #3A2A1F;
-  padding: 7px 14px; cursor: pointer; font-size: 1rem; border-radius: 0;
-}
+.picker-title { font-weight: 600; }
+.picker .group { display: flex; align-items: center; gap: 8px; overflow-x: auto; max-width: 100%; }
+.picker .group > span { color: #5E4637; margin-right: 4px; }
+.picker .thumbs button { flex: none; display: flex; align-items: center; gap: 6px; background: none; border: 1px solid transparent; padding: 3px 8px 3px 3px; cursor: pointer; color: #3A2A1F; font-size: 0.82rem; }
+.picker .thumbs img { width: 30px; height: 40px; object-fit: cover; display: block; }
+.picker .thumbs button[aria-pressed="true"] { border-color: #3A2A1F; font-weight: 700; }
+.picker .fonts button { flex: none; background: transparent; border: 1px solid rgba(58, 42, 31, 0.3); color: #3A2A1F; padding: 6px 12px; cursor: pointer; font-size: 0.95rem; border-radius: 0; }
 .picker .fonts button[aria-pressed="true"] { background: #3A2A1F; color: var(--cream); border-color: #3A2A1F; }
 .picker button[data-v="bodoni"] { font-family: "Bodoni Moda", serif; font-style: italic; }
 .picker button[data-v="fraunces"] { font-family: "Fraunces", serif; font-variation-settings: "SOFT" 100, "WONK" 1; }
 .picker button[data-v="jost"] { font-family: "Jost", sans-serif; }
 .picker button[data-v="shrikhand"] { font-family: "Shrikhand", serif; }
-.picker.closed { padding: 10px 16px; }
+.picker .toggle { margin-left: auto; background: none; border: 0; padding: 4px 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; color: #5E4637; font-size: 0.85rem; }
 .picker.closed .group { display: none; }
 
+/* ---------- Hero ---------- */
 .hero {
   position: relative;
   min-height: max(100svh, 720px);
@@ -143,45 +121,27 @@ button { font: inherit; color: inherit; }
   display: grid;
   grid-template-rows: auto 1fr;
   padding-inline: var(--side);
-  padding-bottom: 48px;
   background: var(--page);
 }
 
-/* ---------- Photo + video stage (sized to the photo) ---------- */
-.stage {
-  position: absolute; z-index: 0; top: 0; right: 0; bottom: 0;
-  aspect-ratio: var(--ratio); height: 100%;
-}
+/* Photo: grounded in the bottom-right corner, fading into the backdrop on its left and top */
 .art {
-  position: absolute; inset: 0;
+  position: absolute; z-index: 0; right: 0; bottom: 0;
+  height: 88%; aspect-ratio: var(--ratio);
   background-image: var(--img);
   background-size: cover;
   background-position: var(--art-pos);
   background-repeat: no-repeat;
-  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.7) var(--fade-a), #000 var(--fade-b));
-          mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.7) var(--fade-a), #000 var(--fade-b));
+  -webkit-mask-image:
+    linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.7) var(--fade-a), #000 var(--fade-b)),
+    linear-gradient(180deg, transparent 0%, #000 20%);
+  -webkit-mask-composite: source-in;
+          mask-image:
+    linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.7) var(--fade-a), #000 var(--fade-b)),
+    linear-gradient(180deg, transparent 0%, #000 20%);
+          mask-composite: intersect;
 }
-.video {
-  position: absolute; z-index: 1;
-  left: var(--vx); top: var(--vy); width: var(--vw);
-  margin: 0; display: grid; gap: 10px;
-}
-.video .frame {
-  aspect-ratio: 16 / 9; max-width: 100%;
-  border: 1px solid var(--frame);
-  background: var(--frame-fill);
-  backdrop-filter: blur(4px);
-  display: grid; place-items: center;
-}
-.video .frame svg { width: 52px; height: 52px; color: var(--play); opacity: 0.9; }
-.video figcaption { font-size: 0.85rem; color: var(--cap); }
-/* When the video is ready, swap the .frame div for:
-   <video class="frame" controls preload="none" playsinline poster="poster.jpg">
-     <source src="your-video.mp4" type="video/mp4">
-   </video> */
-video.frame { width: 100%; height: auto; display: block; object-fit: cover; }
 
-/* ---------- Content ---------- */
 .nav { position: relative; z-index: 2; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-block: 26px; color: var(--nav-fg); }
 .logo { display: flex; align-items: center; min-height: 44px; font-family: var(--brand); font-weight: 700; font-size: 1.6rem; letter-spacing: 0.01em; text-decoration: none; }
 .links { display: flex; gap: 40px; font-size: 0.88rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; }
@@ -198,54 +158,83 @@ video.frame { width: 100%; height: auto; display: block; object-fit: cover; }
 @media (max-width: 1100px) { .links { display: none; } }
 @media (max-width: 960px) { .nav .box { padding: 15px 20px; font-size: 0.8rem; } }
 
-.main { position: relative; z-index: 2; align-self: center; display: grid; gap: clamp(28px, 4vw, 44px); padding-block: 24px 40px; max-width: min(56%, 760px); }
+/* Three columns: text | video | photo */
+.content {
+  position: relative; z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  column-gap: var(--gap);
+  align-items: center;
+  padding-block: 8px 56px;
+}
 
+.main { container-type: inline-size; display: grid; gap: clamp(26px, 3.4vw, 40px); min-width: 0; }
 h1 {
   margin: 0;
   font-family: var(--display);
   font-weight: 400;
-  font-size: clamp(3.4rem, 8.4vw, 9rem);
+  font-size: clamp(2.6rem, var(--fit), 8.4rem);
   line-height: 0.92;
   letter-spacing: -0.035em;
   font-variation-settings: "opsz" 96;
   color: var(--brown);
 }
 h1 .l { display: block; }
-h1 .it { font-style: italic; font-weight: 500; padding-left: 0.6em; color: var(--clay); }
+h1 .it { font-style: italic; font-weight: 500; padding-left: 0.5em; color: var(--clay); }
 h1 .big { font-weight: 800; }
-
-/* Fraunces: soft, slightly wonky old-style serif */
-:root[data-font="fraunces"] h1 { font-size: clamp(3.2rem, 8vw, 8.6rem); letter-spacing: -0.03em; line-height: 0.95; font-variation-settings: "opsz" 144, "SOFT" 100, "WONK" 1; }
+:root[data-font="fraunces"] h1 { letter-spacing: -0.03em; line-height: 0.95; font-variation-settings: "opsz" 144, "SOFT" 100, "WONK" 1; }
 :root[data-font="fraunces"] h1 .it { font-weight: 400; }
 :root[data-font="fraunces"] h1 .big { font-weight: 700; }
-/* Jost: clean, light geometric sans */
-:root[data-font="jost"] h1 { font-weight: 300; font-size: clamp(3.2rem, 8vw, 8.4rem); letter-spacing: -0.045em; line-height: 0.95; font-variation-settings: normal; }
+:root[data-font="jost"] h1 { font-weight: 300; letter-spacing: -0.045em; line-height: 0.95; font-variation-settings: normal; }
 :root[data-font="jost"] h1 .it { font-weight: 300; }
 :root[data-font="jost"] h1 .big { font-weight: 500; }
-/* Shrikhand: fat, retro, friendly */
-:root[data-font="shrikhand"] h1 { font-size: clamp(3rem, 7.6vw, 8rem); letter-spacing: -0.01em; line-height: 1; font-variation-settings: normal; }
+:root[data-font="shrikhand"] h1 { letter-spacing: -0.01em; line-height: 1; font-variation-settings: normal; }
 :root[data-font="shrikhand"] h1 .it, :root[data-font="shrikhand"] h1 .big { font-style: normal; font-weight: 400; }
 
-.cta { display: flex; flex-wrap: wrap; align-items: center; gap: 18px 26px; }
+.cta { display: flex; flex-wrap: wrap; align-items: center; gap: 16px 24px; }
 .cta p { margin: 0; font-size: 1rem; line-height: 1.45; color: var(--brown-soft); max-width: 24ch; }
 
-/* Phones and small tablets: text first, then the video, then the photo */
-@media (max-width: 860px) {
-  .hero { min-height: auto; grid-template-rows: auto auto auto; padding-bottom: 0; }
-  .main { max-width: none; padding-bottom: 28px; }
-  .stage { position: relative; inset: auto; aspect-ratio: auto; height: auto; display: grid; margin-inline: calc(-1 * var(--side)); }
-  .video { position: relative; left: auto; top: auto; width: auto; margin: 0 var(--side) 8px; }
-  .video .frame svg { color: var(--brown); }
-  .video figcaption { color: var(--brown-soft); }
-  .video .frame { border-color: rgba(58, 42, 31, 0.32); }
-  .art { position: relative; inset: auto; height: 440px; background-position: var(--m-pos);
+/* Vertical video frame, centred */
+.video { margin: 0; display: grid; gap: 12px; justify-items: center; }
+.video .frame {
+  height: clamp(380px, 64vh, 640px);
+  aspect-ratio: 9 / 16; max-width: 100%;
+  border: 1px solid var(--frame);
+  background: var(--frame-fill);
+  backdrop-filter: blur(4px);
+  display: grid; place-items: center;
+}
+.video .frame svg { width: 60px; height: 60px; color: var(--brown); opacity: 0.85; }
+.video figcaption { font-size: 0.85rem; color: var(--brown-soft); }
+/* When the video is ready, swap the .frame div for:
+   <video class="frame" controls preload="none" playsinline poster="poster.jpg">
+     <source src="your-video.mp4" type="video/mp4">
+   </video>
+   A vertical (9:16) video, like a phone recording, fits this frame exactly. */
+video.frame { display: block; object-fit: cover; }
+
+/* Phones and tablets: headline, button, video, then the photo */
+@media (max-width: 999px) {
+  .hero { min-height: auto; grid-template-rows: auto auto auto; }
+  .content { grid-template-columns: 1fr; row-gap: 40px; padding-bottom: 32px; }
+  .content .spacer { display: none; }
+  .main { max-width: 640px; }
+  h1 { font-size: clamp(2.8rem, 13vw, 5.6rem); }
+  :root[data-font="shrikhand"] h1 { font-size: clamp(2.3rem, 9vw, 4.8rem); }
+  .video .frame { height: auto; width: min(320px, 78vw); }
+  .art {
+    position: relative; right: auto; bottom: auto; order: 3;
+    height: 440px; aspect-ratio: auto;
+    margin-inline: calc(-1 * var(--side));
+    background-position: var(--m-pos);
     -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 30%);
-            mask-image: linear-gradient(180deg, transparent 0%, #000 30%); }
+            mask-image: linear-gradient(180deg, transparent 0%, #000 30%);
+  }
 }
 </style>
 
 <div class="picker" id="picker" role="region" aria-label="Draft picker">
-  <div class="picker-head"><b>Try a photo and a font</b><button type="button" class="toggle" id="picker-toggle">Hide</button></div>
+  <span class="picker-title">Try a photo and a font</span>
   <div class="group thumbs" role="group" aria-label="Photo" data-group="img">
     <span>Photo</span>
     <button type="button" data-v="peach" aria-pressed="false"><img src="hero-peach.png" alt="">Peach</button>
@@ -261,9 +250,12 @@ h1 .big { font-weight: 800; }
     <button type="button" data-v="jost" aria-pressed="false">Jost</button>
     <button type="button" data-v="shrikhand" aria-pressed="false">Shrikhand</button>
   </div>
+  <button type="button" class="toggle" id="picker-toggle">Hide</button>
 </div>
 
 <section class="hero">
+  <div class="art" aria-hidden="true"></div>
+
   <header class="nav">
     <!-- Logo spot: swap the wordmark for <img src="logo.svg" alt="Reliquo" height="44"> when the logo is ready -->
     <a class="logo" href="#">Reliquo</a>
@@ -275,22 +267,23 @@ h1 .big { font-weight: 800; }
     <a class="box" href="#">Book a free chat</a>
   </header>
 
-  <div class="main">
-    <h1><span class="l">Get your</span><span class="l it">evenings</span><span class="l big">back.</span></h1>
-    <div class="cta">
-      <a class="box" href="#">Book a free chat</a>
-      <p>A free 20-minute call, or coffee in Winnipeg. No pressure.</p>
+  <div class="content">
+    <div class="main">
+      <h1><span class="l">Get your</span><span class="l it">evenings</span><span class="l big">back.</span></h1>
+      <div class="cta">
+        <a class="box" href="#">Book a free chat</a>
+        <p>A free 20-minute call, or coffee in Winnipeg. No pressure.</p>
+      </div>
     </div>
-  </div>
 
-  <div class="stage">
     <figure class="video">
       <div class="frame" aria-label="Video space, coming soon">
         <svg viewBox="0 0 56 56" fill="none" aria-hidden="true"><circle cx="28" cy="28" r="27" stroke="currentColor" stroke-width="1.5"/><path d="M23 19.5v17l14-8.5-14-8.5Z" fill="currentColor"/></svg>
       </div>
       <figcaption>Video coming soon</figcaption>
     </figure>
-    <div class="art" aria-hidden="true"></div>
+
+    <div class="spacer" aria-hidden="true"></div>
   </div>
 </section>
 
@@ -324,7 +317,7 @@ h1 .big { font-weight: 800; }
     var toggle = document.getElementById('picker-toggle');
     toggle.addEventListener('click', function () {
       var closed = panel.classList.toggle('closed');
-      toggle.textContent = closed ? 'Show' : 'Hide';
+      toggle.textContent = closed ? 'Show photo and font picker' : 'Hide';
     });
   })();
 </script>
