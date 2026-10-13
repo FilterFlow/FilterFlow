@@ -1,9 +1,9 @@
 <title>Reliquo Hero</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Hanken+Grotesk:wght@400;500;600&family=Quicksand:wght@700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Parkinsans:wght@300..800&family=Quicksand:wght@700&display=swap">
 <style>
-/* Layout: one calm room. The peach photo sits on the right and its backdrop continues across the screen, so the left side is open space for the logo, headline and button. The video frame floats in the empty air above the short pedestal. Ink navy for all text and buttons, slate blue for small accents, warm cream for button text. Single light look by choice. */
+/* Layout: one calm room. The peach photo sits on the right and its backdrop continues across the screen, so the left side is open space for the logo, headline and button. A large video frame floats in the empty air above the short pedestal, level with the headline. Ink navy for all text and buttons, slate blue for small accents, warm cream for button text. Single light look by choice. */
 :root {
   /* Palette from Madden's swatches: peach, ink navy, slate blue, warm cream */
   --peach: #E3C9B8;
@@ -14,8 +14,9 @@
   --frame: var(--slate);
   --frame-fill: rgba(251, 243, 234, 0.34);
 
-  --display: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
-  --sans: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
+  /* Parkinsans: soft, rounded, simple; made to be friendly and easy to read */
+  --display: "Parkinsans", "Avenir Next", "Segoe UI", sans-serif;
+  --sans: "Parkinsans", "Avenir Next", "Segoe UI", sans-serif;
   --brand: "Quicksand", "Nunito", sans-serif;
   --side: clamp(20px, 4.2vw, 80px);
   color-scheme: light;
@@ -52,7 +53,7 @@ a { color: inherit; }
 }
 .video {
   position: absolute; z-index: 1;
-  left: -22%; top: 19%; width: 80%;
+  left: -46%; top: 17%; width: 108%;
   margin: 0; display: grid; gap: 10px;
 }
 .video .frame {
@@ -62,7 +63,7 @@ a { color: inherit; }
   backdrop-filter: blur(4px);
   display: grid; place-items: center;
 }
-.video .frame svg { width: 52px; height: 52px; color: var(--navy); opacity: 0.9; }
+.video .frame svg { width: 60px; height: 60px; color: var(--navy); opacity: 0.9; }
 .video figcaption { font-size: 0.85rem; color: var(--navy-soft); }
 /* When the video is ready, swap the .frame div for:
    <video class="frame" controls preload="none" playsinline poster="poster.jpg">
@@ -86,21 +87,20 @@ video.frame { width: 100%; height: auto; display: block; object-fit: cover; }
 @media (max-width: 1100px) { .links { display: none; } }
 @media (max-width: 960px) { .nav .box { padding: 15px 20px; font-size: 0.8rem; } }
 
-.main { position: relative; z-index: 2; align-self: center; display: grid; gap: clamp(28px, 4vw, 44px); padding-block: 24px 40px; max-width: min(56%, 760px); }
+.main { position: relative; z-index: 2; align-self: start; display: grid; gap: clamp(22px, 2.6vw, 32px); padding-block: clamp(24px, 6vh, 64px) 40px; max-width: min(50%, 680px); }
 
 h1 {
   margin: 0;
   font-family: var(--display);
-  font-weight: 400;
-  font-size: clamp(3.4rem, 8.4vw, 9rem);
-  line-height: 0.92;
+  font-weight: 500;
+  font-size: clamp(3.2rem, 7vw, 7.4rem);
+  line-height: 0.98;
   letter-spacing: -0.035em;
-  font-variation-settings: "opsz" 96;
   color: var(--navy);
 }
 h1 .l { display: block; }
-h1 .it { font-style: italic; font-weight: 500; padding-left: 0.6em; color: var(--navy); }
-h1 .big { font-weight: 800; }
+h1 .it { font-weight: 400; padding-left: 0.6em; }
+h1 .big { font-weight: 700; }
 
 .cta { display: flex; flex-wrap: wrap; align-items: center; gap: 18px 26px; }
 .cta p { margin: 0; font-size: 1rem; line-height: 1.45; color: var(--navy-soft); max-width: 24ch; }
@@ -108,7 +108,7 @@ h1 .big { font-weight: 800; }
 /* Phones and small tablets: text first, then the video, then the photo */
 @media (max-width: 860px) {
   .hero { min-height: auto; grid-template-rows: auto auto auto; padding-bottom: 0; }
-  .main { max-width: none; padding-bottom: 28px; }
+  .main { max-width: none; padding-block: 24px 28px; }
   .stage { position: relative; inset: auto; aspect-ratio: auto; height: auto; display: grid; margin-inline: calc(-1 * var(--side)); }
   .video { position: relative; left: auto; top: auto; width: auto; margin: 0 var(--side) 8px; }
   .art { position: relative; inset: auto; height: 440px; background-position: center 60%;
