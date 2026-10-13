@@ -56,6 +56,7 @@ a { color: inherit; }
 
 /* ---------- Hero (same geometry as the reference) ---------- */
 .hero {
+  --k: 1.3; /* headline is 30% bigger than the reference size */
   position: relative;
   min-height: max(calc(100svh - 72px), 720px);
   overflow: hidden;
@@ -65,10 +66,11 @@ a { color: inherit; }
   padding-inline: var(--side);
   padding-bottom: 48px;
 }
-.stage { position: absolute; z-index: 0; top: 0; right: 0; bottom: 0; aspect-ratio: 500 / 889; height: 100%; }
+/* Photo shown down to row 740 of 889: the pedestals end at row 714, so only a thin strip of floor remains */
+.stage { position: absolute; z-index: 0; top: 0; right: 0; bottom: 0; aspect-ratio: 500 / 740; height: 100%; }
 .art {
   position: absolute; inset: 0;
-  background: url("hero-peach.png") center bottom / cover no-repeat;
+  background: url("hero-peach.png") center top / cover no-repeat;
   -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.7) 14%, #000 32%);
           mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.7) 14%, #000 32%);
 }
@@ -90,14 +92,17 @@ a { color: inherit; }
    </video> */
 video.frame { width: 100%; height: auto; display: block; object-fit: cover; }
 
-.main { position: relative; z-index: 2; align-self: center; max-width: min(56%, 760px); }
-.hero.placed .main { position: absolute; left: var(--side); width: min(56%, 760px); }
+.main { position: relative; z-index: 2; align-self: center; max-width: min(56%, 760px); display: grid; gap: clamp(22px, 2.6vw, 34px); }
+.cta { display: grid; justify-items: start; gap: 12px; }
+.cta p { margin: 0; font-size: 1rem; line-height: 1.45; color: var(--barn); max-width: 22ch; }
+.hero.placed .main { position: absolute; left: var(--side); width: min(72%, 1000px); }
+.hero.placed h1 .l { white-space: nowrap; }
 h1 {
   margin: 0;
   font-family: var(--display);
   font-weight: 400;
-  font-size: clamp(3.4rem, min(8.4vw, 9.6vh), 9rem);
-  font-size: clamp(3.4rem, min(8.4vw, 9.6svh), 9rem);
+  font-size: calc(var(--k, 1) * clamp(3.4rem, min(8.4vw, 9.6vh), 9rem));
+  font-size: calc(var(--k, 1) * clamp(3.4rem, min(8.4vw, 9.6svh), 9rem));
   line-height: 0.92;
   letter-spacing: -0.035em;
   font-variation-settings: "opsz" 96;
@@ -113,19 +118,19 @@ h1 .big { font-weight: 800; }
 :root[data-font="lora"] { --display: "Lora", "Palatino", Georgia, serif; }
 :root[data-font="figtree"] { --display: "Figtree", "Segoe UI", system-ui, sans-serif; }
 :root[data-font="work"] { --display: "Work Sans", "Helvetica Neue", Arial, sans-serif; }
-:root[data-font="caslon"] h1 { font-size: clamp(3rem, min(7.2vw, 8.2svh), 7.8rem); letter-spacing: -0.025em; line-height: 0.98; font-variation-settings: normal; }
+:root[data-font="caslon"] h1 { font-size: calc(var(--k, 1) * clamp(3rem, min(7.2vw, 8.2svh), 7.8rem)); letter-spacing: -0.025em; line-height: 0.98; font-variation-settings: normal; }
 :root[data-font="caslon"] h1 .it { font-weight: 400; }
 :root[data-font="caslon"] h1 .big { font-weight: 700; }
-:root[data-font="source"] h1 { font-size: clamp(3.2rem, min(7.8vw, 8.9svh), 8.4rem); letter-spacing: -0.03em; line-height: 0.95; font-variation-settings: "opsz" 60; }
+:root[data-font="source"] h1 { font-size: calc(var(--k, 1) * clamp(3.2rem, min(7.8vw, 8.9svh), 8.4rem)); letter-spacing: -0.03em; line-height: 0.95; font-variation-settings: "opsz" 60; }
 :root[data-font="source"] h1 .it { font-weight: 400; }
 :root[data-font="source"] h1 .big { font-weight: 700; }
-:root[data-font="lora"] h1 { font-size: clamp(3.1rem, min(7.6vw, 8.7svh), 8.2rem); letter-spacing: -0.025em; line-height: 0.98; font-variation-settings: normal; }
+:root[data-font="lora"] h1 { font-size: calc(var(--k, 1) * clamp(3.1rem, min(7.6vw, 8.7svh), 8.2rem)); letter-spacing: -0.025em; line-height: 0.98; font-variation-settings: normal; }
 :root[data-font="lora"] h1 .it { font-weight: 400; }
 :root[data-font="lora"] h1 .big { font-weight: 700; }
-:root[data-font="figtree"] h1 { font-weight: 500; font-size: clamp(3.1rem, min(7.6vw, 8.7svh), 8.2rem); letter-spacing: -0.045em; line-height: 0.96; font-variation-settings: normal; }
+:root[data-font="figtree"] h1 { font-weight: 500; font-size: calc(var(--k, 1) * clamp(3.1rem, min(7.6vw, 8.7svh), 8.2rem)); letter-spacing: -0.045em; line-height: 0.96; font-variation-settings: normal; }
 :root[data-font="figtree"] h1 .it { font-weight: 400; }
 :root[data-font="figtree"] h1 .big { font-weight: 700; }
-:root[data-font="work"] h1 { font-weight: 500; font-size: clamp(2.9rem, min(7.1vw, 8.1svh), 7.6rem); letter-spacing: -0.05em; line-height: 0.98; font-variation-settings: normal; }
+:root[data-font="work"] h1 { font-weight: 500; font-size: calc(var(--k, 1) * clamp(2.9rem, min(7.1vw, 8.1svh), 7.6rem)); letter-spacing: -0.05em; line-height: 0.98; font-variation-settings: normal; }
 :root[data-font="work"] h1 .it { font-weight: 400; }
 :root[data-font="work"] h1 .big { font-weight: 700; }
 
@@ -192,6 +197,10 @@ h1 .big { font-weight: 800; }
 <section class="hero">
   <div class="main">
     <h1><span class="l">Get your</span><span class="l it">evenings</span><span class="l big">back.</span></h1>
+    <div class="cta">
+      <a class="box" href="#">Book a free chat</a>
+      <p>A free 20-minute call, or coffee in Winnipeg. No pressure.</p>
+    </div>
   </div>
 
   <figure class="video">
@@ -233,9 +242,10 @@ h1 .big { font-weight: 800; }
 
 <script>
   /* Places the video and headline using the real positions of the pillars in the photo.
-     Photo is 500 x 889 px; measured edges: short pillar top = row 570, tall pillar left edge = column 336. */
+     Photo is 500 x 889 px, shown down to row 740; measured edges: short pillar top = row 570, tall pillar left edge = column 336.
+     The video is placed against the reference headline size; the real headline is --k times bigger and may overlap it a little. */
   (function () {
-    var IMG_H = 889, SHORT_TOP = 570, TALL_LEFT = 336;
+    var IMG_H = 740, SHORT_TOP = 570, TALL_LEFT = 336;
     var hero = document.querySelector('.hero');
     var main = document.querySelector('.main');
     var video = document.querySelector('.video');
@@ -250,11 +260,12 @@ h1 .big { font-weight: 800; }
       var H = hero.getBoundingClientRect(), S = stage.getBoundingClientRect(), M = main.getBoundingClientRect();
       var s = S.height / IMG_H;
       var gap = Math.max(14, Math.min(28, window.innerWidth * 0.018));
+      var k = parseFloat(getComputedStyle(hero).getPropertyValue('--k')) || 1;
       var first = box(main.querySelector('.l')), ev = box(main.querySelector('.it')), back = box(main.querySelector('.big'));
-      var firstTop = first.top - M.top, evBottom = ev.bottom - M.top;
+      var firstTop = first.top - M.top, evBottom = ev.bottom - M.top; // real (bigger) "evenings" sits one gap above the video
       var bottom = (S.top - H.top) + SHORT_TOP * s - gap;      // just above the short pillar
       var right = (S.left - H.left) + TALL_LEFT * s - gap;     // just left of the tall pillar
-      var left = (back.right - H.left) + gap;                  // just right of "back."
+      var left = (M.left - H.left) + (back.right - M.left) / k + gap; // just right of "back." at the reference size
       var width = right - left, height = width * 9 / 16, top = bottom - height;
       var mainTop = top - gap - evBottom;                      // "evenings" sits one gap above the video
       var minTop = 24;
@@ -263,6 +274,8 @@ h1 .big { font-weight: 800; }
         top = mainTop + evBottom + gap;
         height = bottom - top; width = height * 16 / 9; left = right - width;
       }
+      var maxTop = H.height - 20 - M.height;                   // keep the button and small text inside the hero
+      if (mainTop > maxTop) mainTop = Math.max(minTop - firstTop, maxTop);
       main.style.top = Math.round(mainTop) + 'px';
       video.style.right = 'auto';
       video.style.left = Math.round(left) + 'px';
