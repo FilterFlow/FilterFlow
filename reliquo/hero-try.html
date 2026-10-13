@@ -27,13 +27,16 @@
      --c  = width of the widest headline line, in multiples of the font size (measured)
      --lh = line height */
   --c: 4.26; --lh: 0.92;
+  /* Measured ink of the headline (in multiples of the font size), so placement doesn't depend on how a browser sizes text boxes:
+     --cap = how far "Get your" reaches above its baseline, --gd = how far the tail of the "g" in "evenings" drops below its baseline */
+  --cap: 0.77; --gd: 0.27;
   color-scheme: light;
 }
-:root[data-font="caslon"]  { --display: "Libre Caslon Text", "Baskerville", Georgia, serif; --c: 4.59; --lh: 0.98; }
-:root[data-font="source"]  { --display: "Source Serif 4", "Iowan Old Style", Georgia, serif; --c: 3.75; --lh: 0.95; }
-:root[data-font="lora"]    { --display: "Lora", "Palatino", Georgia, serif; --c: 4.42; --lh: 0.98; }
-:root[data-font="figtree"] { --display: "Figtree", "Segoe UI", system-ui, sans-serif; --c: 4.29; --lh: 0.96; }
-:root[data-font="work"]    { --display: "Work Sans", "Helvetica Neue", Arial, sans-serif; --c: 4.47; --lh: 0.98; }
+:root[data-font="caslon"]  { --display: "Libre Caslon Text", "Baskerville", Georgia, serif; --c: 4.59; --lh: 0.98; --cap: 0.78; --gd: 0.27; }
+:root[data-font="source"]  { --display: "Source Serif 4", "Iowan Old Style", Georgia, serif; --c: 3.75; --lh: 0.95; --cap: 0.71; --gd: 0.27; }
+:root[data-font="lora"]    { --display: "Lora", "Palatino", Georgia, serif; --c: 4.42; --lh: 0.98; --cap: 0.73; --gd: 0.28; }
+:root[data-font="figtree"] { --display: "Figtree", "Segoe UI", system-ui, sans-serif; --c: 4.29; --lh: 0.96; --cap: 0.72; --gd: 0.22; }
+:root[data-font="work"]    { --display: "Work Sans", "Helvetica Neue", Arial, sans-serif; --c: 4.47; --lh: 0.98; --cap: 0.68; --gd: 0.22; }
 
 * { box-sizing: border-box; }
 html { background: #E0C0AB; }
@@ -126,6 +129,7 @@ h1 {
 h1 .l { display: block; white-space: nowrap; }
 h1 .it { font-style: italic; font-weight: 500; padding-left: 0.6em; color: var(--sand); }
 h1 .big { font-weight: 800; }
+h1 .bl { display: inline-block; width: 0; height: 0; }   /* zero-size marker: its top is the line's baseline */
 :root[data-font="caslon"] h1, :root[data-font="lora"] h1 { letter-spacing: -0.025em; font-variation-settings: normal; }
 :root[data-font="source"] h1 { letter-spacing: -0.03em; font-variation-settings: "opsz" 60; }
 :root[data-font="figtree"] h1 { letter-spacing: -0.045em; font-variation-settings: normal; font-weight: 500; }
@@ -217,7 +221,7 @@ video.frame { display: block; object-fit: cover; padding: 0; }
 </header>
 
 <div class="picker" id="picker" role="region" aria-label="Draft font picker">
-  <div class="picker-head"><b>Try a headline font</b><button type="button" class="toggle" id="picker-toggle">Hide</button></div>
+  <div class="picker-head"><b>Try a headline font</b><button type="button" class="toggle" id="picker-toggle">Hide fonts</button></div>
   <div class="fonts" role="group" aria-label="Headline font">
     <button type="button" data-v="bodoni" aria-pressed="true">Current (Bodoni)</button>
     <button type="button" data-v="caslon" aria-pressed="false">Caslon</button>
@@ -231,7 +235,7 @@ video.frame { display: block; object-fit: cover; padding: 0; }
 <section class="hero">
   <div class="inner">
     <div class="main">
-      <h1><span class="l">Get your</span><span class="l it">evenings</span><span class="l big">back.</span></h1>
+      <h1><span class="l">Get your<span class="bl" aria-hidden="true"></span></span><span class="l it">evenings<span class="bl" aria-hidden="true"></span></span><span class="l big">back.<span class="bl" aria-hidden="true"></span></span></h1>
       <div class="cta">
         <a class="box" href="#">Book a free chat</a>
         <p>A free 20-minute call,<br> or coffee in Winnipeg.<br> No pressure.</p>
@@ -276,7 +280,7 @@ video.frame { display: block; object-fit: cover; padding: 0; }
     var toggle = document.getElementById('picker-toggle');
     toggle.addEventListener('click', function () {
       var closed = panel.classList.toggle('closed');
-      toggle.textContent = closed ? 'Show' : 'Hide';
+      toggle.textContent = closed ? 'Show fonts' : 'Hide fonts';
     });
   })();
 </script>
@@ -305,6 +309,8 @@ video.frame { display: block; object-fit: cover; padding: 0; }
       var X = function (x) { return S.left - H.left + x * s; }, Y = function (y) { return S.top - H.top + y * s; };
       var cs = getComputedStyle(document.documentElement);
       var lh = parseFloat(cs.getPropertyValue('--lh')) || 0.92, c = parseFloat(cs.getPropertyValue('--c')) || 4.26;
+      var cap = parseFloat(cs.getPropertyValue('--cap')) || 0.77, gd = parseFloat(cs.getPropertyValue('--gd')) || 0.27;
+      var base = function (sel) { return main.querySelector(sel + ' .bl').getBoundingClientRect().top; };   // a line's baseline
       var g = clamp(14, vw * 0.018, 28), ctaGap = clamp(22, vw * 0.024, 32);
       var cl = parseFloat(getComputedStyle(nav).paddingLeft);          // 4: same left edge as the logo
       var B = Y(SHORT_TOP) - g, tallLeft = X(TALL_LEFT), topMin = 40;
@@ -323,9 +329,10 @@ video.frame { display: block; object-fit: cover; padding: 0; }
         var back = box(main.querySelector('.big')), ev = box(main.querySelector('.it')), gt = box(main.querySelector('.l'));
         ctaLeft = back.right - H.left + Math.max(28, f * 0.3);
         right = Math.max(Math.max(ev.right, gt.right) - H.left, ctaLeft + cta.getBoundingClientRect().width);
-        // button sits level with "back.", but always below the tail of the "g" in "evenings"
+        // button sits level with "back.", but always clear of the tail of the "g" in "evenings"
         var Mb = main.getBoundingClientRect(), backLine = main.querySelector('.big').getBoundingClientRect(), ctaH = cta.getBoundingClientRect().height;
-        ctaTop = Math.max(backLine.top - Mb.top + (backLine.height - ctaH) / 2, ev.bottom - Mb.top + 14);
+        var gTail = base('.it') + gd * f;
+        ctaTop = Math.max(backLine.top - Mb.top + (backLine.height - ctaH) / 2, gTail - Mb.top + 18);
         // the "what I do" list moves down to clear the button instead of the headline shrinking
         listPush = Math.max(0, ctaTop + ctaH + 20 - (does.getBoundingClientRect().top - Mb.top));
         if (right <= maxRight && Mb.height + listPush <= Hv - 48) break;
@@ -347,14 +354,20 @@ video.frame { display: block; object-fit: cover; padding: 0; }
         cta.style.top = ctaTop + 'px';
         does.style.marginTop = listPush + 'px';
       }
-      var M2 = main.getBoundingClientRect();
-      main.style.top = (vTop + (Hv - M2.height) / 2) + 'px';             // text block centred on the video
+      // text block centred up and down on the page (from the top of "Get your" to the bottom of the last line of text)
+      var M2 = main.getBoundingClientRect(), fNow = parseFloat(getComputedStyle(main.querySelector('h1')).fontSize);
+      var inkTop = base('.l:first-child') - cap * fNow - M2.top;
+      var inkBottom = Math.max(does.getBoundingClientRect().bottom, cta.getBoundingClientRect().bottom) - M2.top;
+      var top = (H.height - (inkBottom - inkTop)) / 2 - inkTop;
+      top = clamp(32 - inkTop, top, H.height - 32 - inkBottom);
+      main.style.top = top + 'px';
     }
     layout();
     window.addEventListener('resize', layout);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
     if (document.fonts && document.fonts.addEventListener) document.fonts.addEventListener('loadingdone', layout);
     window.addEventListener('load', layout);
+    [300, 1000, 2500].forEach(function (t) { setTimeout(layout, t); });   // in case a font arrives late
     // re-place everything when a different headline font is picked
     new MutationObserver(layout).observe(document.documentElement, { attributes: true, attributeFilter: ['data-font'] });
   })();
