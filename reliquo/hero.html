@@ -3,15 +3,14 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Hanken+Grotesk:wght@400;500;600&family=Quicksand:wght@700&display=swap">
 <style>
-/* Layout: one calm room. A sticky sand header on top; below it the peach photo sits on the right and its backdrop continues across the screen. Big three-line headline on the left in terracotta with "evenings" in sand; the video frame floats above the short pedestal. The photo's empty floor is trimmed so there's little space under the pedestals. Single light look by choice. */
+/* Layout: identical to Madden's reference draft (the peach version from early on): full peach photo on the right with its backdrop carried across the screen, big three-line Bodoni headline on the left, video frame at the same spot above the short pedestal. Only differences: a sticky barn-red header and the new colours. Single light look by choice. */
 :root {
-  /* Exact colours from Madden's swatches */
-  --terracotta: #873F2B;      /* headline letters, buttons, small text */
-  --sand: #C78054;            /* "evenings" and the sticky header */
-  --header-ink: #4A1E12;      /* deep terracotta: readable text on the sand header */
+  /* Madden's swatches */
+  --barn: #69200F;     /* barn red: sticky header, small text */
+  --rufous: #A33215;   /* rufous: headline letters, buttons */
+  --sand: #C78054;     /* sand: "evenings" */
   --cream: #FBF3EA;
-  --frame: rgba(135, 63, 43, 0.45);
-  --frame-fill: rgba(251, 243, 234, 0.30);
+  --frame: rgba(105, 32, 15, 0.32);
 
   --display: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
   --sans: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
@@ -19,73 +18,77 @@
   --side: clamp(20px, 4.2vw, 80px);
   color-scheme: light;
 }
-
 * { box-sizing: border-box; }
 html { background: #E0C0AB; }
-body { min-height: 100vh; margin: 0; background: #E0C0AB; color: var(--terracotta); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+body {
+  min-height: 100vh; margin: 0;
+  background: linear-gradient(180deg, #E0C0AB 0%, #E2C0AA 40%, #E5C8B5 60%, #E2CABA 85%, #E5CEBE 100%);
+  color: var(--barn);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
 a { color: inherit; }
-:focus-visible { outline: 2px solid var(--terracotta); outline-offset: 4px; }
+:focus-visible { outline: 2px solid var(--barn); outline-offset: 4px; }
 
 /* ---------- Sticky header ---------- */
 .nav {
   position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
   display: flex; align-items: center; justify-content: space-between; gap: 24px;
   padding: 14px var(--side);
-  background: var(--sand); color: var(--header-ink);
+  background: var(--barn); color: var(--cream);
 }
+.nav :focus-visible { outline-color: var(--cream); }
 .logo { display: flex; align-items: center; min-height: 44px; font-family: var(--brand); font-weight: 700; font-size: 1.6rem; letter-spacing: 0.01em; text-decoration: none; }
 .links { display: flex; gap: 40px; font-size: 0.88rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; }
 .links a { text-decoration: none; }
 .links a:hover { text-decoration: underline; text-underline-offset: 6px; }
-.nav :focus-visible { outline-color: var(--header-ink); }
 .box {
   display: inline-flex; align-items: center; justify-content: center;
-  background: var(--terracotta); color: var(--cream);
+  background: var(--rufous); color: var(--cream);
   font: 600 0.9rem/1 var(--sans); letter-spacing: 0.07em; text-transform: uppercase;
   padding: 20px 34px; text-decoration: none; border: 0; border-radius: 0; white-space: nowrap;
 }
-.box:hover { background: #6E3222; }
-.nav .box { padding: 16px 26px; }
+.box:hover { background: var(--barn); }
+.nav .box { padding: 16px 28px; }
+.nav .box:hover { background: #B8401F; }
 @media (max-width: 1100px) { .links { display: none; } }
 @media (max-width: 960px) { .nav .box { padding: 13px 18px; font-size: 0.8rem; } }
 
-/* ---------- Hero ---------- */
+/* ---------- Hero (same geometry as the reference) ---------- */
 .hero {
   position: relative;
-  min-height: clamp(600px, calc(100svh - 72px), 900px);
+  min-height: max(calc(100svh - 72px), 720px);
   overflow: hidden;
   isolation: isolate;
   display: grid;
+  grid-template-rows: 1fr;
   padding-inline: var(--side);
-  padding-block: 32px 28px;
-  background: linear-gradient(180deg, #E0C0AB 0%, #E2C0AA 45%, #E5C8B5 70%, #E2CABA 100%);
+  padding-bottom: 48px;
 }
-
-/* Photo + video stage. The photo's bottom floor is trimmed (ratio 500/770 of a 500/889 image) */
-.stage { position: absolute; z-index: 0; top: 0; right: 0; bottom: 0; aspect-ratio: 500 / 770; height: 100%; }
+.stage { position: absolute; z-index: 0; top: 0; right: 0; bottom: 0; aspect-ratio: 500 / 889; height: 100%; }
 .art {
   position: absolute; inset: 0;
-  background: url("hero-peach.png") center top / cover no-repeat;
+  background: url("hero-peach.png") center bottom / cover no-repeat;
   -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.7) 14%, #000 32%);
           mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.7) 14%, #000 32%);
 }
-.video { position: absolute; z-index: 1; left: -22%; top: 15%; width: 80%; margin: 0; display: grid; gap: 10px; }
+.video { position: absolute; z-index: 1; left: -22%; top: 19%; width: 80%; margin: 0; display: grid; gap: 10px; }
 .video .frame {
   aspect-ratio: 16 / 9; max-width: 100%;
   border: 1px solid var(--frame);
-  background: var(--frame-fill);
+  background: rgba(251, 244, 238, 0.28);
   backdrop-filter: blur(4px);
   display: grid; place-items: center;
 }
-.video .frame svg { width: 52px; height: 52px; color: var(--terracotta); opacity: 0.9; }
-.video figcaption { font-size: 0.85rem; color: var(--terracotta); }
+.video .frame svg { width: 52px; height: 52px; color: var(--barn); opacity: 0.85; }
+.video figcaption { font-size: 0.85rem; color: var(--barn); }
 /* When the video is ready, swap the .frame div for:
    <video class="frame" controls preload="none" playsinline poster="poster.jpg">
      <source src="your-video.mp4" type="video/mp4">
    </video> */
 video.frame { width: 100%; height: auto; display: block; object-fit: cover; }
 
-.main { position: relative; z-index: 2; align-self: center; display: grid; gap: clamp(28px, 4vw, 44px); max-width: min(56%, 760px); }
+.main { position: relative; z-index: 2; align-self: center; display: grid; gap: clamp(28px, 4vw, 44px); padding-block: 24px 40px; max-width: min(56%, 760px); }
 h1 {
   margin: 0;
   font-family: var(--display);
@@ -94,28 +97,22 @@ h1 {
   line-height: 0.92;
   letter-spacing: -0.035em;
   font-variation-settings: "opsz" 96;
-  color: var(--terracotta);
+  color: var(--rufous);
 }
 h1 .l { display: block; }
 h1 .it { font-style: italic; font-weight: 500; padding-left: 0.6em; color: var(--sand); }
 h1 .big { font-weight: 800; }
 
 .cta { display: flex; flex-wrap: wrap; align-items: center; gap: 18px 26px; }
-.cta p { margin: 0; font-size: 1rem; line-height: 1.45; color: var(--terracotta); max-width: 24ch; }
+.cta p { margin: 0; font-size: 1rem; line-height: 1.45; color: var(--barn); max-width: 24ch; }
 
-/* Mid-size screens: same arrangement as the reference; the headline sits a little lower so it never runs into the video */
-@media (min-width: 861px) and (max-width: 1180px) {
-  .main { align-self: end; padding-bottom: 12px; }
-  h1 { font-size: clamp(3.2rem, 7.4vw, 6.6rem); }
-}
-
-/* Phones and small tablets: headline, button, video, then the photo */
+/* Phones and small tablets: text first, then the video, then the photo */
 @media (max-width: 860px) {
   .hero { min-height: auto; grid-template-rows: auto auto; padding-bottom: 0; }
   .main { max-width: none; padding-bottom: 28px; }
   .stage { position: relative; inset: auto; aspect-ratio: auto; height: auto; display: grid; margin-inline: calc(-1 * var(--side)); }
   .video { position: relative; left: auto; top: auto; width: auto; margin: 0 var(--side) 8px; }
-  .art { position: relative; inset: auto; height: 400px; background-position: center 72%; background-size: cover;
+  .art { position: relative; inset: auto; height: 440px; background-size: cover; background-position: center 60%;
     -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 30%);
             mask-image: linear-gradient(180deg, transparent 0%, #000 30%); }
 }
