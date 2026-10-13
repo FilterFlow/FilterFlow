@@ -1,22 +1,20 @@
 <title>Reliquo Hero</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Parkinsans:wght@300..800&family=Quicksand:wght@700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Hanken+Grotesk:wght@400;500;600&family=Quicksand:wght@700&display=swap">
 <style>
-/* Layout: one calm room. The peach photo sits on the right and its backdrop continues across the screen, so the left side is open space for the logo, headline and button. A large video frame floats in the empty air above the short pedestal, level with the headline. Ink navy for all text and buttons, slate blue for small accents, warm cream for button text. Single light look by choice. */
+/* Layout: one calm room. A sticky beach-tan header on top; below it the peach photo sits on the right and its backdrop continues across the screen. Big three-line headline on the left in terracotta with "evenings" in beach tan; the video frame floats above the short pedestal. The photo's empty floor is trimmed so there's little space under the pedestals. Single light look by choice. */
 :root {
-  /* Palette from Madden's swatches: peach, ink navy, slate blue, warm cream */
-  --peach: #E3C9B8;
-  --navy: #1E2B3C;
-  --navy-soft: #3A4659;
-  --slate: #6F8CAA;
+  --terracotta: #B5523B;      /* headline letters */
+  --terracotta-btn: #A94A33;  /* buttons (a touch deeper so cream text reads) */
+  --terracotta-ink: #7A3A26;  /* small text */
+  --tan: #946436;             /* "evenings" and the header: a sun-tan bronze */
   --cream: #FBF3EA;
-  --frame: var(--slate);
-  --frame-fill: rgba(251, 243, 234, 0.34);
+  --frame: rgba(181, 82, 59, 0.45);
+  --frame-fill: rgba(251, 243, 234, 0.30);
 
-  /* Parkinsans: soft, rounded, simple; made to be friendly and easy to read */
-  --display: "Parkinsans", "Avenir Next", "Segoe UI", sans-serif;
-  --sans: "Parkinsans", "Avenir Next", "Segoe UI", sans-serif;
+  --display: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
+  --sans: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
   --brand: "Quicksand", "Nunito", sans-serif;
   --side: clamp(20px, 4.2vw, 80px);
   color-scheme: light;
@@ -24,111 +22,118 @@
 
 * { box-sizing: border-box; }
 html { background: #E0C0AB; }
-body { min-height: 100vh; margin: 0; background: #E0C0AB; color: var(--navy); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+body { min-height: 100vh; margin: 0; background: #E0C0AB; color: var(--terracotta-ink); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
 a { color: inherit; }
-:focus-visible { outline: 2px solid var(--navy); outline-offset: 4px; }
+:focus-visible { outline: 2px solid var(--terracotta-ink); outline-offset: 4px; }
 
+/* ---------- Sticky header ---------- */
+.nav {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  padding: 14px var(--side);
+  background: var(--tan); color: var(--cream);
+}
+.logo { display: flex; align-items: center; min-height: 44px; font-family: var(--brand); font-weight: 700; font-size: 1.6rem; letter-spacing: 0.01em; text-decoration: none; }
+.links { display: flex; gap: 40px; font-size: 0.88rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; }
+.links a { text-decoration: none; }
+.links a:hover { text-decoration: underline; text-underline-offset: 6px; }
+.nav :focus-visible { outline-color: var(--cream); }
+.box {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--terracotta-btn); color: var(--cream);
+  font: 600 0.9rem/1 var(--sans); letter-spacing: 0.07em; text-transform: uppercase;
+  padding: 20px 34px; text-decoration: none; border: 0; border-radius: 0; white-space: nowrap;
+}
+.box:hover { background: var(--terracotta-ink); }
+.nav .box { background: var(--cream); color: var(--terracotta-btn); padding: 16px 26px; }
+.nav .box:hover { background: #FFFFFF; }
+@media (max-width: 1100px) { .links { display: none; } }
+@media (max-width: 960px) { .nav .box { padding: 13px 18px; font-size: 0.8rem; } }
+
+/* ---------- Hero ---------- */
 .hero {
   position: relative;
-  min-height: max(100svh, 720px);
+  min-height: clamp(600px, calc(100svh - 72px), 900px);
   overflow: hidden;
   isolation: isolate;
   display: grid;
-  grid-template-rows: auto 1fr;
   padding-inline: var(--side);
-  padding-bottom: 48px;
-  background: linear-gradient(180deg, #E0C0AB 0%, #E2C0AA 40%, #E5C8B5 60%, #E2CABA 85%, #E5CEBE 100%);
+  padding-block: 32px 28px;
+  background: linear-gradient(180deg, #E0C0AB 0%, #E2C0AA 45%, #E5C8B5 70%, #E2CABA 100%);
 }
 
-/* ---------- Photo + video stage (sized to the photo) ---------- */
-.stage {
-  position: absolute; z-index: 0; top: 0; right: 0; bottom: 0;
-  aspect-ratio: 500 / 889; height: 100%;
-}
+/* Photo + video stage. The photo's bottom floor is trimmed (ratio 500/770 of a 500/889 image) */
+.stage { position: absolute; z-index: 0; top: 0; right: 0; bottom: 0; aspect-ratio: 500 / 770; height: 100%; }
 .art {
   position: absolute; inset: 0;
-  background: url("hero-peach.png") center bottom / cover no-repeat;
+  background: url("hero-peach.png") center top / cover no-repeat;
   -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.7) 14%, #000 32%);
           mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.7) 14%, #000 32%);
 }
-.video {
-  position: absolute; z-index: 1;
-  left: -46%; top: 17%; width: 108%;
-  margin: 0; display: grid; gap: 10px;
-}
+.video { position: absolute; z-index: 1; left: -22%; top: 14%; width: 80%; margin: 0; display: grid; gap: 10px; }
 .video .frame {
   aspect-ratio: 16 / 9; max-width: 100%;
-  border: 1.5px solid var(--frame);
+  border: 1px solid var(--frame);
   background: var(--frame-fill);
   backdrop-filter: blur(4px);
   display: grid; place-items: center;
 }
-.video .frame svg { width: 60px; height: 60px; color: var(--navy); opacity: 0.9; }
-.video figcaption { font-size: 0.85rem; color: var(--navy-soft); }
+.video .frame svg { width: 52px; height: 52px; color: var(--terracotta-ink); opacity: 0.9; }
+.video figcaption { font-size: 0.85rem; color: var(--terracotta-ink); }
 /* When the video is ready, swap the .frame div for:
    <video class="frame" controls preload="none" playsinline poster="poster.jpg">
      <source src="your-video.mp4" type="video/mp4">
    </video> */
 video.frame { width: 100%; height: auto; display: block; object-fit: cover; }
 
-/* ---------- Content ---------- */
-.nav { position: relative; z-index: 2; display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-block: 26px; }
-.logo { display: flex; align-items: center; min-height: 44px; font-family: var(--brand); font-weight: 700; font-size: 1.6rem; letter-spacing: 0.01em; text-decoration: none; }
-.links { display: flex; gap: 40px; font-size: 0.88rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; }
-.links a { text-decoration: none; }
-.links a:hover { text-decoration: underline; text-decoration-color: var(--slate); text-decoration-thickness: 2px; text-underline-offset: 6px; }
-.box {
-  display: inline-flex; align-items: center; justify-content: center;
-  background: var(--navy); color: var(--cream);
-  font: 600 0.9rem/1 var(--sans); letter-spacing: 0.07em; text-transform: uppercase;
-  padding: 20px 34px; text-decoration: none; border: 0; border-radius: 0; white-space: nowrap;
-}
-.box:hover { background: #2C3B52; }
-@media (max-width: 1100px) { .links { display: none; } }
-@media (max-width: 960px) { .nav .box { padding: 15px 20px; font-size: 0.8rem; } }
-
-.main { position: relative; z-index: 2; align-self: start; display: grid; gap: clamp(22px, 2.6vw, 32px); padding-block: clamp(24px, 6vh, 64px) 40px; max-width: min(50%, 680px); }
-
+.main { position: relative; z-index: 2; align-self: center; display: grid; gap: clamp(28px, 4vw, 44px); max-width: min(56%, 760px); }
 h1 {
   margin: 0;
   font-family: var(--display);
-  font-weight: 500;
-  font-size: clamp(3.2rem, 7vw, 7.4rem);
-  line-height: 0.98;
+  font-weight: 400;
+  font-size: clamp(3.4rem, 8.4vw, 9rem);
+  line-height: 0.92;
   letter-spacing: -0.035em;
-  color: var(--navy);
+  font-variation-settings: "opsz" 96;
+  color: var(--terracotta);
 }
 h1 .l { display: block; }
-h1 .it { font-weight: 400; padding-left: 0.6em; }
-h1 .big { font-weight: 700; }
+h1 .it { font-style: italic; font-weight: 500; padding-left: 0.6em; color: var(--tan); }
+h1 .big { font-weight: 800; }
 
 .cta { display: flex; flex-wrap: wrap; align-items: center; gap: 18px 26px; }
-.cta p { margin: 0; font-size: 1rem; line-height: 1.45; color: var(--navy-soft); max-width: 24ch; }
+.cta p { margin: 0; font-size: 1rem; line-height: 1.45; color: var(--terracotta-ink); max-width: 24ch; }
 
-/* Phones and small tablets: text first, then the video, then the photo */
+/* Mid-size screens: keep the video clear of the headline */
+@media (min-width: 861px) and (max-width: 1180px) {
+  h1 { font-size: clamp(3.2rem, 6.4vw, 6rem); }
+  .video { left: -2%; width: 64%; }
+}
+
+/* Phones and small tablets: headline, button, video, then the photo */
 @media (max-width: 860px) {
-  .hero { min-height: auto; grid-template-rows: auto auto auto; padding-bottom: 0; }
-  .main { max-width: none; padding-block: 24px 28px; }
+  .hero { min-height: auto; grid-template-rows: auto auto; padding-bottom: 0; }
+  .main { max-width: none; padding-bottom: 28px; }
   .stage { position: relative; inset: auto; aspect-ratio: auto; height: auto; display: grid; margin-inline: calc(-1 * var(--side)); }
   .video { position: relative; left: auto; top: auto; width: auto; margin: 0 var(--side) 8px; }
-  .art { position: relative; inset: auto; height: 440px; background-position: center 60%;
+  .art { position: relative; inset: auto; height: 400px; background-position: center 72%; background-size: cover;
     -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 30%);
             mask-image: linear-gradient(180deg, transparent 0%, #000 30%); }
 }
 </style>
 
-<section class="hero">
-  <header class="nav">
-    <!-- Logo spot: swap the wordmark for <img src="logo.svg" alt="Reliquo" height="44"> when the logo is ready -->
-    <a class="logo" href="#">Reliquo</a>
-    <nav class="links" aria-label="Main">
-      <a href="#">How it works</a>
-      <a href="#">Pricing</a>
-      <a href="#">Questions</a>
-    </nav>
-    <a class="box" href="#">Book a free chat</a>
-  </header>
+<header class="nav">
+  <!-- Logo spot: swap the wordmark for <img src="logo.svg" alt="Reliquo" height="44"> when the logo is ready -->
+  <a class="logo" href="#">Reliquo</a>
+  <nav class="links" aria-label="Main">
+    <a href="#">How it works</a>
+    <a href="#">Pricing</a>
+    <a href="#">Questions</a>
+  </nav>
+  <a class="box" href="#">Book a free chat</a>
+</header>
 
+<section class="hero">
   <div class="main">
     <h1><span class="l">Get your</span><span class="l it">evenings</span><span class="l big">back.</span></h1>
     <div class="cta">
