@@ -3,21 +3,38 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&family=Lora:ital,wght@0,400..700;1,400..700&family=Figtree:ital,wght@0,400..700;1,400..700&family=Work+Sans:ital,wght@0,400..700;1,400..700&family=Hanken+Grotesk:wght@400;500;600&family=Quicksand:wght@700&display=swap">
 <style>
-/* Layout: identical to Madden's reference draft (the peach version from early on): full peach photo on the right with its backdrop carried across the screen, big three-line Bodoni headline on the left, video frame at the same spot above the short pedestal. Only differences: a sticky barn-red header and the new colours. Single light look by choice. */
+/*
+  Layout: one clear order of reading. The headline leads (top left), the button sits directly under it,
+  and the video card steps down to the right of the button, resting just above the short pillar and
+  just left of the tall pillar. Shared lines: the button's top and the video's top are the same line;
+  the video's bottom and right keep the same gap to the two pillars. Nothing overlaps.
+  All positions come from the photo's measured pillar edges (photo 500 x 889, shown down to row 740;
+  short pillar top = row 570, tall pillar left edge = column 336), so no script is needed.
+*/
 :root {
   /* Madden's swatches */
-  --barn: #69200F;     /* barn red: sticky header, headline and small text */
-  --rufous: #A33215;   /* rufous: buttons */
+  --barn: #69200F;     /* barn red: header, headline, small text */
   --sand: #C78054;     /* sand: "evenings" */
   --cream: #FBF3EA;
-  --frame: rgba(105, 32, 15, 0.32);
+  --white: #FFFFFF;
+  --black: #141414;
 
   --display: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
   --sans: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
   --brand: "Quicksand", "Nunito", sans-serif;
   --side: clamp(20px, 4.2vw, 80px);
+
+  /* Headline font tuning (changed by the draft picker) */
+  --fs: 1;      /* size relative to Bodoni */
+  --lh: 0.92;   /* line height */
   color-scheme: light;
 }
+:root[data-font="caslon"]  { --display: "Libre Caslon Text", "Baskerville", Georgia, serif; --fs: 0.86; --lh: 0.98; }
+:root[data-font="source"]  { --display: "Source Serif 4", "Iowan Old Style", Georgia, serif; --fs: 0.93; --lh: 0.95; }
+:root[data-font="lora"]    { --display: "Lora", "Palatino", Georgia, serif; --fs: 0.9; --lh: 0.98; }
+:root[data-font="figtree"] { --display: "Figtree", "Segoe UI", system-ui, sans-serif; --fs: 0.9; --lh: 0.96; }
+:root[data-font="work"]    { --display: "Work Sans", "Helvetica Neue", Arial, sans-serif; --fs: 0.85; --lh: 0.98; }
+
 * { box-sizing: border-box; }
 html { background: #E0C0AB; }
 body {
@@ -29,6 +46,16 @@ body {
 }
 a { color: inherit; }
 :focus-visible { outline: 2px solid var(--barn); outline-offset: 4px; }
+
+/* ---------- Buttons: white with black lettering ---------- */
+.box {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--white); color: var(--black);
+  font: 600 0.9rem/1 var(--sans); letter-spacing: 0.07em; text-transform: uppercase;
+  padding: 20px 34px; text-decoration: none; border: 0; border-radius: 0; white-space: nowrap;
+  box-shadow: 0 12px 26px -18px rgba(105, 32, 15, 0.55);
+}
+.box:hover { background: var(--cream); }
 
 /* ---------- Sticky header ---------- */
 .nav {
@@ -42,97 +69,87 @@ a { color: inherit; }
 .links { display: flex; gap: 40px; font-size: 0.88rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; }
 .links a { text-decoration: none; }
 .links a:hover { text-decoration: underline; text-underline-offset: 6px; }
-.box {
-  display: inline-flex; align-items: center; justify-content: center;
-  background: var(--rufous); color: var(--cream);
-  font: 600 0.9rem/1 var(--sans); letter-spacing: 0.07em; text-transform: uppercase;
-  padding: 20px 34px; text-decoration: none; border: 0; border-radius: 0; white-space: nowrap;
-}
-.box:hover { background: var(--barn); }
-.nav .box { padding: 16px 28px; }
-.nav .box:hover { background: #B8401F; }
+.nav .box { padding: 15px 26px; box-shadow: none; }
 @media (max-width: 1100px) { .links { display: none; } }
 @media (max-width: 960px) { .nav .box { padding: 13px 18px; font-size: 0.8rem; } }
 
-/* ---------- Hero (same geometry as the reference) ---------- */
+/* ---------- Hero ---------- */
 .hero {
-  --k: 1.3; /* headline is 30% bigger than the reference size */
+  --heroH: max(calc(100svh - 72px), 720px);
+  --g: clamp(14px, 1.8vw, 28px);                                  /* the one gap used around the video */
+  /* headline size: as big as the width allows, but never so tall that it crowds the header */
+  --f: min(calc(var(--fs) * clamp(4rem, 11vw, 9.5rem)),
+           calc((var(--vTop) - var(--ctaGap) - 56px) / (3 * var(--lh))));
+  --ctaGap: clamp(24px, 2.6vw, 34px);                            /* headline to button */
+  --vW: calc(var(--heroH) * 0.52);                                /* video width */
+  --vH: calc(var(--vW) * 9 / 16);
+  --vRight: calc(var(--heroH) * 164 / 740 + var(--g));            /* tall pillar edge, plus the gap */
+  --vTop: calc(var(--heroH) * 570 / 740 - var(--g) - var(--vH));  /* short pillar top, minus the gap */
   position: relative;
-  min-height: max(calc(100svh - 72px), 720px);
+  height: var(--heroH);
   overflow: hidden;
   isolation: isolate;
-  display: grid;
-  grid-template-rows: 1fr;
-  padding-inline: var(--side);
-  padding-bottom: 48px;
 }
-/* Photo shown down to row 740 of 889: the pedestals end at row 714, so only a thin strip of floor remains */
-.stage { position: absolute; z-index: 0; top: 0; right: 0; bottom: 0; aspect-ratio: 500 / 740; height: 100%; }
+/* Photo shown down to row 740 of 889 so only a thin strip of floor remains under the pedestals */
+.stage { position: absolute; z-index: 0; top: 0; right: 0; height: 100%; aspect-ratio: 500 / 740; }
 .art {
   position: absolute; inset: 0;
   background: url("hero-peach.png") center top / cover no-repeat;
   -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.7) 14%, #000 32%);
           mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.7) 14%, #000 32%);
 }
-/* Video: placed by the script below so it sits in the pocket right of "back." and under "evenings",
-   with equal gaps to the text, the short pillar (below) and the tall pillar (right). */
-.video { position: absolute; z-index: 1; right: 34%; top: 34%; width: 36%; margin: 0; }
-.video .frame {
-  aspect-ratio: 16 / 9; max-width: 100%;
-  border: 1px solid var(--frame);
-  background: rgba(251, 244, 238, 0.28);
-  backdrop-filter: blur(4px);
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
-}
-.video .frame svg { width: 52px; height: 52px; color: var(--barn); opacity: 0.85; }
-.video .frame span { font-size: 0.85rem; color: var(--barn); }
-/* When the video is ready, swap the .frame div for:
-   <video class="frame" controls preload="none" playsinline poster="poster.jpg">
-     <source src="your-video.mp4" type="video/mp4">
-   </video> */
-video.frame { width: 100%; height: auto; display: block; object-fit: cover; }
 
-.main { position: relative; z-index: 2; align-self: center; max-width: min(56%, 760px); display: grid; gap: clamp(22px, 2.6vw, 34px); }
-.cta { display: grid; justify-items: start; gap: 12px; }
-.cta p { margin: 0; font-size: 1rem; line-height: 1.45; color: var(--barn); max-width: 22ch; }
-.hero.placed .main { position: absolute; left: var(--side); width: min(72%, 1000px); }
-.hero.placed h1 .l { white-space: nowrap; }
+/* Headline + button: the button's top lines up with the video's top */
+.main {
+  position: absolute; z-index: 2;
+  left: var(--side);
+  top: calc(var(--vTop) - 3 * var(--lh) * var(--f) - var(--ctaGap));
+  display: grid; gap: var(--ctaGap);
+}
 h1 {
   margin: 0;
   font-family: var(--display);
   font-weight: 400;
-  font-size: calc(var(--k, 1) * clamp(3.4rem, min(8.4vw, 9.6vh), 9rem));
-  font-size: calc(var(--k, 1) * clamp(3.4rem, min(8.4vw, 9.6svh), 9rem));
-  line-height: 0.92;
+  font-size: var(--f);
+  line-height: var(--lh);
   letter-spacing: -0.035em;
   font-variation-settings: "opsz" 96;
   color: var(--barn);
 }
-h1 .l { display: block; }
+h1 .l { display: block; white-space: nowrap; }
 h1 .it { font-style: italic; font-weight: 500; padding-left: 0.6em; color: var(--sand); }
 h1 .big { font-weight: 800; }
+:root[data-font="caslon"] h1, :root[data-font="lora"] h1 { letter-spacing: -0.025em; font-variation-settings: normal; }
+:root[data-font="source"] h1 { letter-spacing: -0.03em; font-variation-settings: "opsz" 60; }
+:root[data-font="figtree"] h1 { letter-spacing: -0.045em; font-variation-settings: normal; font-weight: 500; }
+:root[data-font="work"] h1 { letter-spacing: -0.05em; font-variation-settings: normal; font-weight: 500; }
+:root[data-font] h1 .it { font-weight: 400; }
+:root[data-font] h1 .big { font-weight: 700; }
+.cta { display: grid; justify-items: start; gap: 12px; }
+.cta p { margin: 0; font-size: 1rem; line-height: 1.45; color: var(--barn); max-width: 22ch; }
 
-/* Headline font options (draft picker) */
-:root[data-font="caslon"] { --display: "Libre Caslon Text", "Baskerville", Georgia, serif; }
-:root[data-font="source"] { --display: "Source Serif 4", "Iowan Old Style", Georgia, serif; }
-:root[data-font="lora"] { --display: "Lora", "Palatino", Georgia, serif; }
-:root[data-font="figtree"] { --display: "Figtree", "Segoe UI", system-ui, sans-serif; }
-:root[data-font="work"] { --display: "Work Sans", "Helvetica Neue", Arial, sans-serif; }
-:root[data-font="caslon"] h1 { font-size: calc(var(--k, 1) * clamp(3rem, min(7.2vw, 8.2svh), 7.8rem)); letter-spacing: -0.025em; line-height: 0.98; font-variation-settings: normal; }
-:root[data-font="caslon"] h1 .it { font-weight: 400; }
-:root[data-font="caslon"] h1 .big { font-weight: 700; }
-:root[data-font="source"] h1 { font-size: calc(var(--k, 1) * clamp(3.2rem, min(7.8vw, 8.9svh), 8.4rem)); letter-spacing: -0.03em; line-height: 0.95; font-variation-settings: "opsz" 60; }
-:root[data-font="source"] h1 .it { font-weight: 400; }
-:root[data-font="source"] h1 .big { font-weight: 700; }
-:root[data-font="lora"] h1 { font-size: calc(var(--k, 1) * clamp(3.1rem, min(7.6vw, 8.7svh), 8.2rem)); letter-spacing: -0.025em; line-height: 0.98; font-variation-settings: normal; }
-:root[data-font="lora"] h1 .it { font-weight: 400; }
-:root[data-font="lora"] h1 .big { font-weight: 700; }
-:root[data-font="figtree"] h1 { font-weight: 500; font-size: calc(var(--k, 1) * clamp(3.1rem, min(7.6vw, 8.7svh), 8.2rem)); letter-spacing: -0.045em; line-height: 0.96; font-variation-settings: normal; }
-:root[data-font="figtree"] h1 .it { font-weight: 400; }
-:root[data-font="figtree"] h1 .big { font-weight: 700; }
-:root[data-font="work"] h1 { font-weight: 500; font-size: calc(var(--k, 1) * clamp(2.9rem, min(7.1vw, 8.1svh), 7.6rem)); letter-spacing: -0.05em; line-height: 0.98; font-variation-settings: normal; }
-:root[data-font="work"] h1 .it { font-weight: 400; }
-:root[data-font="work"] h1 .big { font-weight: 700; }
+/* Video card: a finished-looking card that sits in the scene (soft shadow, like the pedestals) */
+.video {
+  position: absolute; z-index: 1; margin: 0;
+  right: var(--vRight); top: var(--vTop); width: var(--vW);
+}
+.video .frame {
+  aspect-ratio: 16 / 9; width: 100%;
+  background: var(--cream);
+  border-radius: 4px;
+  box-shadow: 0 34px 50px -30px rgba(105, 32, 15, 0.5), 0 2px 6px -2px rgba(105, 32, 15, 0.12);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+  text-align: center; padding: 16px;
+}
+.play { width: 64px; height: 64px; border-radius: 50%; background: var(--barn); display: grid; place-items: center; flex: none; }
+.play svg { width: 20px; height: 20px; margin-left: 4px; color: var(--cream); }
+.video b { font: 600 1.05rem/1.2 var(--sans); color: var(--barn); }
+.video small { font-size: 0.85rem; color: var(--sand); }
+/* When the video is ready, swap the .frame div for:
+   <video class="frame" controls preload="none" playsinline poster="poster.jpg">
+     <source src="your-video.mp4" type="video/mp4">
+   </video> */
+video.frame { display: block; object-fit: cover; padding: 0; }
 
 /* Draft-only font picker (floating, can be hidden) */
 .picker {
@@ -159,13 +176,14 @@ h1 .big { font-weight: 800; }
 .picker button[data-v="work"] { font-family: "Work Sans", sans-serif; }
 .picker.closed .fonts { display: none; }
 
-/* Phones and small tablets: text first, then the video, then the photo */
+/* Phones and small tablets: headline, button, video, then the photo */
 @media (max-width: 860px) {
-  .hero { min-height: auto; grid-template-rows: auto auto auto; padding-top: 32px; padding-bottom: 0; }
-  .main { max-width: none; padding-bottom: 28px; }
-  .stage { position: relative; inset: auto; aspect-ratio: auto; height: auto; display: grid; margin-inline: calc(-1 * var(--side)); }
-  .video { position: relative; left: auto; top: auto; right: auto; width: auto; margin: 0 0 8px; }
-  .art { position: relative; inset: auto; height: 440px; background-size: cover; background-position: center 60%;
+  .hero { height: auto; display: grid; gap: 28px; padding: 36px var(--side) 0; }
+  .main, .video, .stage { position: relative; inset: auto; top: auto; left: auto; right: auto; }
+  .hero { --f: calc(var(--fs) * clamp(3.2rem, 14vw, 5.4rem)); }
+  .video { width: auto; }
+  .stage { height: 380px; aspect-ratio: auto; margin-inline: calc(-1 * var(--side)); }
+  .art { background-size: cover; background-position: center 72%;
     -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 30%);
             mask-image: linear-gradient(180deg, transparent 0%, #000 30%); }
 }
@@ -205,8 +223,9 @@ h1 .big { font-weight: 800; }
 
   <figure class="video">
     <div class="frame" aria-label="Video space, coming soon">
-      <svg viewBox="0 0 56 56" fill="none" aria-hidden="true"><circle cx="28" cy="28" r="27" stroke="currentColor" stroke-width="1.5"/><path d="M23 19.5v17l14-8.5-14-8.5Z" fill="currentColor"/></svg>
-      <span>Video coming soon</span>
+      <span class="play"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M4 2.5v11l9-5.5-9-5.5Z"/></svg></span>
+      <b>See how Reliquo works</b>
+      <small>Video coming soon</small>
     </div>
   </figure>
 
@@ -225,7 +244,6 @@ h1 .big { font-weight: 800; }
       if (v === 'bodoni') root.removeAttribute('data-font'); else root.setAttribute('data-font', v);
       buttons.forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.v === v ? 'true' : 'false'); });
       try { localStorage.setItem('reliquo-headline-font', v); } catch (e) {}
-      if (window.reliquoLayout) window.reliquoLayout();
     }
     buttons.forEach(function (b) { b.addEventListener('click', function () { pick(b.dataset.v); }); });
     var saved = 'bodoni';
@@ -237,55 +255,5 @@ h1 .big { font-weight: 800; }
       var closed = panel.classList.toggle('closed');
       toggle.textContent = closed ? 'Show' : 'Hide';
     });
-  })();
-</script>
-
-<script>
-  /* Places the video and headline using the real positions of the pillars in the photo.
-     Photo is 500 x 889 px, shown down to row 740; measured edges: short pillar top = row 570, tall pillar left edge = column 336.
-     The video is placed against the reference headline size; the real headline is --k times bigger and may overlap it a little. */
-  (function () {
-    var IMG_H = 740, SHORT_TOP = 570, TALL_LEFT = 336;
-    var hero = document.querySelector('.hero');
-    var main = document.querySelector('.main');
-    var video = document.querySelector('.video');
-    var stage = document.querySelector('.stage');
-    function box(el) { var r = document.createRange(); r.selectNodeContents(el); return r.getBoundingClientRect(); }
-    function layout() {
-      if (window.innerWidth <= 860) {
-        hero.classList.remove('placed'); main.style.top = ''; video.removeAttribute('style'); return;
-      }
-      hero.classList.add('placed');
-      main.style.top = '0px';
-      var H = hero.getBoundingClientRect(), S = stage.getBoundingClientRect(), M = main.getBoundingClientRect();
-      var s = S.height / IMG_H;
-      var gap = Math.max(14, Math.min(28, window.innerWidth * 0.018));
-      var k = parseFloat(getComputedStyle(hero).getPropertyValue('--k')) || 1;
-      var first = box(main.querySelector('.l')), ev = box(main.querySelector('.it')), back = box(main.querySelector('.big'));
-      var firstTop = first.top - M.top, evBottom = ev.bottom - M.top; // real (bigger) "evenings" sits one gap above the video
-      var bottom = (S.top - H.top) + SHORT_TOP * s - gap;      // just above the short pillar
-      var right = (S.left - H.left) + TALL_LEFT * s - gap;     // just left of the tall pillar
-      var left = (M.left - H.left) + (back.right - M.left) / k + gap; // just right of "back." at the reference size
-      var width = right - left, height = width * 9 / 16, top = bottom - height;
-      var mainTop = top - gap - evBottom;                      // "evenings" sits one gap above the video
-      var minTop = 24;
-      if (mainTop + firstTop < minTop) {                       // wide screens: keep the pillar gaps, shrink to fit under "evenings"
-        mainTop = minTop - firstTop;
-        top = mainTop + evBottom + gap;
-        height = bottom - top; width = height * 16 / 9; left = right - width;
-      }
-      var maxTop = H.height - 20 - M.height;                   // keep the button and small text inside the hero
-      if (mainTop > maxTop) mainTop = Math.max(minTop - firstTop, maxTop);
-      main.style.top = Math.round(mainTop) + 'px';
-      video.style.right = 'auto';
-      video.style.left = Math.round(left) + 'px';
-      video.style.top = Math.round(top) + 'px';
-      video.style.width = Math.round(width) + 'px';
-    }
-    window.reliquoLayout = layout;
-    layout();
-    window.addEventListener('resize', layout);
-    if (document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
-    window.addEventListener('load', layout);
   })();
 </script>
