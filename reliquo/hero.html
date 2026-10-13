@@ -72,28 +72,32 @@ a { color: inherit; }
   -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.7) 14%, #000 32%);
           mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.7) 14%, #000 32%);
 }
-.video { position: absolute; z-index: 1; left: -22%; top: 19%; width: 80%; margin: 0; display: grid; gap: 10px; }
+/* Video: placed by the script below so it sits in the pocket right of "back." and under "evenings",
+   with equal gaps to the text, the short pillar (below) and the tall pillar (right). */
+.video { position: absolute; z-index: 1; right: 34%; top: 34%; width: 36%; margin: 0; }
 .video .frame {
   aspect-ratio: 16 / 9; max-width: 100%;
   border: 1px solid var(--frame);
   background: rgba(251, 244, 238, 0.28);
   backdrop-filter: blur(4px);
-  display: grid; place-items: center;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px;
 }
 .video .frame svg { width: 52px; height: 52px; color: var(--barn); opacity: 0.85; }
-.video figcaption { font-size: 0.85rem; color: var(--barn); }
+.video .frame span { font-size: 0.85rem; color: var(--barn); }
 /* When the video is ready, swap the .frame div for:
    <video class="frame" controls preload="none" playsinline poster="poster.jpg">
      <source src="your-video.mp4" type="video/mp4">
    </video> */
 video.frame { width: 100%; height: auto; display: block; object-fit: cover; }
 
-.main { position: relative; z-index: 2; align-self: center; display: grid; gap: clamp(28px, 4vw, 44px); padding-block: 24px 40px; max-width: min(56%, 760px); }
+.main { position: relative; z-index: 2; align-self: center; max-width: min(56%, 760px); }
+.hero.placed .main { position: absolute; left: var(--side); width: min(56%, 760px); }
 h1 {
   margin: 0;
   font-family: var(--display);
   font-weight: 400;
-  font-size: clamp(3.4rem, 8.4vw, 9rem);
+  font-size: clamp(3.4rem, min(8.4vw, 9.6vh), 9rem);
+  font-size: clamp(3.4rem, min(8.4vw, 9.6svh), 9rem);
   line-height: 0.92;
   letter-spacing: -0.035em;
   font-variation-settings: "opsz" 96;
@@ -109,19 +113,19 @@ h1 .big { font-weight: 800; }
 :root[data-font="lora"] { --display: "Lora", "Palatino", Georgia, serif; }
 :root[data-font="figtree"] { --display: "Figtree", "Segoe UI", system-ui, sans-serif; }
 :root[data-font="work"] { --display: "Work Sans", "Helvetica Neue", Arial, sans-serif; }
-:root[data-font="caslon"] h1 { font-size: clamp(3rem, 7.2vw, 7.8rem); letter-spacing: -0.025em; line-height: 0.98; font-variation-settings: normal; }
+:root[data-font="caslon"] h1 { font-size: clamp(3rem, min(7.2vw, 8.2svh), 7.8rem); letter-spacing: -0.025em; line-height: 0.98; font-variation-settings: normal; }
 :root[data-font="caslon"] h1 .it { font-weight: 400; }
 :root[data-font="caslon"] h1 .big { font-weight: 700; }
-:root[data-font="source"] h1 { font-size: clamp(3.2rem, 7.8vw, 8.4rem); letter-spacing: -0.03em; line-height: 0.95; font-variation-settings: "opsz" 60; }
+:root[data-font="source"] h1 { font-size: clamp(3.2rem, min(7.8vw, 8.9svh), 8.4rem); letter-spacing: -0.03em; line-height: 0.95; font-variation-settings: "opsz" 60; }
 :root[data-font="source"] h1 .it { font-weight: 400; }
 :root[data-font="source"] h1 .big { font-weight: 700; }
-:root[data-font="lora"] h1 { font-size: clamp(3.1rem, 7.6vw, 8.2rem); letter-spacing: -0.025em; line-height: 0.98; font-variation-settings: normal; }
+:root[data-font="lora"] h1 { font-size: clamp(3.1rem, min(7.6vw, 8.7svh), 8.2rem); letter-spacing: -0.025em; line-height: 0.98; font-variation-settings: normal; }
 :root[data-font="lora"] h1 .it { font-weight: 400; }
 :root[data-font="lora"] h1 .big { font-weight: 700; }
-:root[data-font="figtree"] h1 { font-weight: 500; font-size: clamp(3.1rem, 7.6vw, 8.2rem); letter-spacing: -0.045em; line-height: 0.96; font-variation-settings: normal; }
+:root[data-font="figtree"] h1 { font-weight: 500; font-size: clamp(3.1rem, min(7.6vw, 8.7svh), 8.2rem); letter-spacing: -0.045em; line-height: 0.96; font-variation-settings: normal; }
 :root[data-font="figtree"] h1 .it { font-weight: 400; }
 :root[data-font="figtree"] h1 .big { font-weight: 700; }
-:root[data-font="work"] h1 { font-weight: 500; font-size: clamp(2.9rem, 7.1vw, 7.6rem); letter-spacing: -0.05em; line-height: 0.98; font-variation-settings: normal; }
+:root[data-font="work"] h1 { font-weight: 500; font-size: clamp(2.9rem, min(7.1vw, 8.1svh), 7.6rem); letter-spacing: -0.05em; line-height: 0.98; font-variation-settings: normal; }
 :root[data-font="work"] h1 .it { font-weight: 400; }
 :root[data-font="work"] h1 .big { font-weight: 700; }
 
@@ -150,15 +154,12 @@ h1 .big { font-weight: 800; }
 .picker button[data-v="work"] { font-family: "Work Sans", sans-serif; }
 .picker.closed .fonts { display: none; }
 
-.cta { display: flex; flex-wrap: wrap; align-items: center; gap: 18px 26px; }
-.cta p { margin: 0; font-size: 1rem; line-height: 1.45; color: var(--barn); max-width: 24ch; }
-
 /* Phones and small tablets: text first, then the video, then the photo */
 @media (max-width: 860px) {
-  .hero { min-height: auto; grid-template-rows: auto auto; padding-bottom: 0; }
+  .hero { min-height: auto; grid-template-rows: auto auto auto; padding-top: 32px; padding-bottom: 0; }
   .main { max-width: none; padding-bottom: 28px; }
   .stage { position: relative; inset: auto; aspect-ratio: auto; height: auto; display: grid; margin-inline: calc(-1 * var(--side)); }
-  .video { position: relative; left: auto; top: auto; width: auto; margin: 0 var(--side) 8px; }
+  .video { position: relative; left: auto; top: auto; right: auto; width: auto; margin: 0 0 8px; }
   .art { position: relative; inset: auto; height: 440px; background-size: cover; background-position: center 60%;
     -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 30%);
             mask-image: linear-gradient(180deg, transparent 0%, #000 30%); }
@@ -191,19 +192,16 @@ h1 .big { font-weight: 800; }
 <section class="hero">
   <div class="main">
     <h1><span class="l">Get your</span><span class="l it">evenings</span><span class="l big">back.</span></h1>
-    <div class="cta">
-      <a class="box" href="#">Book a free chat</a>
-      <p>A free 20-minute call, or coffee in Winnipeg. No pressure.</p>
-    </div>
   </div>
 
+  <figure class="video">
+    <div class="frame" aria-label="Video space, coming soon">
+      <svg viewBox="0 0 56 56" fill="none" aria-hidden="true"><circle cx="28" cy="28" r="27" stroke="currentColor" stroke-width="1.5"/><path d="M23 19.5v17l14-8.5-14-8.5Z" fill="currentColor"/></svg>
+      <span>Video coming soon</span>
+    </div>
+  </figure>
+
   <div class="stage">
-    <figure class="video">
-      <div class="frame" aria-label="Video space, coming soon">
-        <svg viewBox="0 0 56 56" fill="none" aria-hidden="true"><circle cx="28" cy="28" r="27" stroke="currentColor" stroke-width="1.5"/><path d="M23 19.5v17l14-8.5-14-8.5Z" fill="currentColor"/></svg>
-      </div>
-      <figcaption>Video coming soon</figcaption>
-    </figure>
     <div class="art" aria-hidden="true"></div>
   </div>
 </section>
@@ -218,6 +216,7 @@ h1 .big { font-weight: 800; }
       if (v === 'bodoni') root.removeAttribute('data-font'); else root.setAttribute('data-font', v);
       buttons.forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.v === v ? 'true' : 'false'); });
       try { localStorage.setItem('reliquo-headline-font', v); } catch (e) {}
+      if (window.reliquoLayout) window.reliquoLayout();
     }
     buttons.forEach(function (b) { b.addEventListener('click', function () { pick(b.dataset.v); }); });
     var saved = 'bodoni';
@@ -229,5 +228,51 @@ h1 .big { font-weight: 800; }
       var closed = panel.classList.toggle('closed');
       toggle.textContent = closed ? 'Show' : 'Hide';
     });
+  })();
+</script>
+
+<script>
+  /* Places the video and headline using the real positions of the pillars in the photo.
+     Photo is 500 x 889 px; measured edges: short pillar top = row 570, tall pillar left edge = column 336. */
+  (function () {
+    var IMG_H = 889, SHORT_TOP = 570, TALL_LEFT = 336;
+    var hero = document.querySelector('.hero');
+    var main = document.querySelector('.main');
+    var video = document.querySelector('.video');
+    var stage = document.querySelector('.stage');
+    function box(el) { var r = document.createRange(); r.selectNodeContents(el); return r.getBoundingClientRect(); }
+    function layout() {
+      if (window.innerWidth <= 860) {
+        hero.classList.remove('placed'); main.style.top = ''; video.removeAttribute('style'); return;
+      }
+      hero.classList.add('placed');
+      main.style.top = '0px';
+      var H = hero.getBoundingClientRect(), S = stage.getBoundingClientRect(), M = main.getBoundingClientRect();
+      var s = S.height / IMG_H;
+      var gap = Math.max(14, Math.min(28, window.innerWidth * 0.018));
+      var first = box(main.querySelector('.l')), ev = box(main.querySelector('.it')), back = box(main.querySelector('.big'));
+      var firstTop = first.top - M.top, evBottom = ev.bottom - M.top;
+      var bottom = (S.top - H.top) + SHORT_TOP * s - gap;      // just above the short pillar
+      var right = (S.left - H.left) + TALL_LEFT * s - gap;     // just left of the tall pillar
+      var left = (back.right - H.left) + gap;                  // just right of "back."
+      var width = right - left, height = width * 9 / 16, top = bottom - height;
+      var mainTop = top - gap - evBottom;                      // "evenings" sits one gap above the video
+      var minTop = 24;
+      if (mainTop + firstTop < minTop) {                       // wide screens: keep the pillar gaps, shrink to fit under "evenings"
+        mainTop = minTop - firstTop;
+        top = mainTop + evBottom + gap;
+        height = bottom - top; width = height * 16 / 9; left = right - width;
+      }
+      main.style.top = Math.round(mainTop) + 'px';
+      video.style.right = 'auto';
+      video.style.left = Math.round(left) + 'px';
+      video.style.top = Math.round(top) + 'px';
+      video.style.width = Math.round(width) + 'px';
+    }
+    window.reliquoLayout = layout;
+    layout();
+    window.addEventListener('resize', layout);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
+    window.addEventListener('load', layout);
   })();
 </script>
