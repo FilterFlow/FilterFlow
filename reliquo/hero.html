@@ -3,14 +3,14 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Hanken+Grotesk:wght@400;500;600&family=Quicksand:wght@700&display=swap">
 <style>
-/* Layout: one calm room. A sticky beach-tan header on top; below it the peach photo sits on the right and its backdrop continues across the screen. Big three-line headline on the left in terracotta with "evenings" in beach tan; the video frame floats above the short pedestal. The photo's empty floor is trimmed so there's little space under the pedestals. Single light look by choice. */
+/* Layout: one calm room. A sticky sand header on top; below it the peach photo sits on the right and its backdrop continues across the screen. Big three-line headline on the left in terracotta with "evenings" in sand; the video frame floats above the short pedestal. The photo's empty floor is trimmed so there's little space under the pedestals. Single light look by choice. */
 :root {
-  --terracotta: #B5523B;      /* headline letters */
-  --terracotta-btn: #A94A33;  /* buttons (a touch deeper so cream text reads) */
-  --terracotta-ink: #7A3A26;  /* small text */
-  --tan: #946436;             /* "evenings" and the header: a sun-tan bronze */
+  /* Exact colours from Madden's swatches */
+  --terracotta: #873F2B;      /* headline letters, buttons, small text */
+  --sand: #C78054;            /* "evenings" and the sticky header */
+  --header-ink: #4A1E12;      /* deep terracotta: readable text on the sand header */
   --cream: #FBF3EA;
-  --frame: rgba(181, 82, 59, 0.45);
+  --frame: rgba(135, 63, 43, 0.45);
   --frame-fill: rgba(251, 243, 234, 0.30);
 
   --display: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
@@ -22,31 +22,30 @@
 
 * { box-sizing: border-box; }
 html { background: #E0C0AB; }
-body { min-height: 100vh; margin: 0; background: #E0C0AB; color: var(--terracotta-ink); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+body { min-height: 100vh; margin: 0; background: #E0C0AB; color: var(--terracotta); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
 a { color: inherit; }
-:focus-visible { outline: 2px solid var(--terracotta-ink); outline-offset: 4px; }
+:focus-visible { outline: 2px solid var(--terracotta); outline-offset: 4px; }
 
 /* ---------- Sticky header ---------- */
 .nav {
   position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
   display: flex; align-items: center; justify-content: space-between; gap: 24px;
   padding: 14px var(--side);
-  background: var(--tan); color: var(--cream);
+  background: var(--sand); color: var(--header-ink);
 }
 .logo { display: flex; align-items: center; min-height: 44px; font-family: var(--brand); font-weight: 700; font-size: 1.6rem; letter-spacing: 0.01em; text-decoration: none; }
 .links { display: flex; gap: 40px; font-size: 0.88rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; }
 .links a { text-decoration: none; }
 .links a:hover { text-decoration: underline; text-underline-offset: 6px; }
-.nav :focus-visible { outline-color: var(--cream); }
+.nav :focus-visible { outline-color: var(--header-ink); }
 .box {
   display: inline-flex; align-items: center; justify-content: center;
-  background: var(--terracotta-btn); color: var(--cream);
+  background: var(--terracotta); color: var(--cream);
   font: 600 0.9rem/1 var(--sans); letter-spacing: 0.07em; text-transform: uppercase;
   padding: 20px 34px; text-decoration: none; border: 0; border-radius: 0; white-space: nowrap;
 }
-.box:hover { background: var(--terracotta-ink); }
-.nav .box { background: var(--cream); color: var(--terracotta-btn); padding: 16px 26px; }
-.nav .box:hover { background: #FFFFFF; }
+.box:hover { background: #6E3222; }
+.nav .box { padding: 16px 26px; }
 @media (max-width: 1100px) { .links { display: none; } }
 @media (max-width: 960px) { .nav .box { padding: 13px 18px; font-size: 0.8rem; } }
 
@@ -70,7 +69,7 @@ a { color: inherit; }
   -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.7) 14%, #000 32%);
           mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.7) 14%, #000 32%);
 }
-.video { position: absolute; z-index: 1; left: -22%; top: 14%; width: 80%; margin: 0; display: grid; gap: 10px; }
+.video { position: absolute; z-index: 1; left: -22%; top: 15%; width: 80%; margin: 0; display: grid; gap: 10px; }
 .video .frame {
   aspect-ratio: 16 / 9; max-width: 100%;
   border: 1px solid var(--frame);
@@ -78,8 +77,8 @@ a { color: inherit; }
   backdrop-filter: blur(4px);
   display: grid; place-items: center;
 }
-.video .frame svg { width: 52px; height: 52px; color: var(--terracotta-ink); opacity: 0.9; }
-.video figcaption { font-size: 0.85rem; color: var(--terracotta-ink); }
+.video .frame svg { width: 52px; height: 52px; color: var(--terracotta); opacity: 0.9; }
+.video figcaption { font-size: 0.85rem; color: var(--terracotta); }
 /* When the video is ready, swap the .frame div for:
    <video class="frame" controls preload="none" playsinline poster="poster.jpg">
      <source src="your-video.mp4" type="video/mp4">
@@ -98,16 +97,16 @@ h1 {
   color: var(--terracotta);
 }
 h1 .l { display: block; }
-h1 .it { font-style: italic; font-weight: 500; padding-left: 0.6em; color: var(--tan); }
+h1 .it { font-style: italic; font-weight: 500; padding-left: 0.6em; color: var(--sand); }
 h1 .big { font-weight: 800; }
 
 .cta { display: flex; flex-wrap: wrap; align-items: center; gap: 18px 26px; }
-.cta p { margin: 0; font-size: 1rem; line-height: 1.45; color: var(--terracotta-ink); max-width: 24ch; }
+.cta p { margin: 0; font-size: 1rem; line-height: 1.45; color: var(--terracotta); max-width: 24ch; }
 
-/* Mid-size screens: keep the video clear of the headline */
+/* Mid-size screens: same arrangement as the reference; the headline sits a little lower so it never runs into the video */
 @media (min-width: 861px) and (max-width: 1180px) {
-  h1 { font-size: clamp(3.2rem, 6.4vw, 6rem); }
-  .video { left: -2%; width: 64%; }
+  .main { align-self: end; padding-bottom: 12px; }
+  h1 { font-size: clamp(3.2rem, 7.4vw, 6.6rem); }
 }
 
 /* Phones and small tablets: headline, button, video, then the photo */
