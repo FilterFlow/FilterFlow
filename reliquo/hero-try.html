@@ -1,0 +1,361 @@
+<title>Reliquo Hero Try</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Libre+Caslon+Text:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&family=Lora:ital,wght@0,400..700;1,400..700&family=Figtree:ital,wght@0,400..700;1,400..700&family=Work+Sans:ital,wght@0,400..700;1,400..700&family=Hanken+Grotesk:wght@400;500;600&family=Quicksand:wght@700&display=swap">
+<style>
+/*
+  Layout: one band. The text block (headline, button, small line) and a vertical video card share the
+  same top line and the same bottom line. The band's bottom sits one gap above the short pillar, and the
+  video sits one gap left of the tall pillar. The headline is as large as the space allows, using each
+  font's measured width, so it never touches the video.
+  Photo is 500 x 889 px, shown down to row 740; short pillar top = row 570, tall pillar left edge = column 336.
+*/
+:root {
+  /* Madden's swatches */
+  --barn: #69200F;     /* barn red: header, headline, small text */
+  --sand: #C78054;     /* sand: "evenings" */
+  --cream: #FBF3EA;
+  --pillar: #E9E7E7;   /* off-white sampled from the lit side of the pillars */
+  --black: #141414;
+
+  --display: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
+  --sans: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --brand: "Quicksand", "Nunito", sans-serif;
+  --side: clamp(20px, 4.2vw, 80px);
+
+  /* Headline font tuning (changed by the draft picker):
+     --c  = width of the widest headline line, in multiples of the font size (measured)
+     --lh = line height */
+  --c: 4.26; --lh: 0.92;
+  color-scheme: light;
+}
+:root[data-font="caslon"]  { --display: "Libre Caslon Text", "Baskerville", Georgia, serif; --c: 4.59; --lh: 0.98; }
+:root[data-font="source"]  { --display: "Source Serif 4", "Iowan Old Style", Georgia, serif; --c: 3.75; --lh: 0.95; }
+:root[data-font="lora"]    { --display: "Lora", "Palatino", Georgia, serif; --c: 4.42; --lh: 0.98; }
+:root[data-font="figtree"] { --display: "Figtree", "Segoe UI", system-ui, sans-serif; --c: 4.29; --lh: 0.96; }
+:root[data-font="work"]    { --display: "Work Sans", "Helvetica Neue", Arial, sans-serif; --c: 4.47; --lh: 0.98; }
+
+* { box-sizing: border-box; }
+html { background: #E0C0AB; }
+body {
+  min-height: 100vh; margin: 0;
+  background: linear-gradient(180deg, #E0C0AB 0%, #E2C0AA 40%, #E5C8B5 60%, #E2CABA 85%, #E5CEBE 100%);
+  color: var(--barn);
+  font-family: var(--sans);
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--barn); outline-offset: 4px; }
+
+/* ---------- Buttons: pillar off-white with black lettering ---------- */
+.box {
+  display: inline-flex; align-items: center; justify-content: center;
+  height: 54px; padding: 0 34px;
+  background: var(--pillar); color: var(--black);
+  font: 600 0.9rem/1 var(--sans); letter-spacing: 0.07em; text-transform: uppercase;
+  text-decoration: none; border: 0; border-radius: 0; white-space: nowrap;
+  box-shadow: 0 12px 26px -18px rgba(105, 32, 15, 0.5);
+}
+.box:hover { background: #F3F1F1; }
+
+/* ---------- Sticky header ---------- */
+.nav {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  padding: 14px max(var(--side), calc((100% - 1200px) / 2));
+  background: var(--barn); color: var(--cream);
+}
+.nav :focus-visible { outline-color: var(--cream); }
+.logo { display: flex; align-items: center; min-height: 44px; font-family: var(--brand); font-weight: 700; font-size: 1.6rem; letter-spacing: 0.01em; text-decoration: none; }
+.links { display: flex; gap: 40px; font-size: 0.88rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; }
+.links a { text-decoration: none; }
+.links a:hover { text-decoration: underline; text-underline-offset: 6px; }
+.nav .box { height: 44px; padding: 0 24px; box-shadow: none; }
+@media (max-width: 1100px) { .links { display: none; } }
+@media (max-width: 960px) { .nav .box { padding: 0 16px; font-size: 0.8rem; } }
+
+/* ---------- Hero ---------- */
+.hero {
+  --heroH: max(calc(100svh - 72px), 720px);
+  position: relative;
+  height: var(--heroH);
+  overflow: hidden;
+  isolation: isolate;
+  container-type: inline-size;   /* lets the layout use the hero's real width (cqw) */
+}
+.inner {
+  --g: clamp(14px, 1.8vw, 28px);                                  /* the one gap used throughout */
+  --ctaGap: clamp(22px, 2.4vw, 32px);                            /* headline to button */
+  --ctaH: 140px;                                                  /* button + small line */
+  --K: calc(var(--ctaGap) + var(--ctaH));
+  --B: calc(var(--heroH) * 570 / 740 - var(--g));                 /* band bottom: one gap above the short pillar */
+  --vRight: calc(var(--heroH) * 164 / 740 + var(--g));            /* video right: one gap left of the tall pillar */
+  /* Headline: the largest size that fits across (text + gap + video + pillar) and down (below the header) */
+  --fW: calc((100cqw - var(--vRight) - var(--side) - var(--g) - 0.5625 * var(--K)) / (var(--c) + 1.6875 * var(--lh)));
+  --fH: calc((var(--B) - 56px - var(--K)) / (3 * var(--lh)));
+  --f: clamp(3rem, min(var(--fW), var(--fH)), 9.5rem);
+  --Hv: calc(3 * var(--lh) * var(--f) + var(--K));                /* band height = text block height */
+  --top: calc(var(--B) - var(--Hv));
+  position: absolute; inset: 0;
+}
+
+/* Photo shown down to row 740 of 889 so only a thin strip of floor remains under the pedestals */
+.stage { position: absolute; z-index: 0; top: 0; right: 0; height: 100%; aspect-ratio: 500 / 740; }
+.art {
+  position: absolute; inset: 0;
+  background: url("hero-peach.png") center top / cover no-repeat;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.7) 14%, #000 32%);
+          mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.7) 14%, #000 32%);
+}
+
+.main {
+  position: absolute; z-index: 2;
+  left: var(--side); top: var(--top);
+  display: grid; gap: var(--ctaGap);
+}
+h1 {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: var(--f);
+  line-height: var(--lh);
+  letter-spacing: -0.035em;
+  font-variation-settings: "opsz" 96;
+  color: var(--barn);
+}
+h1 .l { display: block; white-space: nowrap; }
+h1 .it { font-style: italic; font-weight: 500; padding-left: 0.6em; color: var(--sand); }
+h1 .big { font-weight: 800; }
+:root[data-font="caslon"] h1, :root[data-font="lora"] h1 { letter-spacing: -0.025em; font-variation-settings: normal; }
+:root[data-font="source"] h1 { letter-spacing: -0.03em; font-variation-settings: "opsz" 60; }
+:root[data-font="figtree"] h1 { letter-spacing: -0.045em; font-variation-settings: normal; font-weight: 500; }
+:root[data-font="work"] h1 { letter-spacing: -0.05em; font-variation-settings: normal; font-weight: 500; }
+:root[data-font] h1 .it { font-weight: 400; }
+:root[data-font] h1 .big { font-weight: 700; }
+.cta { height: var(--ctaH); display: grid; align-content: start; justify-items: start; gap: 12px; }
+/* Try page: button + small line sit to the right of "back." (placed by script) */
+.hero.placed .cta { position: absolute; height: auto; }
+/* Try page: a quiet "what I do" line under the headline */
+.does { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px 22px; font-size: 0.98rem; color: var(--barn); width: 0; min-width: 100%; }
+.does li { display: flex; align-items: center; gap: 9px; white-space: nowrap; }
+.does li::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--sand); }
+.cta p { margin: 0; font-size: 1rem; line-height: 1.45; color: var(--barn); white-space: nowrap; }
+
+/* Vertical video card: same top and bottom as the text block */
+.video {
+  position: absolute; z-index: 1; margin: 0;
+  right: var(--vRight); top: var(--top);
+  height: var(--Hv); aspect-ratio: 9 / 16;
+}
+.video .frame {
+  width: 100%; height: 100%;
+  background: var(--cream);
+  border-radius: 6px;
+  box-shadow: 0 34px 50px -30px rgba(105, 32, 15, 0.5), 0 2px 6px -2px rgba(105, 32, 15, 0.12);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+  text-align: center; padding: 18px;
+}
+.play { width: 64px; height: 64px; border-radius: 50%; background: var(--barn); display: grid; place-items: center; flex: none; }
+.play svg { width: 20px; height: 20px; margin-left: 4px; color: var(--cream); }
+.video b { font: 600 1.05rem/1.25 var(--sans); color: var(--barn); max-width: 12ch; }
+.video small { font-size: 0.85rem; color: var(--sand); }
+/* When the video is ready, swap the .frame div for a vertical (9:16) video, e.g. filmed on a phone held upright:
+   <video class="frame" controls preload="none" playsinline poster="poster.jpg">
+     <source src="your-video.mp4" type="video/mp4">
+   </video> */
+video.frame { display: block; object-fit: cover; padding: 0; }
+
+/* Draft-only font picker (floating, can be hidden) */
+.picker {
+  position: fixed; z-index: 50; left: 50%; transform: translateX(-50%);
+  bottom: calc(16px + env(safe-area-inset-bottom, 0px));
+  width: max-content; max-width: calc(100% - 32px);
+  background: #FFFFFF; color: #2B1A14;
+  border: 1px solid rgba(105, 32, 15, 0.18);
+  box-shadow: 0 18px 40px -18px rgba(40, 15, 8, 0.45);
+  padding: 12px 16px 14px; display: grid; gap: 10px;
+  font: 500 0.88rem/1.2 var(--sans);
+}
+.picker-head { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.picker-head b { font-weight: 600; }
+.picker .toggle { background: none; border: 0; padding: 4px 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; color: #5A3B30; font: inherit; }
+.picker .fonts { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 2px; }
+.picker .fonts button { flex: none; background: transparent; border: 1px solid rgba(105, 32, 15, 0.28); color: #2B1A14; padding: 8px 14px; cursor: pointer; font-size: 1.02rem; border-radius: 0; }
+.picker .fonts button[aria-pressed="true"] { background: var(--barn); color: var(--cream); border-color: var(--barn); }
+.picker button[data-v="bodoni"] { font-family: "Bodoni Moda", serif; }
+.picker button[data-v="caslon"] { font-family: "Libre Caslon Text", serif; }
+.picker button[data-v="source"] { font-family: "Source Serif 4", serif; }
+.picker button[data-v="lora"] { font-family: "Lora", serif; }
+.picker button[data-v="figtree"] { font-family: "Figtree", sans-serif; }
+.picker button[data-v="work"] { font-family: "Work Sans", sans-serif; }
+.picker.closed .fonts { display: none; }
+
+/* Phones and small tablets: headline, button, vertical video, then the photo */
+@media (max-width: 860px) {
+  .hero { height: auto; container-type: normal; }
+  .inner { position: static; display: grid; gap: 32px; padding: 36px var(--side) 0;
+           --f: clamp(3rem, calc(84vw / var(--c)), 5.6rem); }
+  .main, .video, .stage { position: relative; inset: auto; top: auto; left: auto; right: auto; }
+  .cta { height: auto; }
+  .video { height: auto; width: min(300px, 78vw); justify-self: center; }
+  .stage { height: 380px; aspect-ratio: auto; margin-inline: calc(-1 * var(--side)); }
+  .art { background-size: cover; background-position: center 72%;
+    -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 30%);
+            mask-image: linear-gradient(180deg, transparent 0%, #000 30%); }
+}
+</style>
+
+<header class="nav">
+  <!-- Logo spot: swap the wordmark for <img src="logo.svg" alt="Reliquo" height="44"> when the logo is ready -->
+  <a class="logo" href="#">Reliquo</a>
+  <nav class="links" aria-label="Main">
+    <a href="#">How it works</a>
+    <a href="#">Pricing</a>
+    <a href="#">Questions</a>
+  </nav>
+  <a class="box" href="#">Book a free chat</a>
+</header>
+
+<div class="picker" id="picker" role="region" aria-label="Draft font picker">
+  <div class="picker-head"><b>Try a headline font</b><button type="button" class="toggle" id="picker-toggle">Hide</button></div>
+  <div class="fonts" role="group" aria-label="Headline font">
+    <button type="button" data-v="bodoni" aria-pressed="true">Current (Bodoni)</button>
+    <button type="button" data-v="caslon" aria-pressed="false">Caslon</button>
+    <button type="button" data-v="source" aria-pressed="false">Source Serif</button>
+    <button type="button" data-v="lora" aria-pressed="false">Lora</button>
+    <button type="button" data-v="figtree" aria-pressed="false">Figtree</button>
+    <button type="button" data-v="work" aria-pressed="false">Work Sans</button>
+  </div>
+</div>
+
+<section class="hero">
+  <div class="inner">
+    <div class="main">
+      <h1><span class="l">Get your</span><span class="l it">evenings</span><span class="l big">back.</span></h1>
+      <div class="cta">
+        <a class="box" href="#">Book a free chat</a>
+        <p>A free 20-minute call,<br> or coffee in Winnipeg.<br> No pressure.</p>
+      </div>
+      <ul class="does" aria-label="What I set up">
+        <li>Missed calls answered</li>
+        <li>Follow-ups sent</li>
+        <li>Reviews requested</li>
+      </ul>
+    </div>
+
+    <figure class="video">
+      <div class="frame" aria-label="Video space, coming soon">
+        <span class="play"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M4 2.5v11l9-5.5-9-5.5Z"/></svg></span>
+        <b>See how Reliquo works</b>
+        <small>Video coming soon</small>
+      </div>
+    </figure>
+
+    <div class="stage">
+      <div class="art" aria-hidden="true"></div>
+    </div>
+  </div>
+</section>
+
+<script>
+  (function () {
+    var root = document.documentElement;
+    var buttons = document.querySelectorAll('.picker .fonts button');
+    var valid = Array.prototype.map.call(buttons, function (b) { return b.dataset.v; });
+    function pick(v) {
+      if (valid.indexOf(v) === -1) v = 'bodoni';
+      if (v === 'bodoni') root.removeAttribute('data-font'); else root.setAttribute('data-font', v);
+      buttons.forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.v === v ? 'true' : 'false'); });
+      try { localStorage.setItem('reliquo-headline-font', v); } catch (e) {}
+    }
+    buttons.forEach(function (b) { b.addEventListener('click', function () { pick(b.dataset.v); }); });
+    var saved = 'bodoni';
+    try { saved = localStorage.getItem('reliquo-headline-font') || 'bodoni'; } catch (e) {}
+    pick(saved);
+    var panel = document.getElementById('picker');
+    var toggle = document.getElementById('picker-toggle');
+    toggle.addEventListener('click', function () {
+      var closed = panel.classList.toggle('closed');
+      toggle.textContent = closed ? 'Show' : 'Hide';
+    });
+  })();
+</script>
+
+<script>
+  /* Try page layout (wide screens):
+     1. video centred in the gap between the text and the tall pillar
+     2. video about 18% taller than on the main page, but never covering the short pillar
+     3. button + small line to the right of "back." (drops back under the headline when there isn't room)
+     4. text and header inside a centred 1200px area (text lines up with the logo)
+     5. a quiet "what I do" line under the headline
+     Photo is 500 x 889 px shown down to row 740; short pillar top = row 570; tall pillar left = column 336. */
+  (function () {
+    var IMG_H = 740, SHORT_TOP = 570, TALL_LEFT = 336;
+    var hero = document.querySelector('.hero'), inner = document.querySelector('.inner'), nav = document.querySelector('.nav');
+    var main = document.querySelector('.main'), cta = document.querySelector('.cta'), does = document.querySelector('.does');
+    var video = document.querySelector('.video'), stage = document.querySelector('.stage');
+    function box(el) { var r = document.createRange(); r.selectNodeContents(el); return r.getBoundingClientRect(); }
+    function clamp(a, x, b) { return Math.max(a, Math.min(x, b)); }
+    function reset() { hero.classList.remove('placed'); [inner, main, cta, video, does].forEach(function (el) { el.removeAttribute('style'); }); }
+    function layout() {
+      reset();
+      if (window.innerWidth <= 860) return;
+      var W = hero.clientWidth, vw = window.innerWidth;
+      var H = hero.getBoundingClientRect(), S = stage.getBoundingClientRect(), s = S.height / IMG_H;
+      var X = function (x) { return S.left - H.left + x * s; }, Y = function (y) { return S.top - H.top + y * s; };
+      var cs = getComputedStyle(document.documentElement);
+      var lh = parseFloat(cs.getPropertyValue('--lh')) || 0.92, c = parseFloat(cs.getPropertyValue('--c')) || 4.26;
+      var g = clamp(14, vw * 0.018, 28), ctaGap = clamp(22, vw * 0.024, 32);
+      var cl = parseFloat(getComputedStyle(nav).paddingLeft);          // 4: same left edge as the logo
+      var B = Y(SHORT_TOP) - g, tallLeft = X(TALL_LEFT), topMin = 40;
+      // main page's video height at this size (same formula as hero.html), then 18% taller, capped by the space above the short pillar
+      var K = ctaGap + 140, vRight = W - tallLeft + g;
+      var fW = (W - vRight - cl - g - 0.5625 * K) / (c + 1.6875 * lh), fH = (B - 56 - K) / (3 * lh);
+      var fCur = clamp(48, Math.min(fW, fH), 152), HvCur = 3 * lh * fCur + K;
+      var Hv = Math.min(B - topMin, HvCur * 1.18), Wv = Hv * 9 / 16;
+      var maxRight = tallLeft - Wv - 2 * g;                             // text must end here to leave room for a centred video
+      hero.classList.add('placed');
+      main.style.left = cl + 'px'; main.style.top = '0px';
+      // 3: try the button beside "back."
+      var f = 152, right, beside = true, ctaLeft = 0, ctaTop = 0, listPush = 0;
+      for (; f >= 84; f -= 2) {
+        inner.style.setProperty('--f', f + 'px');
+        var back = box(main.querySelector('.big')), ev = box(main.querySelector('.it')), gt = box(main.querySelector('.l'));
+        ctaLeft = back.right - H.left + Math.max(28, f * 0.3);
+        right = Math.max(Math.max(ev.right, gt.right) - H.left, ctaLeft + cta.getBoundingClientRect().width);
+        // button sits level with "back.", but always below the tail of the "g" in "evenings"
+        var Mb = main.getBoundingClientRect(), backLine = main.querySelector('.big').getBoundingClientRect(), ctaH = cta.getBoundingClientRect().height;
+        ctaTop = Math.max(backLine.top - Mb.top + (backLine.height - ctaH) / 2, ev.bottom - Mb.top + 14);
+        // the "what I do" list moves down to clear the button instead of the headline shrinking
+        listPush = Math.max(0, ctaTop + ctaH + 20 - (does.getBoundingClientRect().top - Mb.top));
+        if (right <= maxRight && Mb.height + listPush <= Hv - 48) break;
+      }
+      if (f < 84) {                                                     // not enough room: button goes back under the headline
+        beside = false; hero.classList.remove('placed');
+        for (f = 152; f >= 48; f -= 2) {
+          inner.style.setProperty('--f', f + 'px');
+          var M0 = main.getBoundingClientRect();
+          right = Math.max.apply(null, [].map.call(main.querySelectorAll('h1 .l, .cta .box, .cta p, .does'), function (el) { return box(el).right; })) - H.left;
+          if (right <= maxRight && M0.height <= Hv - 48) break;
+        }
+      }
+      // 1: centre the video in the gap
+      var vLeft = right + (tallLeft - right - Wv) / 2, vTop = B - Hv;
+      video.style.right = 'auto'; video.style.left = vLeft + 'px'; video.style.top = vTop + 'px'; video.style.height = Hv + 'px';
+      if (beside) {
+        cta.style.left = (ctaLeft - cl) + 'px';
+        cta.style.top = ctaTop + 'px';
+        does.style.marginTop = listPush + 'px';
+      }
+      var M2 = main.getBoundingClientRect();
+      main.style.top = (vTop + (Hv - M2.height) / 2) + 'px';             // text block centred on the video
+    }
+    layout();
+    window.addEventListener('resize', layout);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
+    if (document.fonts && document.fonts.addEventListener) document.fonts.addEventListener('loadingdone', layout);
+    window.addEventListener('load', layout);
+    // re-place everything when a different headline font is picked
+    new MutationObserver(layout).observe(document.documentElement, { attributes: true, attributeFilter: ['data-font'] });
+  })();
+</script>
