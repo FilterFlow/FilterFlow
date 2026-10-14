@@ -1,377 +1,637 @@
 <title>Reliquo</title>
+
+<!-- =====================================================================
+     EDIT HERE: the things you'll swap later. Everything else updates itself.
+     ===================================================================== -->
+<script>
+  var RELIQUO = {
+    // 1. Your video file, e.g. "reliquo-intro.mp4" (filmed upright, 9:16, about 90 seconds).
+    //    Leave it as "" until the video is ready. Until then the hero shows a
+    //    "Book a free call" button and the video card stays a clean placeholder.
+    video: "",
+
+    //    Optional: a still picture shown on the video card before it plays, e.g. "reliquo-intro.jpg".
+    poster: "",
+
+    // 2. Your booking page (Calendly, Cal.com, etc.). Every "Book a free call" button uses it.
+    booking: "https://example.com/book-a-free-call",
+
+    // 3. The email shown in the footer (placeholder for now).
+    email: "hello@reliquo.ca"
+  };
+</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=Kalam:wght@400;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Hanken+Grotesk:wght@400;500;600;700&family=Quicksand:wght@700&display=swap">
 <style>
-/* Layout: Madden's old FilterFlow template. Cream page, a tan panel that runs off the right edge in the hero (now holding the handwritten task sheet), quiet tan-light band for how it works, tan contact band, near-black footer. Deliberately single-theme: the warm tan palette is the brand. */
+/*
+  Layout: the peach pedestal hero (headline left, vertical video card between the text and the tall pillar),
+  then short bands that alternate the photo's floor colour and cream, ending on a barn-red band with the footer.
+  Deliberately one look (Madden's brand palette), so there is no separate dark theme.
+  Photo is 500 x 889 px, shown down to row 740; short pillar top = row 570, tall pillar left edge = column 336.
+*/
 :root {
-  --tan: #C9A97A;
-  --tan-deep: #93693A;
-  --tan-light: #EFE5D3;
-  --cream: #FAF7F1;
-  --black: #171412;
-  --ink: #1F1B17;
-  --ink-soft: #5A5148;
-  --paper: #FFFDF8;
-  --struck: #9C8F80;
+  --barn: #69200F;       /* header, headings, buttons on cream */
+  --sand: #C78054;       /* "evenings", step numbers */
+  --sand-deep: #9C5A33;  /* sand for small text, so it stays readable */
+  --cream: #FBF3EA;
+  --peach: #E0C0AB;      /* top of the photo */
+  --blush: #E6CFBF;      /* the photo's floor colour, used for bands that follow the hero */
+  --pillar: #E9E7E7;     /* off-white sampled from the lit side of the pillars */
+  --ink: #5B3226;        /* body text */
+  --black: #141414;
+  --rule: rgba(105, 32, 15, 0.2);
+  --nav-bg: rgba(105, 32, 15, 0.9);
 
-  --head: "Quicksand", "Nunito", "Segoe UI", sans-serif;
-  --body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
-  --hand: "Kalam", "Bradley Hand", "Segoe Print", cursive;
+  --display: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
+  --sans: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
+  --brand: "Quicksand", "Nunito", sans-serif;
+  --side: clamp(20px, 4.2vw, 80px);
 
-  --max: 1120px;
-  --pad: 28px;
+  /* Headline measurements (the page re-measures --c itself if the headline words change):
+     --c = widest headline line in multiples of the font size, --lh = line height,
+     --cap = how far the first line reaches above its baseline, --gd = how far a descender (the "g") drops below */
+  --c: 4.26; --lh: 0.92; --cap: 0.77; --gd: 0.27;
   color-scheme: light;
 }
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; }
+[hidden] { display: none !important; }
+html { background: var(--peach); scroll-behavior: smooth; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
-body {
-  background: var(--cream);
-  color: var(--ink);
-  font-family: var(--body);
-  font-size: 19px;
-  line-height: 1.7;
-  overflow-x: clip;
-}
-h1, h2, h3 { font-family: var(--head); font-weight: 700; color: var(--black); margin: 0; line-height: 1.2; text-wrap: balance; }
-p { margin: 0 0 1em; }
+body { margin: 0; background: var(--peach); color: var(--ink); font-family: var(--sans); -webkit-font-smoothing: antialiased; overflow-x: clip; }
 a { color: inherit; }
-:focus-visible { outline: 3px solid var(--black); outline-offset: 3px; border-radius: 2px; }
+:focus-visible { outline: 2px solid var(--barn); outline-offset: 4px; }
+section[id] { scroll-margin-top: calc(var(--navH, 72px) + 8px); }
 
-.wrap { max-width: var(--max); margin: 0 auto; padding-inline: var(--pad); }
-
-.text-link {
-  font-family: var(--head); font-weight: 700; font-size: 18px; color: var(--black);
-  text-decoration: none; border-bottom: 3px solid var(--tan); padding-bottom: 3px;
+/* ---------- Buttons: pillar off-white with black lettering ---------- */
+.box {
+  display: inline-flex; align-items: center; justify-content: center; gap: 12px;
+  height: 54px; padding: 0 34px;
+  background: var(--pillar); color: var(--black);
+  font: 600 0.9rem/1 var(--sans); letter-spacing: 0.07em; text-transform: uppercase;
+  text-decoration: none; border: 0; border-radius: 0; white-space: nowrap; cursor: pointer;
+  box-shadow: 0 12px 26px -18px rgba(105, 32, 15, 0.5);
 }
-.text-link:hover { border-bottom-color: var(--black); }
+.box:hover { background: #F3F1F1; }
+.arr { width: 20px; height: 12px; flex: none; transition: transform 0.2s ease; }
+.box:hover .arr { transform: translateX(4px); }
 
-/* Header */
-.site-header .wrap { display: flex; align-items: baseline; justify-content: space-between; flex-wrap: wrap; gap: 12px 40px; padding-block: 34px 10px; }
-.wordmark { font-family: var(--head); font-weight: 700; font-size: 28px; color: var(--black); text-decoration: none; }
-.site-nav ul { list-style: none; display: flex; flex-wrap: wrap; gap: 8px 34px; margin: 0; padding: 0; }
-.site-nav a { font-weight: 600; font-size: 17px; color: var(--ink); text-decoration: none; padding-block: 4px; border-bottom: 2px solid transparent; }
-.site-nav a:hover { border-bottom-color: var(--tan); }
+/* ---------- Sticky header: slightly see-through with blur ---------- */
+.nav {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+  display: flex; align-items: center; justify-content: space-between; gap: 24px;
+  padding: 14px max(var(--side), calc((100% - 1200px) / 2));
+  background: var(--nav-bg);
+  -webkit-backdrop-filter: saturate(150%) blur(14px);
+          backdrop-filter: saturate(150%) blur(14px);
+  color: var(--cream);
+}
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) { .nav { background: var(--barn); } }
+.nav :focus-visible { outline-color: var(--cream); }
+.logo { display: flex; align-items: center; min-height: 44px; font-family: var(--brand); font-weight: 700; font-size: 1.6rem; letter-spacing: 0.01em; text-decoration: none; }
+.links { display: flex; gap: clamp(20px, 2.8vw, 40px); font-size: 0.88rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; }
+.links a { text-decoration: none; padding-block: 8px; white-space: nowrap; }
+.links a:hover { text-decoration: underline; text-underline-offset: 6px; }
+.nav .box { height: 44px; padding: 0 24px; box-shadow: none; }
+@media (max-width: 960px) { .nav .box { padding: 0 16px; font-size: 0.8rem; } }
 
-/* Hero: headline left, tan panel with the task sheet runs off the right edge */
-.hero .wrap { display: grid; grid-template-columns: 5fr 7fr; gap: 56px; align-items: center; padding-top: 48px; }
-.hero-copy { min-width: 0; display: grid; gap: 26px; justify-items: start; }
-.hero h1 { font-size: 46px; letter-spacing: -0.01em; }
-.hero-copy p { color: var(--ink-soft); max-width: 24em; margin: 0; }
-.hero-panel {
-  background: var(--tan);
-  margin-right: calc(-1 * var(--pad) - max(0px, (100vw - var(--max)) / 2));
-  padding: 64px 56px 56px;
-  display: grid; justify-items: center; gap: 20px;
-  min-width: 0;
+/* ---------- Hero ---------- */
+.hero {
+  --heroH: max(calc(100svh - var(--navH, 72px)), 720px);
+  position: relative;
+  height: var(--heroH);
+  overflow: hidden;
+  isolation: isolate;
+  container-type: inline-size;   /* lets the layout use the hero's real width (cqw) */
+  background: linear-gradient(180deg, #E0C0AB 0%, #E2C0AA 40%, #E5C8B5 60%, #E2CABA 85%, var(--blush) 100%);
+}
+.inner {
+  --g: clamp(14px, 1.8vw, 28px);
+  --ctaGap: clamp(22px, 2.4vw, 32px);
+  --ctaH: 140px;
+  --K: calc(var(--ctaGap) + var(--ctaH));
+  --B: calc(var(--heroH) * 570 / 740 - var(--g));                 /* one gap above the short pillar */
+  --vRight: calc(var(--heroH) * 164 / 740 + var(--g));            /* one gap left of the tall pillar */
+  --fW: calc((100cqw - var(--vRight) - var(--side) - var(--g) - 0.5625 * var(--K)) / (var(--c) + 1.6875 * var(--lh)));
+  --fH: calc((var(--B) - 56px - var(--K)) / (3 * var(--lh)));
+  --f: clamp(3rem, min(var(--fW), var(--fH)), 9.5rem);
+  --Hv: calc(3 * var(--lh) * var(--f) + var(--K));
+  --top: calc(var(--B) - var(--Hv));
+  position: absolute; inset: 0;
 }
 
-/* Task sheet */
-.note {
-  background: var(--paper);
-  border-radius: 3px;
-  padding: 30px 34px 32px;
-  transform: rotate(-1.6deg);
-  box-shadow: 0 24px 44px -26px rgba(23, 20, 18, 0.55);
-  font-family: var(--hand);
-  width: 100%; max-width: 420px;
+/* Photo shown down to row 740 of 889 so only a thin strip of floor remains under the pedestals */
+.stage { position: absolute; z-index: 0; top: 0; right: 0; height: 100%; aspect-ratio: 500 / 740; }
+.art {
+  position: absolute; inset: 0;
+  background: url("hero-peach.png") center top / cover no-repeat;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.7) 14%, #000 32%);
+          mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.7) 14%, #000 32%);
 }
-.note h2 { font-family: var(--hand); font-weight: 700; font-size: 26px; margin-bottom: 8px; }
-.note ul { list-style: none; padding: 0; margin: 0; display: grid; }
-.note li { position: relative; width: fit-content; max-width: 100%; white-space: nowrap; font-size: 21px; line-height: 1.35; padding-block: 8px; color: var(--ink); }
-.note li.done { color: var(--struck); }
-.note li.done::after {
-  content: ""; position: absolute; left: -4px; right: -6px; top: 52%;
-  height: 2.5px; background: var(--ink); border-radius: 2px;
-  transform-origin: left center; transform: rotate(-1.2deg) scaleX(1);
-  animation: strike 0.45s cubic-bezier(.6,.1,.3,1) both;
+
+.main {
+  position: absolute; z-index: 2;
+  left: var(--side); top: var(--top);
+  display: grid; gap: var(--ctaGap); justify-items: start;
 }
-.note li.done:nth-child(1)::after { animation-delay: 0.3s; }
-.note li.done:nth-child(2)::after { animation-delay: 0.7s; }
-.note li.done:nth-child(3)::after { animation-delay: 1.1s; }
-.note li.done:nth-child(4)::after { animation-delay: 1.5s; }
-.note li.done:nth-child(5)::after { animation-delay: 1.9s; }
-@keyframes strike { from { transform: rotate(-1.2deg) scaleX(0); } }
-@media (prefers-reduced-motion: reduce) { .note li.done::after { animation: none; } }
-.note li.keep { font-weight: 700; color: var(--black); margin-top: 6px; }
-.note li.keep span { border: 2.5px solid var(--tan-deep); border-radius: 50% / 60%; padding: 3px 12px; margin-left: -12px; }
-.panel-note { color: var(--black); font-size: 16px; margin: 0; max-width: 420px; width: 100%; }
-
-/* Time saved */
-.stats .wrap { padding-block: 120px 110px; }
-.stats-head { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: end; margin-bottom: 48px; }
-.stats h2 { font-size: 40px; max-width: 12em; }
-.stats-head p { color: var(--ink-soft); max-width: 24em; margin: 0; }
-.stat-list { list-style: none; margin: 0; padding: 0; border-top: 2px solid var(--black); }
-.stat-row { display: grid; grid-template-columns: 1.6fr 1fr 1.2fr; gap: 32px; align-items: baseline; padding-block: 22px; }
-.stat-task { font-family: var(--head); font-weight: 700; font-size: 21px; color: var(--black); }
-.stat-before { font-family: var(--head); font-weight: 700; font-size: 26px; color: var(--tan-deep); white-space: nowrap; font-variant-numeric: tabular-nums; }
-.stat-before small { font-size: 16px; font-weight: 600; }
-.stat-after { font-size: 18px; }
-.stat-after::before { content: "→ "; color: var(--tan-deep); font-weight: 600; }
-.stat-total { display: grid; grid-template-columns: 1.6fr 1fr 1.2fr; gap: 32px; align-items: baseline; padding-top: 28px; margin-top: 8px; border-top: 2px solid var(--black); }
-.stat-total .stat-task { font-size: 19px; color: var(--ink-soft); }
-.stat-total .stat-before { font-size: 34px; color: var(--black); }
-.fine-print { font-size: 16px; color: var(--ink-soft); margin-top: 36px; max-width: 40em; }
-
-/* How it works: plain blocks, no numbers */
-.how { background: var(--tan-light); }
-.how .wrap { padding-block: 120px 110px; }
-.how h2 { font-size: 40px; max-width: 13em; }
-.how-grid { display: grid; grid-template-columns: 1.35fr 1fr; gap: 72px; margin-top: 64px; }
-.step-first h3 { font-size: 32px; margin-bottom: 16px; max-width: 12em; }
-.step-first p { font-size: 20px; max-width: 26em; }
-.step-first .aside { font-size: 17px; color: var(--ink-soft); border-left: 3px solid var(--black); padding-left: 16px; margin: 26px 0 30px; }
-.steps-after { display: grid; gap: 56px; padding-top: 110px; }
-.step-later h3 { font-size: 22px; margin-bottom: 8px; }
-.step-later p { font-size: 18px; color: var(--ink-soft); margin: 0; }
-
-/* Questions */
-.faq .wrap { padding-block: 110px 120px; display: grid; grid-template-columns: 1fr 1.7fr; gap: 72px; align-items: start; }
-.faq h2 { font-size: 36px; margin-bottom: 22px; }
-.faq-side p { color: var(--ink-soft); max-width: 17em; }
-.faq-list { border-top: 2px solid var(--black); }
-summary {
-  list-style: none; cursor: pointer;
-  display: grid; grid-template-columns: 1fr 32px; gap: 20px; align-items: center;
-  padding-block: 24px;
-  font-family: var(--head); font-weight: 700; font-size: 21px; color: var(--black);
+h1 {
+  margin: 0;
+  font-family: var(--display);
+  font-weight: 400;
+  font-size: var(--f);
+  line-height: var(--lh);
+  letter-spacing: -0.035em;
+  font-variation-settings: "opsz" 96;
+  color: var(--barn);
 }
-summary::-webkit-details-marker { display: none; }
-.toggle { width: 32px; height: 32px; border: 2px solid var(--black); border-radius: 50%; position: relative; }
-.toggle::before, .toggle::after { content: ""; position: absolute; left: 50%; top: 50%; background: var(--black); transform: translate(-50%, -50%); }
-.toggle::before { width: 12px; height: 2px; }
-.toggle::after { width: 2px; height: 12px; }
-details[open] .toggle::after { display: none; }
-.answer { padding: 0 52px 24px 0; }
-.answer p { max-width: 34em; }
-.answer p:last-child { margin-bottom: 0; }
+h1 .l { display: block; white-space: nowrap; }
+h1 .it { font-style: italic; font-weight: 500; padding-left: 0.6em; color: var(--sand); }
+h1 .big { font-weight: 800; }
+h1 .bl { display: inline-block; width: 0; height: 0; }   /* zero-size marker: its top is the line's baseline */
 
-/* Contact */
-.contact { background: var(--tan); }
-.contact .wrap { padding-block: 120px 100px; display: grid; grid-template-columns: 1.25fr 1fr; gap: 72px; align-items: start; }
-.contact h2 { font-size: 44px; margin-bottom: 40px; }
-.reach-kind { display: block; font-size: 16px; color: var(--black); margin-bottom: 4px; }
-.email { font-family: var(--head); font-weight: 700; font-size: 32px; color: var(--black); border-bottom: 3px solid var(--black); padding-bottom: 2px; overflow-wrap: anywhere; user-select: all; }
-.copy { margin-top: 22px; background: none; border: 0; padding: 0 0 3px; cursor: pointer; font-family: var(--head); font-weight: 700; font-size: 17px; color: var(--black); border-bottom: 2px solid var(--black); }
-.copy:hover { border-bottom-color: var(--cream); }
-#copy-status { font-size: 16px; color: var(--black); min-height: 1.6em; margin: 10px 0 0; }
-.closing { padding-top: 150px; }
-.closing p { font-size: 23px; line-height: 1.6; font-style: italic; color: var(--black); max-width: 17em; }
-.closing .sig { font-family: var(--head); font-weight: 600; font-style: normal; font-size: 18px; }
+/* The three-line story. On wide screens it sits beside the last headline line (placed by the script). */
+.story { display: grid; gap: 2px; font-size: 1.06rem; line-height: 1.5; color: var(--barn); }
+.story p { margin: 0; }
+.story p:last-child { font-weight: 600; }
+.hero.placed .story { position: absolute; white-space: nowrap; }
 
-.site-footer { background: var(--black); color: var(--tan-light); font-size: 15px; }
-.site-footer .wrap { padding-block: 26px 36px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px 24px; }
+.cta { display: grid; justify-items: start; gap: 12px; }
+.cta-note { margin: 0; font-size: 1rem; line-height: 1.45; color: var(--barn); }
 
-/* Smaller screens */
-@media (max-width: 960px) {
-  .hero .wrap, .stats-head, .how-grid, .faq .wrap, .contact .wrap { grid-template-columns: 1fr; }
-  .hero .wrap { gap: 36px; }
-  .hero-panel { padding: 44px 28px 36px; }
-  .stats-head { gap: 20px; }
-  .steps-after { padding-top: 0; }
-  .closing { padding-top: 0; }
-  .faq .wrap, .contact .wrap { gap: 40px; }
+/* Vertical video card */
+.video {
+  position: absolute; z-index: 1; margin: 0;
+  right: var(--vRight); top: var(--top);
+  height: var(--Hv); aspect-ratio: 9 / 16; max-width: 100%;
 }
-@media (max-width: 720px) {
-  .stat-row, .stat-total { grid-template-columns: minmax(0, 1fr) auto; gap: 4px 20px; }
-  .stat-row .stat-after { grid-column: 1 / -1; }
+.frame {
+  position: relative; width: 100%; height: 100%; overflow: hidden;
+  background: var(--cream);
+  border-radius: 6px;
+  box-shadow: 0 34px 50px -30px rgba(105, 32, 15, 0.5), 0 2px 6px -2px rgba(105, 32, 15, 0.12);
 }
-@media (max-width: 640px) {
-  :root { --pad: 20px; }
-  body { font-size: 18px; }
-  .hero h1 { font-size: 36px; }
-  .stats h2, .how h2 { font-size: 31px; }
-  .faq h2 { font-size: 30px; }
-  .contact h2 { font-size: 34px; }
-  .stats .wrap, .how .wrap, .faq .wrap, .contact .wrap { padding-block: 72px; }
-  .note { padding: 24px 22px 26px; }
-  .note li { font-size: 18px; }
-  .stat-task { font-size: 19px; }
-  .stat-before { font-size: 22px; }
-  .stat-total .stat-before { font-size: 28px; }
-  .step-first h3 { font-size: 27px; }
-  .email { font-size: 24px; }
-  .closing p { font-size: 20px; }
-  summary { font-size: 19px; }
-  .answer { padding-right: 0; }
-  .site-nav ul { gap: 6px 22px; }
-  .site-nav a { font-size: 16px; }
+.placeholder { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; text-align: center; padding: 18px; }
+.ph-icon { width: 64px; height: 64px; border-radius: 50%; border: 1.5px solid var(--rule); display: grid; place-items: center; color: var(--sand-deep); }
+.ph-icon svg { width: 18px; height: 18px; margin-left: 3px; }
+.placeholder b { font: 600 1.05rem/1.25 var(--sans); color: var(--barn); max-width: 12ch; }
+.placeholder small { font-size: 0.85rem; color: var(--sand-deep); }
+.clip { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; background: var(--black); }
+.play-btn { position: absolute; inset: 0; display: grid; place-items: center; background: transparent; border: 0; padding: 0; cursor: pointer; }
+.play { width: 72px; height: 72px; border-radius: 50%; background: var(--barn); display: grid; place-items: center; box-shadow: 0 10px 24px -10px rgba(0, 0, 0, 0.5); }
+.play svg { width: 22px; height: 22px; margin-left: 4px; color: var(--cream); }
+.play-btn:hover .play { transform: scale(1.05); }
+.play-btn:focus-visible { outline-offset: -6px; }
+
+/* ---------- Sections below the hero ---------- */
+.wrap { width: min(1200px, 100% - 2 * var(--side)); margin-inline: auto; }
+.band { padding-block: clamp(72px, 8vw, 120px); }
+.band.blush { background: var(--blush); }
+.band.cream { background: var(--cream); }
+h2 {
+  margin: 0;
+  font-family: var(--display); font-weight: 500;
+  font-size: clamp(2.5rem, 5vw, 4.25rem); line-height: 1; letter-spacing: -0.03em;
+  font-variation-settings: "opsz" 28;   /* sturdier cut: the thinnest strokes stay visible */
+  color: var(--barn); text-wrap: balance;
 }
+h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem; line-height: 1.15; letter-spacing: -0.01em; font-variation-settings: "opsz" 12; color: var(--barn); text-wrap: balance; }
+:where(.band) p, :where(.band) dd { font-size: 1.06rem; line-height: 1.6; }   /* low priority, so the styles below win */
+.lead { margin: 0; font-size: 1.15rem; color: var(--ink); max-width: 36ch; }
+.split { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 32px clamp(32px, 6vw, 96px); align-items: start; }
+.split > * { min-width: 0; }
+.split > div:first-child { display: grid; gap: 20px; }
+
+/* How it works */
+.head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 16px 48px; }
+.steps { list-style: none; margin: clamp(40px, 5vw, 64px) 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px clamp(24px, 4vw, 56px); }
+.steps li { border-top: 1px solid var(--rule); padding-top: 22px; display: grid; gap: 10px; align-content: start; }
+.num { font: italic 500 3.4rem/0.9 var(--display); font-variation-settings: "opsz" 28; color: var(--sand); }
+.steps p { margin: 0; color: var(--ink); max-width: 34ch; }
+
+/* What we automate */
+.helpers { margin: 0; border-top: 1px solid var(--rule); }
+.helpers > div { display: grid; grid-template-columns: minmax(0, 13rem) minmax(0, 1fr); gap: 6px 32px; padding-block: 20px; border-bottom: 1px solid var(--rule); }
+.helpers dt { font-weight: 600; font-size: 1.08rem; line-height: 1.5; color: var(--barn); }
+.helpers dd { margin: 0; color: var(--ink); }
+
+/* Example */
+.example { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); align-items: center; }
+.tag { justify-self: start; margin: 0; padding: 7px 12px; border: 1px solid var(--barn); color: var(--barn); font-size: 0.78rem; line-height: 1.2; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; }
+.timeline { list-style: none; margin: 12px 0 0; padding: 0; border-top: 1px solid var(--rule); }
+.timeline li { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); gap: 4px 16px; padding-block: 14px; border-bottom: 1px solid var(--rule); font-size: 1.06rem; line-height: 1.5; }
+.timeline time { font-weight: 600; color: var(--barn); font-variant-numeric: tabular-nums; }
+.phone { justify-self: center; width: min(330px, 100%); margin: 0; display: grid; gap: 14px; }
+.screen {
+  background: var(--cream); border: 10px solid var(--barn); border-radius: 34px;
+  padding: 18px 14px 22px; display: grid; gap: 10px; align-content: start; min-height: 470px;
+  box-shadow: 0 34px 50px -30px rgba(105, 32, 15, 0.55);
+}
+.screen-top { display: grid; justify-items: center; gap: 2px; padding-bottom: 12px; border-bottom: 1px solid var(--rule); margin-bottom: 4px; }
+.screen-top b { font-size: 1rem; color: var(--black); }
+.screen-top span, .stamp { font-size: 0.78rem; color: var(--ink); }
+.stamp { justify-self: center; }
+.msg { margin: 0; max-width: 84%; padding: 10px 14px; border-radius: 18px; font-size: 0.95rem; line-height: 1.4; }
+.msg.them { justify-self: start; background: var(--pillar); color: var(--black); border-bottom-left-radius: 6px; }
+.msg.you { justify-self: end; background: var(--barn); color: var(--cream); border-bottom-right-radius: 6px; }
+.phone figcaption { text-align: center; font-size: 0.9rem; color: var(--ink); }
+
+/* What it costs */
+.cost .big { margin: 0; font-family: var(--display); font-variation-settings: "opsz" 14; font-size: clamp(1.6rem, 2.6vw, 2.2rem); line-height: 1.2; letter-spacing: -0.01em; color: var(--barn); max-width: 26ch; }
+.fees { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 40px; margin: 36px 0 0; }
+.fees div { border-top: 1px solid var(--rule); padding-top: 16px; display: grid; gap: 6px; }
+.fees dt { font-weight: 600; color: var(--barn); font-size: 1.08rem; }
+.fees dd { margin: 0; color: var(--ink); }
+
+/* Questions: same cream as the costs band, divided by a line */
+#questions { padding-top: 0; }
+#questions .wrap { border-top: 1px solid var(--rule); padding-top: clamp(56px, 6vw, 88px); }
+.qa { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 36px 48px; }
+.qa div { display: grid; gap: 10px; align-content: start; }
+.qa h3 { font-size: 1.4rem; }
+.qa p { margin: 0; color: var(--ink); }
+
+/* Final call + footer */
+.final { background: var(--barn); color: var(--cream); padding-block: clamp(72px, 8vw, 112px); }
+.final .wrap { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 28px 48px; align-items: end; }
+.final h2 { color: var(--cream); font-size: clamp(2.8rem, 6vw, 5.2rem); }
+.final h2 em { font-style: italic; font-weight: 500; color: var(--sand); }
+.final-side { display: grid; gap: 22px; justify-items: start; }
+.final-side p { margin: 0; font-size: 1.15rem; line-height: 1.5; }
+.final .box { box-shadow: none; }
+.final :focus-visible, .foot :focus-visible { outline-color: var(--cream); }
+.foot { background: var(--barn); color: var(--cream); font-size: 0.95rem; }
+.foot .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 36px; padding-block: 22px 32px; border-top: 1px solid rgba(251, 243, 234, 0.22); }
+.foot .logo { font-size: 1.35rem; min-height: 40px; margin-right: auto; }
+.mail { display: inline-flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+.mail span { user-select: all; overflow-wrap: anywhere; }
+.copy { background: none; border: 0; padding: 4px 0; cursor: pointer; color: var(--cream); font: 600 0.82rem/1 var(--sans); letter-spacing: 0.07em; text-transform: uppercase; text-decoration: underline; text-underline-offset: 4px; }
+#copy-status { min-width: 1px; font-size: 0.9rem; }
+
+/* ---------- Tablets and phones ---------- */
+@media (max-width: 1000px) {
+  .qa { grid-template-columns: minmax(0, 1fr); }
+  .cta .box { font-size: 0.8rem; padding: 0 22px; }
+}
+@media (max-width: 860px) {
+  /* header: logo + button on top, links in a row underneath */
+  .nav { flex-wrap: wrap; row-gap: 2px; column-gap: 16px; padding-block: 10px 6px; }
+  .logo { font-size: 1.4rem; min-height: 40px; }
+  .nav .box { height: 40px; padding: 0 14px; font-size: 0.74rem; }
+  .links { order: 3; flex-basis: 100%; gap: 20px; font-size: 0.74rem; overflow-x: auto; }
+
+  /* hero: headline, story, button, vertical video, then the photo */
+  .hero { height: auto; container-type: normal; }
+  .inner { position: static; display: grid; gap: 36px; padding: 36px var(--side) 0;
+           --f: clamp(3rem, calc(84vw / var(--c)), 5.6rem); }
+  .main, .video, .stage { position: relative; inset: auto; top: auto; left: auto; right: auto; }
+  .main { gap: 24px; }
+  .cta .box { font-size: 0.8rem; padding: 0 20px; max-width: 100%; }
+  .arr { transform: rotate(90deg); }                 /* points down at the video card */
+  .box:hover .arr { transform: rotate(90deg) translateX(3px); }
+  .video { height: auto; width: min(300px, 78vw); justify-self: center; }
+  .stage { height: 380px; aspect-ratio: auto; margin-inline: calc(-1 * var(--side)); }
+  .art { background-size: cover; background-position: center 72%;
+    -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 30%);
+            mask-image: linear-gradient(180deg, transparent 0%, #000 30%); }
+
+  .split, .example, .final .wrap { grid-template-columns: minmax(0, 1fr); }
+  .steps { grid-template-columns: minmax(0, 1fr); }
+  .phone { justify-self: start; }
+}
+@media (max-width: 560px) {
+  .helpers > div, .timeline li { grid-template-columns: minmax(0, 1fr); }
+  .fees { grid-template-columns: minmax(0, 1fr); }
+}
+@media (prefers-reduced-motion: reduce) { .arr { transition: none; } }
 </style>
 
-<header class="site-header">
-  <div class="wrap">
-    <a class="wordmark" href="#top" id="top">Reliquo</a>
-    <nav class="site-nav" aria-label="Main">
-      <ul>
-        <li><a href="#time">Time saved</a></li>
-        <li><a href="#how-it-works">How it works</a></li>
-        <li><a href="#questions">Questions</a></li>
-        <li><a href="#contact">Contact</a></li>
-      </ul>
-    </nav>
-  </div>
+<header class="nav" id="top">
+  <!-- Logo spot: swap the wordmark for <img src="logo.svg" alt="Reliquo" height="44"> when the logo is ready -->
+  <a class="logo" href="#top">Reliquo</a>
+  <nav class="links" aria-label="Main">
+    <a href="#how">How it works</a>
+    <a href="#cost">What it costs</a>
+    <a href="#questions">Questions</a>
+  </nav>
+  <a class="box" href="https://example.com/book-a-free-call" data-book>Book a free call</a>
 </header>
 
 <main>
   <section class="hero" aria-label="Introduction">
-    <div class="wrap">
-      <div class="hero-copy">
-        <h1>Let the little jobs take care of themselves.</h1>
-        <p>I set up simple helpers that answer missed calls, reply to messages and sort your email. You keep running your business. There's nothing new to learn.</p>
-        <a class="text-link" href="#contact">Let's talk</a>
-      </div>
+    <div class="inner">
+      <div class="main">
+        <!-- HEADLINE: to change it, swap the words inside the three <span class="l"> lines below
+             (keep three short lines; leave the small <span class="bl"> markers in place).
+             The layout measures the new words by itself. -->
+        <h1><span class="l">Get your<span class="bl" aria-hidden="true"></span></span><span class="l it">evenings<span class="bl" aria-hidden="true"></span></span><span class="l big">back.<span class="bl" aria-hidden="true"></span></span></h1>
 
-      <div class="hero-panel">
-        <div class="note" role="img" aria-label="A handwritten to-do list. Five chores are crossed off: call back a missed number, answer a website message, follow up on a quote, sort 43 emails, and ask for a review. The last item, home for supper by six, is circled.">
-          <h2>Monday</h2>
-          <ul aria-hidden="true">
-            <li class="done">Call back missed number</li>
-            <li class="done">Answer website message</li>
-            <li class="done">Follow up on Henderson quote</li>
-            <li class="done">Sort 43 emails</li>
-            <li class="done">Ask Mrs. Patel for a review</li>
-            <li class="keep"><span>Home for supper by 6</span></li>
-          </ul>
+        <div class="story">
+          <p>Your phone rings while you're on a job.</p>
+          <p>You can't answer.</p>
+          <p>The customer calls someone else.</p>
         </div>
-        <p class="panel-note">Five of these can happen on their own.</p>
-      </div>
-    </div>
-  </section>
 
-  <section class="stats" id="time">
-    <div class="wrap">
-      <div class="stats-head">
-        <h2>The small jobs that quietly eat your week.</h2>
-        <p>These are the tasks most small shops handle by hand, and roughly how long each one takes.</p>
-      </div>
-
-      <ul class="stat-list">
-        <li class="stat-row"><span class="stat-task">Sorting and filing emails</span><span class="stat-before">~1 hr <small>/ week</small></span><span class="stat-after">Filed as they arrive</span></li>
-        <li class="stat-row"><span class="stat-task">Calling back missed calls</span><span class="stat-before">~1 hr <small>/ week</small></span><span class="stat-after">Customer gets a text right away</span></li>
-        <li class="stat-row"><span class="stat-task">Answering "what are your hours?"</span><span class="stat-before">~45 min <small>/ week</small></span><span class="stat-after">Answered with your real details</span></li>
-        <li class="stat-row"><span class="stat-task">Copying contact forms into a list</span><span class="stat-before">~30 min <small>/ week</small></span><span class="stat-after">Added to your list automatically</span></li>
-        <li class="stat-row"><span class="stat-task">Asking customers for reviews</span><span class="stat-before">~20 min <small>/ week</small></span><span class="stat-after">Sent after every job</span></li>
-      </ul>
-
-      <div class="stat-total">
-        <span class="stat-task">All together, roughly</span>
-        <span class="stat-before">3½ hrs <small>/ week</small></span>
-      </div>
-
-      <p class="fine-print">These are typical estimates for a small business, not promises. Your own numbers will depend on how busy you are, and we'd look at them together before setting anything up.</p>
-    </div>
-  </section>
-
-  <section class="how" id="how-it-works">
-    <div class="wrap">
-      <h2>Three steps, and you only do the first one.</h2>
-      <div class="how-grid">
-        <div class="step-first">
-          <h3>We have a normal conversation.</h3>
-          <p>You tell me what keeps slipping through the cracks. Maybe it's calls you miss while you're busy, or customers you meant to get back to.</p>
-          <p class="aside">No forms, no tech talk. A phone call or a coffee is fine.</p>
-          <a class="text-link" href="#contact">Start that conversation</a>
-        </div>
-        <div class="steps-after">
-          <div class="step-later">
-            <h3>I set it up for you.</h3>
-            <p>I test everything with pretend information first, so nothing touches your real accounts until it works.</p>
-          </div>
-          <div class="step-later">
-            <h3>It quietly does its job.</h3>
-            <p>You keep working the way you always have. There's nothing new to learn or check.</p>
-          </div>
+        <div class="cta">
+          <!-- Shown once RELIQUO.video is set -->
+          <button class="box when-video" type="button" id="watch" hidden>Watch how Reliquo fixes that<svg class="arr" viewBox="0 0 20 12" aria-hidden="true"><path d="M1 6h17M13 1l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          <p class="cta-note when-video" hidden>90 seconds. No signup.</p>
+          <!-- Shown until then -->
+          <a class="box when-novideo" href="https://example.com/book-a-free-call" data-book>Book a free call</a>
+          <p class="cta-note when-novideo">15 minutes by phone or video. No pressure.</p>
         </div>
       </div>
-    </div>
-  </section>
 
-  <section class="faq" id="questions">
-    <div class="wrap">
-      <div class="faq-side">
-        <h2>It's fair to be a little wary.</h2>
-        <p>These are the things people ask me most. If yours isn't here, just ask. No question is too basic.</p>
-      </div>
-      <div class="faq-list">
-        <details>
-          <summary>Is this safe?<span class="toggle" aria-hidden="true"></span></summary>
-          <div class="answer">
-            <p>Yes. When anything connects to your email or phone, you sign in yourself on that company's own official screen, like Google's or Microsoft's.</p>
-            <p>I never see your password. You can switch the connection off yourself, any time.</p>
+      <figure class="video" id="video">
+        <div class="frame">
+          <video class="clip" id="clip" playsinline preload="metadata" hidden></video>
+          <button class="play-btn" id="play" type="button" aria-label="Play the video" hidden>
+            <span class="play"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M4 2.5v11l9-5.5-9-5.5Z"/></svg></span>
+          </button>
+          <div class="placeholder" id="placeholder">
+            <span class="ph-icon" aria-hidden="true"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.5v11l9-5.5-9-5.5Z"/></svg></span>
+            <b>See how Reliquo works</b>
+            <small>Video coming soon</small>
           </div>
-        </details>
-        <details>
-          <summary>Do I need to know anything about computers?<span class="toggle" aria-hidden="true"></span></summary>
-          <div class="answer">
-            <p>No. I do all the setting up. After that, there's nothing for you to open, learn or keep an eye on.</p>
-            <p>If something ever needs your attention, I'll explain it in plain words.</p>
-          </div>
-        </details>
-        <details>
-          <summary>What happens to my information?<span class="toggle" aria-hidden="true"></span></summary>
-          <div class="answer">
-            <p>Each helper only sees the one thing it's for, like new messages in one inbox. It doesn't see the rest of your account or your files.</p>
-            <p>Before we connect anything, we'll read the permission screen together, so you know exactly what it can and can't do.</p>
-          </div>
-        </details>
-        <details>
-          <summary>What does it cost?<span class="toggle" aria-hidden="true"></span></summary>
-          <div class="answer">
-            <p>$75 to $100 for one helper, or $200 for three or more. You pay once, when it's set up and working.</p>
-            <p>Some helpers use services with small running costs, like sending text messages. I'll tell you exactly what those are before we start.</p>
-          </div>
-        </details>
-        <details>
-          <summary>What if I try it and don't like it?<span class="toggle" aria-hidden="true"></span></summary>
-          <div class="answer">
-            <p>Then we switch it off. There's no contract to get out of, and turning it off is as easy as turning it on was.</p>
-          </div>
-        </details>
+        </div>
+      </figure>
+
+      <div class="stage">
+        <div class="art" aria-hidden="true"></div>
       </div>
     </div>
   </section>
 
-  <section class="contact" id="contact">
+  <section class="band blush" id="how">
     <div class="wrap">
+      <div class="head">
+        <h2>How it works</h2>
+        <p class="lead">Three steps. The first one is free.</p>
+      </div>
+      <ol class="steps">
+        <li>
+          <span class="num" aria-hidden="true">1</span>
+          <h3>A free call</h3>
+          <p>15 minutes by phone or video. You tell us where calls and messages slip through, and we tell you what could help.</p>
+        </li>
+        <li>
+          <span class="num" aria-hidden="true">2</span>
+          <h3>We set it up</h3>
+          <p>We build it around the phone and email you already use, and test it with pretend customers before anything goes live.</p>
+        </li>
+        <li>
+          <span class="num" aria-hidden="true">3</span>
+          <h3>A monthly check-in</h3>
+          <p>Once a month you get a short report on what your helpers did, and we fix or adjust anything that needs it.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="band cream" id="automate">
+    <div class="wrap split">
       <div>
-        <h2>Let's talk.</h2>
-        <span class="reach-kind">Email</span>
-        <span class="email" id="email">hello@reliquo.ca</span>
-        <div><button class="copy" id="copy" type="button">Copy email</button></div>
-        <p id="copy-status" role="status"></p>
+        <h2>What we automate</h2>
+        <p class="lead">Small helpers that work in the background while you're on the job.</p>
       </div>
-      <div class="closing">
-        <p>You don't need to know what you need yet. Tell me what's frustrating you, and we'll work out together whether I can help.</p>
-        <p class="sig">Madden, Reliquo</p>
+      <dl class="helpers">
+        <div><dt>Missed-call text-back</dt><dd>If you can't pick up, the caller gets a text right away, so they wait for you instead of calling someone else.</dd></div>
+        <div><dt>Lead logging</dt><dd>Every new call, text and web form goes into one list, so no job gets forgotten.</dd></div>
+        <div><dt>Follow-ups</dt><dd>Quotes and callbacks get a polite reminder, sent for you at the right time.</dd></div>
+        <div><dt>Review requests</dt><dd>After a job, your customer gets a short message asking for a Google review.</dd></div>
+        <div><dt>Email sorting</dt><dd>Your inbox sorts itself into what needs you today and what can wait.</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section class="band blush" id="example">
+    <div class="wrap split example">
+      <div>
+        <p class="tag">Demo business, not a real client.</p>
+        <h2>Joe's Plumbing</h2>
+        <p class="lead">The story from the top of the page, with the helpers switched on.</p>
+        <ol class="timeline">
+          <li><time>2:14 pm</time><span>Joe is under a sink. His phone rings and he can't answer.</span></li>
+          <li><time>2:14 pm</time><span>The caller gets a text from Joe's Plumbing right away.</span></li>
+          <li><time>2:16 pm</time><span>She replies that her water heater is leaking. It goes on Joe's list.</span></li>
+          <li><time>3:05 pm</time><span>Joe finishes the job, sees the note and calls her back.</span></li>
+          <li><time>Next day</time><span>After the repair, she gets a short message asking for a review.</span></li>
+        </ol>
+      </div>
+      <figure class="phone">
+        <div class="screen" role="img" aria-label="Demo text conversation. Joe's Plumbing: Hi, it's Joe's Plumbing. Sorry we missed your call, we're on a job right now. What can we help with? Customer: My water heater is leaking. Can someone come today? Joe's Plumbing: Thanks, got it. Joe will call you back as soon as he's off this job.">
+          <div class="screen-top" aria-hidden="true"><b>Joe's Plumbing</b><span>Text message</span></div>
+          <span class="stamp" aria-hidden="true">Today 2:14 pm</span>
+          <p class="msg them" aria-hidden="true">Hi, it's Joe's Plumbing. Sorry we missed your call, we're on a job right now. What can we help with?</p>
+          <p class="msg you" aria-hidden="true">My water heater is leaking. Can someone come today?</p>
+          <p class="msg them" aria-hidden="true">Thanks, got it. Joe will call you back as soon as he's off this job.</p>
+        </div>
+        <figcaption>What the caller sees (demo)</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <section class="band cream" id="cost">
+    <div class="wrap split">
+      <div><h2>What it costs</h2></div>
+      <div class="cost">
+        <p class="big">One setup fee and a flat monthly fee, explained in the video and on the call.</p>
+        <dl class="fees">
+          <div><dt>Setup fee</dt><dd>Paid once, for building and testing your helpers.</dd></div>
+          <div><dt>Monthly fee</dt><dd>The same every month. Covers keeping everything running, your check-in and your report.</dd></div>
+        </dl>
+      </div>
+    </div>
+  </section>
+
+  <section class="band cream" id="questions">
+    <div class="wrap split">
+      <div><h2>Questions</h2></div>
+      <div class="qa">
+        <div>
+          <h3>Do I need to be techy?</h3>
+          <p>No. We do all the setup. After that it runs on its own, and there's nothing new for you to learn or check.</p>
+        </div>
+        <div>
+          <h3>What if it breaks?</h3>
+          <p>Tell us and we'll fix it. We also look everything over before each monthly report.</p>
+        </div>
+        <div>
+          <h3>Who owns my data?</h3>
+          <p>You do. Everything runs on your own accounts, like your Google or Microsoft email. You sign in yourself, we never see your password, and you can switch the connection off any time.</p>
+        </div>
+        <div>
+          <h3>Who is behind Reliquo?</h3>
+          <p>Reliquo is run by Madden, here in Winnipeg. The person on your free call is the same person who sets things up and sends your monthly report.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="final" id="book" aria-label="Book a free call">
+    <div class="wrap">
+      <h2>Start with a <em>free</em> call.</h2>
+      <div class="final-side">
+        <p>15 minutes by phone or video. No pressure.</p>
+        <a class="box" href="https://example.com/book-a-free-call" data-book>Book a free call</a>
       </div>
     </div>
   </section>
 </main>
 
-<footer class="site-footer">
+<footer class="foot">
   <div class="wrap">
-    <span>Reliquo, Winnipeg, Manitoba</span>
-    <span>© 2026</span>
+    <a class="logo" href="#top">Reliquo</a>
+    <span>Winnipeg, Manitoba</span>
+    <span class="mail"><span id="email">hello@reliquo.ca</span><button class="copy" id="copy-email" type="button">Copy email</button><span id="copy-status" role="status"></span></span>
+    <span>© 2026 Reliquo</span>
   </div>
 </footer>
 
 <script>
   (function () {
-    var email = document.getElementById('email');
-    var status = document.getElementById('copy-status');
-    function selectIt() {
-      var r = document.createRange(); r.selectNodeContents(email);
-      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
-      status.textContent = 'Email selected. Press Ctrl+C (or Cmd+C) to copy it.';
-    }
-    document.getElementById('copy').addEventListener('click', function () {
-      try {
-        navigator.clipboard.writeText(email.textContent).then(function () { status.textContent = 'Email copied.'; }, selectIt);
-      } catch (e) { selectIt(); }
+    var cfg = window.RELIQUO || {};
+    var root = document.documentElement;
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* ---------- Booking link and email from the settings at the top ---------- */
+    document.querySelectorAll('[data-book]').forEach(function (a) { if (cfg.booking) a.href = cfg.booking; });
+    var emailEl = document.getElementById('email'), copyStatus = document.getElementById('copy-status');
+    if (cfg.email) emailEl.textContent = cfg.email;
+    document.getElementById('copy-email').addEventListener('click', function () {
+      function selectIt() {
+        var r = document.createRange(); r.selectNodeContents(emailEl);
+        var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+        copyStatus.textContent = 'Selected. Press Ctrl+C (or Cmd+C) to copy.';
+      }
+      try { navigator.clipboard.writeText(emailEl.textContent).then(function () { copyStatus.textContent = 'Copied.'; }, selectIt); }
+      catch (e) { selectIt(); }
     });
+
+    /* ---------- Video: "Watch how Reliquo fixes that" when a file is set, "Book a free call" until then ---------- */
+    var hero = document.querySelector('.hero'), clip = document.getElementById('clip'), playBtn = document.getElementById('play');
+    function videoMode(on) {
+      document.querySelectorAll('.when-video').forEach(function (el) { el.hidden = !on; });
+      document.querySelectorAll('.when-novideo').forEach(function (el) { el.hidden = on; });
+      clip.hidden = !on; playBtn.hidden = !on;
+      document.getElementById('placeholder').hidden = on;
+    }
+    function play() {
+      clip.controls = true; playBtn.hidden = true;
+      var p = clip.play();
+      if (p && p.catch) p.catch(function () { clip.controls = false; playBtn.hidden = false; });
+    }
+    if (cfg.video) {
+      if (cfg.poster) clip.poster = cfg.poster;
+      clip.src = cfg.video;
+      videoMode(true);
+      clip.addEventListener('error', function () { clip.removeAttribute('src'); videoMode(false); layout(); });   // file missing: fall back to booking
+      clip.addEventListener('ended', function () { clip.controls = false; playBtn.hidden = false; });
+      playBtn.addEventListener('click', play);
+      document.getElementById('watch').addEventListener('click', function () {
+        if (window.matchMedia('(max-width: 860px)').matches) clip.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'center' });
+        play();
+      });
+    }
+
+    /* ---------- Hero layout (wide screens) ----------
+       Headline as large as fits; the story sits beside the last headline line, clear of the "g" tail above it;
+       the button goes under the headline; the video card is centred between the text and the tall pillar,
+       one gap above the short pillar; the text block is centred up and down on the page. */
+    var IMG_H = 740, SHORT_TOP = 570, TALL_LEFT = 336;
+    var nav = document.querySelector('.nav'), inner = hero.querySelector('.inner'), main = hero.querySelector('.main');
+    var h1 = main.querySelector('h1'), story = main.querySelector('.story'), cta = main.querySelector('.cta');
+    var video = document.getElementById('video'), stage = hero.querySelector('.stage');
+    var lines = h1.querySelectorAll('.l'), first = lines[0], mid = lines[lines.length - 2], last = lines[lines.length - 1];
+    function box(el) { var r = document.createRange(); r.selectNodeContents(el); return r.getBoundingClientRect(); }
+    function clamp(a, x, b) { return Math.max(a, Math.min(x, b)); }
+    function base(line) { return line.querySelector('.bl').getBoundingClientRect().top; }
+    function rightOf(els) { var r = 0; Array.prototype.forEach.call(els, function (el) { r = Math.max(r, box(el).right); }); return r; }
+    function ctaRight() {
+      var r = 0;
+      Array.prototype.forEach.call(cta.children, function (el) { r = Math.max(r, el.tagName === 'P' ? box(el).right : el.getBoundingClientRect().right); });
+      return r;
+    }
+    function measureHeadline() {   // widest line as a multiple of the font size, so new headline words still fit
+      h1.style.fontSize = '100px';
+      var L = h1.getBoundingClientRect().left;
+      var w = rightOf(lines) - L;
+      h1.style.fontSize = '';
+      if (w > 0) root.style.setProperty('--c', (w / 100 + 0.04).toFixed(3));
+    }
+    function layout() {
+      root.style.setProperty('--navH', nav.getBoundingClientRect().height + 'px');
+      measureHeadline();
+      hero.classList.remove('placed');
+      [inner, main, story, cta, video].forEach(function (el) { el.removeAttribute('style'); });
+      if (window.innerWidth <= 860) return;
+
+      var H = hero.getBoundingClientRect(), W = hero.clientWidth, vw = window.innerWidth;
+      var S = stage.getBoundingClientRect(), s = S.height / IMG_H;
+      var X = function (x) { return S.left - H.left + x * s; }, Y = function (y) { return S.top - H.top + y * s; };
+      var cs = getComputedStyle(root), num = function (n, d) { return parseFloat(cs.getPropertyValue(n)) || d; };
+      var lh = num('--lh', 0.92), c = num('--c', 4.26), cap = num('--cap', 0.77), gd = num('--gd', 0.27);
+      var g = clamp(14, vw * 0.018, 28), ctaGap = clamp(22, vw * 0.024, 32), edge = 36;
+      var cl = parseFloat(getComputedStyle(nav).paddingLeft);       // same left edge as the logo
+      var B = Y(SHORT_TOP) - g, tallLeft = X(TALL_LEFT);
+      // video height: the main hero's formula, 18% taller, never covering the short pillar
+      var K = ctaGap + 140, vRight = W - tallLeft + g;
+      var fW = (W - vRight - cl - g - 0.5625 * K) / (c + 1.6875 * lh), fH = (B - 56 - K) / (3 * lh);
+      var HvCur = 3 * lh * clamp(48, Math.min(fW, fH), 152) + K;
+      var Hv = Math.min(B - 40, HvCur * 1.18), Wv = Hv * 9 / 16;
+      var maxRight = tallLeft - Wv - 2 * g, maxInk = H.height - 2 * edge;
+
+      main.style.left = cl + 'px'; main.style.top = '0px';
+      function textRight() { return Math.max(rightOf(lines), hero.classList.contains('placed') ? 0 : rightOf(story.children)) - H.left; }
+      // A: story beside the last headline line (button under the headline)
+      function beside() {
+        hero.classList.add('placed');
+        for (var f = 152; f >= 84; f -= 2) {
+          inner.style.setProperty('--f', f + 'px'); cta.style.marginTop = '';
+          var M = main.getBoundingClientRect(), backLine = last.getBoundingClientRect(), St = story.getBoundingClientRect();
+          var sLeft = box(last).right - M.left + Math.max(28, f * 0.3);
+          var sTop = Math.max(backLine.top - M.top + (backLine.height - St.height) / 2, base(mid) + gd * f - M.top + 18);   // clear of the "g" tail
+          var ctaTop = cta.getBoundingClientRect().top - M.top;
+          var push = Math.max(0, sTop + St.height + 28 - ctaTop);   // button drops below the story if needed
+          var ink = ctaTop + push + cta.getBoundingClientRect().height - (base(first) - cap * f - M.top);
+          var right = Math.max(textRight(), M.left - H.left + sLeft + St.width);
+          if (right <= maxRight && ink <= maxInk) return { f: f, sLeft: sLeft, sTop: sTop, push: push };
+        }
+        return null;
+      }
+      // B: story and button stacked under the headline
+      function under() {
+        hero.classList.remove('placed'); cta.style.marginTop = '';
+        for (var f = 152; f > 48; f -= 2) {
+          inner.style.setProperty('--f', f + 'px');
+          if (textRight() <= maxRight && cta.getBoundingClientRect().bottom - (base(first) - cap * f) <= maxInk) break;
+        }
+        return { f: f };
+      }
+      var A = beside(), Bm = under();
+      var useA = A && A.f >= 0.9 * Bm.f;                            // prefer the story beside "back." unless it costs a lot of size
+      var pick = useA ? A : Bm;
+      hero.classList.toggle('placed', useA);
+      inner.style.setProperty('--f', pick.f + 'px');
+      if (useA) { story.style.left = pick.sLeft + 'px'; story.style.top = pick.sTop + 'px'; cta.style.marginTop = pick.push + 'px'; }
+      var right = Math.max(textRight(), useA ? story.getBoundingClientRect().right - H.left : 0, ctaRight() - H.left);
+      // video centred in the gap between the text and the tall pillar (a little smaller if the button needs the room)
+      Wv = Math.max(140, Math.min(Wv, tallLeft - right - 2 * g)); Hv = Wv * 16 / 9;
+      var vLeft = right + (tallLeft - right - Wv) / 2;
+      video.style.right = 'auto'; video.style.left = vLeft + 'px'; video.style.top = (B - Hv) + 'px'; video.style.height = Hv + 'px';
+      // text block centred up and down (from the top of the first line to the bottom of the small text)
+      var M = main.getBoundingClientRect();
+      var fNow = parseFloat(getComputedStyle(h1).fontSize);
+      var top = base(first) - cap * fNow - M.top;
+      var bottom = Math.max(cta.getBoundingClientRect().bottom, useA ? story.getBoundingClientRect().bottom : 0) - M.top;
+      main.style.top = clamp(edge - top, (H.height - (bottom - top)) / 2 - top, H.height - edge - bottom) + 'px';
+    }
+    layout();
+    window.addEventListener('resize', layout);
+    window.addEventListener('load', layout);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(layout);
+    if (document.fonts && document.fonts.addEventListener) document.fonts.addEventListener('loadingdone', layout);
+    [300, 1000, 2500].forEach(function (t) { setTimeout(layout, t); });   // in case a font arrives late
   })();
 </script>
