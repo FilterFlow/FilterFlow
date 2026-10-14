@@ -328,7 +328,7 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
 }
 @media (prefers-reduced-motion: reduce) { .arr { transition: none; } }
 
-/* ---------- DRAFT TOOLS: font picker + drag to resize. Delete this block, the tools markup and the tools script before launch. ---------- */
+/* ---------- DRAFT TOOLS: font picker + drag to move and resize. Delete this block, the tools markup and the tools script before launch. ---------- */
 /* a slim bar along the bottom edge, below the video card and the button */
 .tools {
   position: fixed; z-index: 40; left: 16px; right: 16px; bottom: calc(12px + env(safe-area-inset-bottom, 0px));
@@ -358,11 +358,13 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
 .tools .row [data-font-v="newsreader"] { font-family: "Newsreader", serif; }
 .tools .row [data-font-v="garamond"] { font-family: "EB Garamond", serif; font-size: 1.02rem; }
 .tools .readout { margin: 0; color: #5A3B30; font-size: 0.8rem; font-variant-numeric: tabular-nums; }
-.tools:not(.resizing) .readout { display: none; }   /* the numbers show while you resize */
+.tools .hint { margin: 0; color: #2B1A14; font-size: 0.8rem; font-weight: 600; }
+.tools:not(.resizing) :is(.readout, .hint) { display: none; }   /* tips and numbers show while you edit */
 @media (max-width: 1320px) { .tools h4 { display: none; } }            /* keep the bar to one row on laptops */
 @media (max-width: 1180px) { .tools-head b { display: none; } .tools, .tools-body { column-gap: 12px; } }
 .rz-layer { position: absolute; left: 0; top: 0; width: 0; height: 0; z-index: 45; }
-.rz-box { position: absolute; outline: 1.5px dashed rgba(105, 32, 15, 0.6); outline-offset: 4px; pointer-events: none; }
+.rz-box { position: absolute; outline: 1.5px dashed rgba(105, 32, 15, 0.6); outline-offset: 4px; cursor: move; touch-action: none; }
+.rz-box:hover { background: rgba(105, 32, 15, 0.06); }
 .rz-handle {
   position: absolute; width: 24px; height: 24px; margin: -12px 0 0 -12px; padding: 0;
   border-radius: 50%; background: var(--barn); border: 3px solid #FFFFFF; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
@@ -370,8 +372,9 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
 }
 .rz-handle:focus-visible { outline: 2px solid var(--barn); outline-offset: 3px; }
 .rz-tag { position: absolute; padding: 4px 7px; background: var(--barn); color: var(--cream); font: 600 0.74rem/1 var(--sans); white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 0.15s; }
-.rz-handle:hover + .rz-tag, .rz-handle:focus-visible + .rz-tag, .rz-tag.on { opacity: 1; }
+.rz-handle:hover + .rz-tag, .rz-handle:focus-visible + .rz-tag, .rz-tag.on, .rz-tag.show { opacity: 1; }
 .rz-layer.dragging, .rz-layer.dragging * { cursor: nwse-resize; }
+.rz-layer.moving, .rz-layer.moving * { cursor: move; }
 </style>
 
 <header class="nav" id="top">
@@ -547,7 +550,7 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
   </section>
 </main>
 
-<!-- DRAFT TOOLS: headline font picker and drag-to-resize, only for trying things out. Delete before launch. -->
+<!-- DRAFT TOOLS: headline font picker and drag to move and resize, only for trying things out. Delete before launch. -->
 <div class="tools" id="tools" role="region" aria-label="Draft tools">
   <div class="tools-head"><b>Draft tools</b><button type="button" class="link" id="tools-toggle">Hide</button></div>
   <div class="tools-body">
@@ -564,12 +567,13 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
       </div>
     </div>
     <div class="tools-fonts tools-sizes">
-      <h4>Sizes</h4>
+      <h4>Layout</h4>
       <div class="row">
-        <button type="button" id="rz-toggle" aria-pressed="false">Drag to resize</button>
-        <button type="button" id="rz-reset">Reset sizes</button>
+        <button type="button" id="rz-toggle" aria-pressed="false">Move &amp; resize</button>
+        <button type="button" id="rz-reset">Reset all</button>
       </div>
     </div>
+    <p class="hint">Drag a piece to move it. Drag its round handle to resize it.</p>
     <p class="readout" id="rz-readout" aria-live="polite"></p>
   </div>
 </div>
@@ -671,9 +675,18 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
       });
       Array.prototype.forEach.call(ctaNotes, function (n) { n.style.fontSize = sz.note ? sz.note + 'px' : ''; });
     }
+    // DRAFT: pieces you dragged somewhere else, stored as an offset from where the layout puts them
+    var movable = { h1: [h1], story: [story], btn: ctaBoxes, note: ctaNotes, video: [video] };
+    function applyMoves(sz) {
+      Object.keys(movable).forEach(function (k) {
+        var at = sz.at && sz.at[k];
+        Array.prototype.forEach.call(movable[k], function (el) { el.style.translate = at ? at[0] + 'px ' + at[1] + 'px' : ''; });
+      });
+    }
 
     function layout() {
       root.style.setProperty('--navH', nav.getBoundingClientRect().height + 'px');
+      applyMoves({});                       // measure everything where the layout puts it, then add your moves at the end
       measureHeadline();
       hero.classList.remove('placed');
       [inner, main, story, cta, video].forEach(function (el) { el.removeAttribute('style'); });
@@ -682,6 +695,7 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
       if (window.innerWidth <= 860) {
         if (sz.h1) inner.style.setProperty('--f', sz.h1 + 'px');
         if (sz.video) video.style.width = Math.round(sz.video * 9 / 16) + 'px';
+        applyMoves(sz);
         afterLayout();
         return;
       }
@@ -749,10 +763,11 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
       var top = base(first) - cap * fNow - M.top;
       var bottom = Math.max(cta.getBoundingClientRect().bottom, useA ? story.getBoundingClientRect().bottom : 0) - M.top;
       main.style.top = clamp(edge - top, (H.height - (bottom - top)) / 2 - top, H.height - edge - bottom) + 'px';
+      applyMoves(sz);
       afterLayout();
     }
 
-    /* ---------- DRAFT TOOLS: headline font picker + drag to resize ----------
+    /* ---------- DRAFT TOOLS: headline font picker + drag to move and resize ----------
        Delete this part, the "tools" markup and the DRAFT TOOLS CSS before launch. */
     (function () {
       var tools = document.getElementById('tools'), layer = document.getElementById('rz-layer');
@@ -772,7 +787,7 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
       pickFont(savedFont);
       new MutationObserver(function () { layout(); }).observe(root, { attributes: true, attributeFilter: ['data-font'] });
 
-      // drag to resize: a dashed outline and a round handle on each piece of the hero
+      // move and resize: drag a piece (its dashed outline) to move it, drag its round handle to resize it
       function shown(list) { for (var i = 0; i < list.length; i++) if (!list[i].hidden) return list[i]; return list[0]; }
       function fontPx(el) { return parseFloat(getComputedStyle(el).fontSize); }
       var targets = [
@@ -788,9 +803,30 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
       targets.forEach(function (t) {
         t.box = document.createElement('div'); t.box.className = 'rz-box';
         t.handle = document.createElement('button'); t.handle.type = 'button'; t.handle.className = 'rz-handle';
-        t.handle.setAttribute('aria-label', 'Resize ' + t.label.toLowerCase() + ' (drag, or use the arrow keys)');
+        t.handle.setAttribute('aria-label', 'Resize ' + t.label.toLowerCase() + ' (drag, or arrow keys; Shift + arrow keys move it)');
         t.tag = document.createElement('span'); t.tag.className = 'rz-tag';
-        layer.appendChild(t.box); layer.appendChild(t.handle); layer.appendChild(t.tag);
+        t.box.addEventListener('pointerenter', function () { t.tag.classList.add('show'); });
+        t.box.addEventListener('pointerleave', function () { t.tag.classList.remove('show'); });
+        // move: drag the piece itself
+        t.box.addEventListener('pointerdown', function (e) {
+          if (e.button !== 0) return;
+          e.preventDefault();
+          t.box.setPointerCapture(e.pointerId);
+          var sz = sizes[screenKind()]; sz.at = sz.at || {};
+          var start = sz.at[t.key] || [0, 0], x0 = e.clientX, y0 = e.clientY;
+          layer.classList.add('moving'); t.tag.classList.add('on');
+          function move(ev) {
+            sz.at[t.key] = [Math.round(start[0] + ev.clientX - x0), Math.round(start[1] + ev.clientY - y0)];
+            applyMoves(sz); afterLayout();
+          }
+          function up() {
+            t.box.removeEventListener('pointermove', move); t.box.removeEventListener('pointerup', up); t.box.removeEventListener('pointercancel', up);
+            if (sz.at[t.key] && !sz.at[t.key][0] && !sz.at[t.key][1]) delete sz.at[t.key];
+            layer.classList.remove('moving'); t.tag.classList.remove('on');
+            save(); afterLayout();
+          }
+          t.box.addEventListener('pointermove', move); t.box.addEventListener('pointerup', up); t.box.addEventListener('pointercancel', up);
+        });
         t.handle.addEventListener('pointerdown', function (e) {
           e.preventDefault();
           t.handle.setPointerCapture(e.pointerId);
@@ -815,28 +851,45 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
           t.handle.addEventListener('pointermove', move); t.handle.addEventListener('pointerup', up); t.handle.addEventListener('pointercancel', up);
         });
         t.handle.addEventListener('keydown', function (e) {
+          if (e.shiftKey) {                   // Shift + arrow keys move the piece 4px
+            var d = { ArrowUp: [0, -4], ArrowDown: [0, 4], ArrowLeft: [-4, 0], ArrowRight: [4, 0] }[e.key];
+            if (!d) return;
+            e.preventDefault();
+            var sz = sizes[screenKind()]; sz.at = sz.at || {};
+            var at = sz.at[t.key] || [0, 0];
+            sz.at[t.key] = [at[0] + d[0], at[1] + d[1]];
+            applyMoves(sz); save(); afterLayout();
+            return;
+          }
           var k = { ArrowUp: 1.03, ArrowRight: 1.03, ArrowDown: 0.97, ArrowLeft: 0.97 }[e.key];
           if (!k) return;
           var now = t.size();
           e.preventDefault(); setSize(t, k > 1 ? Math.max(now * k, now + 1) : Math.min(now * k, now - 1));   // at least 1px per press
         });
       });
+      // outlines underneath, handles on top, so a handle is never covered by another piece's outline
+      targets.forEach(function (t) { layer.appendChild(t.box); });
+      targets.forEach(function (t) { layer.appendChild(t.handle); layer.appendChild(t.tag); });
+      function movedBy(t) { var sz = sizes[screenKind()]; return sz.at && sz.at[t.key]; }
       afterLayout = function () {
+        var moved = targets.filter(movedBy).map(function (t) { var a = movedBy(t); return t.label.toLowerCase() + ' ' + a[0] + ', ' + a[1]; });
         readout.textContent = targets.map(function (t) { return t.label + ' ' + Math.round(t.size()) + (sizes[screenKind()][t.key] ? '*' : ''); }).join(' · ')
-          + ' px (' + (screenKind() === 'phone' ? 'phone' : 'computer') + ' sizes; * = set by you)';
+          + ' px (' + (screenKind() === 'phone' ? 'phone' : 'computer') + '; * = set by you)'
+          + (moved.length ? '. Moved: ' + moved.join(' · ') : '');
         if (layer.hidden) return;
         targets.forEach(function (t) {
           var r = t.el().getBoundingClientRect(), x = r.left + window.scrollX, y = r.top + window.scrollY;
           t.box.style.left = x + 'px'; t.box.style.top = y + 'px'; t.box.style.width = r.width + 'px'; t.box.style.height = r.height + 'px';
           t.handle.style.left = (x + r.width + 5) + 'px'; t.handle.style.top = (y + r.height + 5) + 'px';
           t.tag.style.left = (x + r.width + 22) + 'px'; t.tag.style.top = (y + r.height - 6) + 'px';
-          t.tag.textContent = t.label + ' ' + Math.round(t.size()) + 'px';
+          var a = movedBy(t);
+          t.tag.textContent = t.label + ' ' + Math.round(t.size()) + 'px' + (a ? ' · moved ' + a[0] + ', ' + a[1] : '');
         });
       };
       function setResizing(on) {
         layer.hidden = !on; tools.classList.toggle('resizing', on);
         toggle.setAttribute('aria-pressed', on ? 'true' : 'false');
-        toggle.textContent = on ? 'Done resizing' : 'Drag to resize';
+        toggle.textContent = on ? 'Done editing' : 'Move & resize';
         afterLayout();
       }
       toggle.addEventListener('click', function () { setResizing(layer.hidden); });
