@@ -55,12 +55,12 @@
 :root {
   --barn: #22333B;       /* slate: header, small text, buttons, arrow, headings (the name is kept from the first palette) */
   --barn-hover: #2F4652;
-  --sand: #A9927D;       /* taupe: "handle the", the "How it works" band, "free" */
+  --sand: #A9927D;       /* taupe: the dots beside the small text */
   --sand-deep: #5E503F;  /* brown: small accent text */
   --brown: #5E503F;      /* brown: the demo band */
   --cream: #F2F4F3;      /* off-white: page, light buttons, text on dark */
   --peach: #F2F4F3;      /* page background (name kept from the first palette) */
-  --blush: #A9927D;      /* band after the hero */
+  --blush: #A9927D;      /* taupe (not used right now) */
   --pillar: #F2F4F3;     /* light buttons */
   --card: #FFFFFF;       /* blank video card */
   --white: #FFFFFF;
@@ -206,7 +206,7 @@ h1 .l { display: block; white-space: nowrap; }
 h1 .it { font-style: italic; font-weight: 500; padding-left: 0.6em; color: var(--barn); }
 h1 .big { font-weight: 800; }
 h1 .bl { display: inline-block; width: 0; height: 0; }   /* zero-size marker: its top is the line's baseline */
-h1, h2, h3, .num, .cost .big { font-synthesis: none; }   /* never fake a bold or italic a font doesn't have */
+h1, h2, h3 { font-synthesis: none; }   /* never fake a bold or italic a font doesn't have */
 /* DRAFT font options: spacing and weights per font. The thin ones keep the whole headline light, like Squarespace's,
    with the last line a little heavier. */
 :root[data-font] h1 { font-variation-settings: normal; }
@@ -263,15 +263,27 @@ h1, h2, h3, .num, .cost .big { font-synthesis: none; }   /* never fake a bold or
 .play svg { width: 22px; height: 22px; margin-left: 4px; color: var(--cream); }
 .play-btn:hover .play { transform: scale(1.05); }
 .play-btn:focus-visible { outline-offset: -6px; }
+/* Sound button: big and easy to hit, top right of the video */
+.sound {
+  position: absolute; top: 12px; right: 12px; z-index: 2;
+  width: 64px; height: 64px; border: 0; border-radius: 50%; padding: 0; cursor: pointer;
+  display: grid; place-items: center;
+  background: rgba(10, 9, 8, 0.55); color: #fff;
+  -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px);
+  box-shadow: 0 8px 20px -10px rgba(0, 0, 0, 0.6);
+  transition: transform 0.2s ease, background-color 0.2s ease;
+}
+.sound svg { width: 42px; height: 42px; }
+.sound .s-on, .sound.is-on .s-off { display: none; }
+.sound.is-on .s-on { display: block; }
+.sound:hover { transform: scale(1.06); background: rgba(10, 9, 8, 0.7); }
+.sound:focus-visible { outline: 3px solid var(--sky); outline-offset: 3px; }
+.lightbox .sound { width: 72px; height: 72px; top: 16px; right: 16px; }
+.lightbox .sound svg { width: 48px; height: 48px; }
 
 /* ---------- Sections below the hero ---------- */
 .wrap { width: min(1200px, 100% - 2 * var(--side)); margin-inline: auto; }
 .band { padding-block: clamp(72px, 8vw, 120px); }
-.band.blush { background: var(--blush); --barn: var(--black); --ink: var(--black); --sand: var(--brown); --rule: rgba(10, 9, 8, 0.22); }
-.band.brown { background: var(--brown); color: var(--ink); --barn: var(--cream); --ink: #E7E3DD; --rule: rgba(242, 244, 243, 0.25); }
-.band.brown .screen { --barn: #22333B; --ink: #22333B; --rule: rgba(34, 51, 59, 0.2); }
-.band.brown .msg.you { background: #22333B; color: var(--cream); }
-.band.cream { background: var(--cream); }
 h2 {
   margin: 0;
   font-family: var(--display); font-weight: 500;
@@ -280,70 +292,42 @@ h2 {
   color: var(--barn); text-wrap: balance;
 }
 h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem; line-height: 1.15; letter-spacing: -0.01em; font-variation-settings: "opsz" 12; color: var(--barn); text-wrap: balance; }
-:where(.band) p, :where(.band) dd { font-size: 1.06rem; line-height: 1.6; }   /* low priority, so the styles below win */
+:where(.band) p { font-size: 1.06rem; line-height: 1.6; }   /* low priority, so the styles below win */
 .lead { margin: 0; font-size: 1.15rem; color: var(--ink); max-width: 36ch; }
-.split { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); gap: 32px clamp(32px, 6vw, 96px); align-items: start; }
-.split > * { min-width: 0; }
-.split > div:first-child { display: grid; gap: 20px; }
-
-/* How it works */
 .head { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: end; gap: 16px 48px; }
-.steps { list-style: none; margin: clamp(40px, 5vw, 64px) 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 32px clamp(24px, 4vw, 56px); }
-.steps li { border-top: 1px solid var(--rule); padding-top: 22px; display: grid; gap: 10px; align-content: start; }
-.num { font: italic 500 3.4rem/0.9 var(--display); font-variation-settings: "opsz" 28; color: var(--sand); }
-.steps p { margin: 0; color: var(--ink); max-width: 34ch; }
 
-/* What we automate */
-.helpers { margin: 0; border-top: 1px solid var(--rule); }
-.helpers > div { display: grid; grid-template-columns: minmax(0, 13rem) minmax(0, 1fr); gap: 6px 32px; padding-block: 20px; border-bottom: 1px solid var(--rule); }
-.helpers dt { font-weight: 600; font-size: 1.08rem; line-height: 1.5; color: var(--barn); }
-.helpers dd { margin: 0; color: var(--ink); }
-
-/* Example */
-.example { grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); align-items: center; }
-.tag { justify-self: start; margin: 0; padding: 7px 12px; border: 1px solid var(--barn); color: var(--barn); font-size: 0.78rem; line-height: 1.2; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; }
-.timeline { list-style: none; margin: 12px 0 0; padding: 0; border-top: 1px solid var(--rule); }
-.timeline li { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); gap: 4px 16px; padding-block: 14px; border-bottom: 1px solid var(--rule); font-size: 1.06rem; line-height: 1.5; }
-.timeline time { font-weight: 600; color: var(--barn); font-variant-numeric: tabular-nums; }
-.phone { justify-self: center; width: min(330px, 100%); margin: 0; display: grid; gap: 14px; }
-.screen {
-  background: var(--cream); border: 10px solid var(--barn); border-radius: 34px;
-  padding: 18px 14px 22px; display: grid; gap: 10px; align-content: start; min-height: 470px;
-  box-shadow: 0 34px 50px -30px rgba(34, 51, 59, 0.55);
+/* What we automate: black band with three rows of pictures that slide across on their own */
+.band.dark { background: var(--black); color: var(--cream); --barn: var(--cream); --ink: #C3CAC7; --rule: rgba(242, 244, 243, 0.18); }
+.band.dark :focus-visible { outline-color: var(--cream); }
+.belts { display: grid; gap: clamp(30px, 3.4vw, 48px); margin-top: clamp(44px, 5vw, 72px); --shot: clamp(220px, 20vw, 300px); --gap: clamp(14px, 1.5vw, 20px); }
+.belt { display: grid; gap: 14px; }
+.belt-name { display: flex; align-items: baseline; gap: 14px; font: 600 0.84rem/1.2 var(--sans); letter-spacing: 0.08em; text-transform: uppercase; color: var(--cream); }
+.belt-name span { color: var(--ink); font-variant-numeric: tabular-nums; }
+.belt-view {   /* full width of the screen; the pictures fade in and out at the edges */
+  overflow: hidden; padding-block: 14px;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
+          mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
 }
-.screen-top { display: grid; justify-items: center; gap: 2px; padding-bottom: 12px; border-bottom: 1px solid var(--rule); margin-bottom: 4px; }
-.screen-top b { font-size: 1rem; color: var(--black); }
-.screen-top span, .stamp { font-size: 0.78rem; color: var(--ink); }
-.stamp { justify-self: center; }
-.msg { margin: 0; max-width: 84%; padding: 10px 14px; border-radius: 18px; font-size: 0.95rem; line-height: 1.4; }
-.msg.them { justify-self: start; background: var(--white); color: var(--black); border-bottom-left-radius: 6px; }
-.msg.you { justify-self: end; background: var(--barn); color: var(--cream); border-bottom-right-radius: 6px; }
-.phone figcaption { text-align: center; font-size: 0.9rem; color: var(--ink); }
+.belt-track, .belt-set { display: flex; gap: var(--gap); width: max-content; }
+.belt-track { will-change: transform; }
+.belt-set { list-style: none; margin: 0; padding: 0; flex: none; }
+.shot {
+  position: relative; display: block; width: var(--shot); aspect-ratio: 4 / 3; padding: 0; border: 0; border-radius: 10px;
+  background: var(--white); overflow: hidden; cursor: pointer;
+  transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.35s ease;
+}
+.shot img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.shot .ph { position: absolute; left: 14px; bottom: 12px; font: 500 0.8rem/1 var(--sans); color: #A3ABA8; }
+.shot.on { transform: translateY(-4px) scale(1.03); box-shadow: 0 0 0 3px var(--sky); }   /* the picture you clicked: its row stops */
+.band.dark .shot:focus-visible { outline: 3px solid var(--sky); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) {   /* no sliding: the rows scroll sideways by hand instead */
+  .belt-view { overflow-x: auto; -webkit-mask-image: none; mask-image: none; padding-inline: var(--side); }
+  .shot { transition: none; }
+}
+@media (max-width: 860px) { .belts { --shot: clamp(200px, 62vw, 280px); } }
 
-/* What it costs */
-.cost .big { margin: 0; font-family: var(--display); font-variation-settings: "opsz" 14; font-size: clamp(1.6rem, 2.6vw, 2.2rem); line-height: 1.2; letter-spacing: -0.01em; color: var(--barn); max-width: 26ch; }
-.fees { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px 40px; margin: 36px 0 0; }
-.fees div { border-top: 1px solid var(--rule); padding-top: 16px; display: grid; gap: 6px; }
-.fees dt { font-weight: 600; color: var(--barn); font-size: 1.08rem; }
-.fees dd { margin: 0; color: var(--ink); }
-
-/* Questions: same cream as the costs band, divided by a line */
-#questions { padding-top: 0; }
-#questions .wrap { border-top: 1px solid var(--rule); padding-top: clamp(56px, 6vw, 88px); }
-.qa { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 36px 48px; }
-.qa div { display: grid; gap: 10px; align-content: start; }
-.qa h3 { font-size: 1.4rem; }
-.qa p { margin: 0; color: var(--ink); }
-
-/* Final call + footer */
-.final { background: var(--black); color: var(--cream); padding-block: clamp(72px, 8vw, 112px); }
-.final .wrap { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 28px 48px; align-items: end; }
-.final h2 { color: var(--cream); font-size: clamp(2.8rem, 6vw, 5.2rem); }
-.final h2 em { font-style: italic; font-weight: 500; color: var(--sand); }
-.final-side { display: grid; gap: 22px; justify-items: start; }
-.final-side p { margin: 0; font-size: 1.15rem; line-height: 1.5; }
-.final .box { box-shadow: none; }
-.final :focus-visible, .foot :focus-visible { outline-color: var(--cream); }
+/* Footer */
+.foot :focus-visible { outline-color: var(--cream); }
 .foot { background: var(--black); color: var(--cream); font-size: 0.95rem; }
 .foot .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 36px; padding-block: 22px 32px; border-top: 1px solid rgba(251, 243, 234, 0.22); }
 .foot .logo { font-size: 1.35rem; min-height: 40px; margin-right: auto; }
@@ -354,7 +338,6 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
 
 /* ---------- Tablets and phones ---------- */
 @media (max-width: 1000px) {
-  .qa { grid-template-columns: minmax(0, 1fr); }
   .cta .box { font-size: 0.8rem; padding: 0 22px; }
 }
 @media (max-width: 860px) {
@@ -379,14 +362,6 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
   .art { background-size: cover; background-position: center 72%; transform: scaleX(-1);
     -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 30%);
             mask-image: linear-gradient(180deg, transparent 0%, #000 30%); }
-
-  .split, .example, .final .wrap { grid-template-columns: minmax(0, 1fr); }
-  .steps { grid-template-columns: minmax(0, 1fr); }
-  .phone { justify-self: start; }
-}
-@media (max-width: 560px) {
-  .helpers > div, .timeline li { grid-template-columns: minmax(0, 1fr); }
-  .fees { grid-template-columns: minmax(0, 1fr); }
 }
 @media (prefers-reduced-motion: reduce) { .arr { transition: none; } }
 
@@ -420,7 +395,7 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
 @keyframes blurIn { from { opacity: 0; filter: blur(6px); } to { opacity: 1; filter: none; } }
 @keyframes popUp { from { transform: translateY(10px); } to { transform: none; } }
 .anim:not(.anim-go) :is(.nav :is(.logo, .links a, .box), .hero :is(h1, .story, .cta, .arrow, .video),
-  main section:not(.hero) :is(h2, h3, p, dt, dd, .num, .tag, .timeline li, .box, figcaption, .screen), .foot .wrap > *) { opacity: 0; }   /* a moment, until the layout is ready */
+  main section:not(.hero) :is(h2, h3, p), .foot .wrap > *) { opacity: 0; }   /* a moment, until the layout is ready */
 /* text and buttons first... */
 .anim-go:not(.anim-done) :is(.nav :is(.logo, .links a, .box), .hero :is(h1, .story, .cta), .pre) { animation: blurIn 1s ease-out backwards; }
 /* ...then the video card, with the arrow pointing at it, 0.8s later. ("anim-done" stops these once they have played,
@@ -499,9 +474,7 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
   <!-- Logo spot: swap the wordmark for <img src="logo.svg" alt="Reliquo" height="44"> when the logo is ready -->
   <a class="logo" href="#top">Reliquo</a>
   <nav class="links" aria-label="Main">
-    <a href="#how">How it works</a>
-    <a href="#cost">What it costs</a>
-    <a href="#questions">Questions</a>
+    <a href="#automate">What we automate</a>
   </nav>
   <a class="box" href="https://example.com/book-a-free-call" data-book>Book a free call</a>
 </header>
@@ -535,7 +508,12 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
 
       <figure class="video" id="video">
         <div class="frame" role="button" tabindex="0" aria-label="Open the video bigger">
-          <video class="clip" id="clip" playsinline preload="metadata" hidden></video>
+          <video class="clip" id="clip" playsinline muted preload="auto" hidden></video>
+          <!-- The video plays on its own with the sound off; this big button turns the sound on and off -->
+          <button class="sound" id="sound" type="button" aria-pressed="false" aria-label="Turn the sound on" hidden>
+            <svg class="s-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path d="M16 9.5l5 5M21 9.5l-5 5" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+            <svg class="s-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><path d="M15.5 9a4.2 4.2 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+          </button>
           <button class="play-btn" id="play" type="button" tabindex="-1" aria-hidden="true" hidden>
             <span class="play"><svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M4 2.5v11l9-5.5-9-5.5Z"/></svg></span>
           </button>
@@ -555,118 +533,51 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
     <svg class="arrow" id="arrow" aria-hidden="true"><path class="arrow-line"/><path class="arrow-head"/></svg>
   </section>
 
-  <section class="band blush" id="how">
-    <div class="wrap">
-      <div class="head">
-        <h2>How it works</h2>
-        <p class="lead">Three steps. The first one is free.</p>
-      </div>
-      <ol class="steps">
-        <li>
-          <span class="num" aria-hidden="true">1</span>
-          <h3>A free call</h3>
-          <p>15 minutes by phone or video. You tell us where calls and messages slip through, and we tell you what could help.</p>
-        </li>
-        <li>
-          <span class="num" aria-hidden="true">2</span>
-          <h3>We set it up</h3>
-          <p>We build it around the phone and email you already use, and test it with pretend customers before anything goes live.</p>
-        </li>
-        <li>
-          <span class="num" aria-hidden="true">3</span>
-          <h3>A monthly check-in</h3>
-          <p>Once a month you get a short report on what your helpers did, and we fix or adjust anything that needs it.</p>
-        </li>
-      </ol>
+  <!-- WHAT WE AUTOMATE: three rows of pictures that slide across on their own, one row per helper.
+       Each white block is a spot for a picture. To add one, put it inside the block's button, e.g.
+       <button class="shot" type="button" aria-label="Instant replies, picture 1"><img src="reply-1.jpg" alt="..."></button>
+       (and delete the <span class="ph"> placeholder). Clicking a picture stops its row; clicking it again starts it. -->
+  <section class="band dark" id="automate" aria-labelledby="automate-title">
+    <div class="wrap head">
+      <h2 id="automate-title">What we automate</h2>
+      <p class="lead">Small helpers that work in the background while you're on the job.</p>
     </div>
-  </section>
-
-  <section class="band cream" id="automate">
-    <div class="wrap split">
-      <div>
-        <h2>What we automate</h2>
-        <p class="lead">Small helpers that work in the background while you're on the job.</p>
-      </div>
-      <dl class="helpers">
-        <div><dt>Missed-call text-back</dt><dd>If you can't pick up, the caller gets a text right away, so they wait for you instead of calling someone else.</dd></div>
-        <div><dt>Lead logging</dt><dd>Every new call, text and web form goes into one list, so no job gets forgotten.</dd></div>
-        <div><dt>Follow-ups</dt><dd>Quotes and callbacks get a polite reminder, sent for you at the right time.</dd></div>
-        <div><dt>Review requests</dt><dd>After a job, your customer gets a short message asking for a Google review.</dd></div>
-        <div><dt>Email sorting</dt><dd>Your inbox sorts itself into what needs you today and what can wait.</dd></div>
-      </dl>
-    </div>
-  </section>
-
-  <section class="band brown" id="example">
-    <div class="wrap split example">
-      <div>
-        <p class="tag">Demo business, not a real client.</p>
-        <h2>Joe's Plumbing</h2>
-        <p class="lead">A missed call on a busy day, with the helpers switched on.</p>
-        <ol class="timeline">
-          <li><time>2:14 pm</time><span>Joe is under a sink. His phone rings and he can't answer.</span></li>
-          <li><time>2:14 pm</time><span>The caller gets a text from Joe's Plumbing right away.</span></li>
-          <li><time>2:16 pm</time><span>She replies that her water heater is leaking. It goes on Joe's list.</span></li>
-          <li><time>3:05 pm</time><span>Joe finishes the job, sees the note and calls her back.</span></li>
-          <li><time>Next day</time><span>After the repair, she gets a short message asking for a review.</span></li>
-        </ol>
-      </div>
-      <figure class="phone">
-        <div class="screen" role="img" aria-label="Demo text conversation. Joe's Plumbing: Hi, it's Joe's Plumbing. Sorry we missed your call, we're on a job right now. What can we help with? Customer: My water heater is leaking. Can someone come today? Joe's Plumbing: Thanks, got it. Joe will call you back as soon as he's off this job.">
-          <div class="screen-top" aria-hidden="true"><b>Joe's Plumbing</b><span>Text message</span></div>
-          <span class="stamp" aria-hidden="true">Today 2:14 pm</span>
-          <p class="msg them" aria-hidden="true">Hi, it's Joe's Plumbing. Sorry we missed your call, we're on a job right now. What can we help with?</p>
-          <p class="msg you" aria-hidden="true">My water heater is leaking. Can someone come today?</p>
-          <p class="msg them" aria-hidden="true">Thanks, got it. Joe will call you back as soon as he's off this job.</p>
-        </div>
-        <figcaption>What the caller sees (demo)</figcaption>
-      </figure>
-    </div>
-  </section>
-
-  <section class="band cream" id="cost">
-    <div class="wrap split">
-      <div><h2>What it costs</h2></div>
-      <div class="cost">
-        <p class="big">One setup fee and a flat monthly fee, explained in the video and on the call.</p>
-        <dl class="fees">
-          <div><dt>Setup fee</dt><dd>Paid once, for building and testing your helpers.</dd></div>
-          <div><dt>Monthly fee</dt><dd>The same every month. Covers keeping everything running, your check-in and your report.</dd></div>
-        </dl>
-      </div>
-    </div>
-  </section>
-
-  <section class="band cream" id="questions">
-    <div class="wrap split">
-      <div><h2>Questions</h2></div>
-      <div class="qa">
-        <div>
-          <h3>Do I need to be techy?</h3>
-          <p>No. We do all the setup. After that it runs on its own, and there's nothing new for you to learn or check.</p>
-        </div>
-        <div>
-          <h3>What if it breaks?</h3>
-          <p>Tell us and we'll fix it. We also look everything over before each monthly report.</p>
-        </div>
-        <div>
-          <h3>Who owns my data?</h3>
-          <p>You do. Everything runs on your own accounts, like your Google or Microsoft email. You sign in yourself, we never see your password, and you can switch the connection off any time.</p>
-        </div>
-        <div>
-          <h3>Who is behind Reliquo?</h3>
-          <p>Reliquo is run by Madden, here in Winnipeg. The person on your free call is the same person who sets things up and sends your monthly report.</p>
+    <div class="belts">
+      <div class="belt" data-way="left">
+        <h3 class="wrap belt-name"><span>01</span>Instant replies</h3>
+        <div class="belt-view">
+          <ul class="belt-set">
+            <li><button class="shot" type="button" aria-label="Instant replies, picture 1"><span class="ph">Picture 1</span></button></li>
+            <li><button class="shot" type="button" aria-label="Instant replies, picture 2"><span class="ph">Picture 2</span></button></li>
+            <li><button class="shot" type="button" aria-label="Instant replies, picture 3"><span class="ph">Picture 3</span></button></li>
+            <li><button class="shot" type="button" aria-label="Instant replies, picture 4"><span class="ph">Picture 4</span></button></li>
+            <li><button class="shot" type="button" aria-label="Instant replies, picture 5"><span class="ph">Picture 5</span></button></li>
+          </ul>
         </div>
       </div>
-    </div>
-  </section>
-
-  <section class="final" id="book" aria-label="Book a free call">
-    <div class="wrap">
-      <h2>Start with a <em>free</em> call.</h2>
-      <div class="final-side">
-        <p>15 minutes by phone or video. No pressure.</p>
-        <a class="box" href="https://example.com/book-a-free-call" data-book>Book a free call</a>
+      <div class="belt" data-way="right">
+        <h3 class="wrap belt-name"><span>02</span>Quote follow-ups</h3>
+        <div class="belt-view">
+          <ul class="belt-set">
+            <li><button class="shot" type="button" aria-label="Quote follow-ups, picture 1"><span class="ph">Picture 1</span></button></li>
+            <li><button class="shot" type="button" aria-label="Quote follow-ups, picture 2"><span class="ph">Picture 2</span></button></li>
+            <li><button class="shot" type="button" aria-label="Quote follow-ups, picture 3"><span class="ph">Picture 3</span></button></li>
+            <li><button class="shot" type="button" aria-label="Quote follow-ups, picture 4"><span class="ph">Picture 4</span></button></li>
+            <li><button class="shot" type="button" aria-label="Quote follow-ups, picture 5"><span class="ph">Picture 5</span></button></li>
+          </ul>
+        </div>
+      </div>
+      <div class="belt" data-way="left">
+        <h3 class="wrap belt-name"><span>03</span>Review requests</h3>
+        <div class="belt-view">
+          <ul class="belt-set">
+            <li><button class="shot" type="button" aria-label="Review requests, picture 1"><span class="ph">Picture 1</span></button></li>
+            <li><button class="shot" type="button" aria-label="Review requests, picture 2"><span class="ph">Picture 2</span></button></li>
+            <li><button class="shot" type="button" aria-label="Review requests, picture 3"><span class="ph">Picture 3</span></button></li>
+            <li><button class="shot" type="button" aria-label="Review requests, picture 4"><span class="ph">Picture 4</span></button></li>
+            <li><button class="shot" type="button" aria-label="Review requests, picture 5"><span class="ph">Picture 5</span></button></li>
+          </ul>
+        </div>
       </div>
     </div>
   </section>
@@ -739,29 +650,48 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
       catch (e) { selectIt(); }
     });
 
-    /* ---------- Video: "Watch how Reliquo fixes that" when a file is set, "Book a free call" until then ---------- */
+    /* ---------- Video: plays on its own with the sound off, with a big button to turn the sound on.
+       "Watch how Reliquo fixes that" when a file is set, "Book a free call" until then ---------- */
     var hero = document.querySelector('.hero'), clip = document.getElementById('clip'), playBtn = document.getElementById('play');
+    var soundBtn = document.getElementById('sound');
     var frame = document.querySelector('#video .frame'), lb = document.getElementById('lightbox'), lbClose = document.getElementById('lb-close');
-    var hasVideo = false;
+    var hasVideo = false, fromStart = false;
     function videoMode(on) {
       hasVideo = on;
       document.querySelectorAll('.when-video').forEach(function (el) { el.hidden = !on; });
       document.querySelectorAll('.when-novideo').forEach(function (el) { el.hidden = on; });
-      clip.hidden = !on; playBtn.hidden = !on;
+      clip.hidden = !on; playBtn.hidden = true; soundBtn.hidden = !on;
       document.getElementById('placeholder').hidden = on;
     }
     function play() {
-      clip.controls = true; playBtn.hidden = true;
+      playBtn.hidden = true;
       var p = clip.play();
-      if (p && p.catch) p.catch(function () { clip.controls = false; playBtn.hidden = false; });
+      if (p && p.catch) p.catch(function () { playBtn.hidden = false; });   // the browser said no: show the play button instead
+    }
+    function showSound() {
+      var on = !clip.muted;
+      clip.loop = !on;                                  // with the sound off it loops; with the sound on it plays through once
+      soundBtn.classList.toggle('is-on', on);
+      soundBtn.setAttribute('aria-pressed', on ? 'true' : 'false');
+      soundBtn.setAttribute('aria-label', on ? 'Turn the sound off' : 'Turn the sound on');
+    }
+    function sound(on) {
+      if (on && !fromStart) { clip.currentTime = 0; fromStart = true; }   // the first time the sound goes on, start from the beginning
+      clip.muted = !on;
+      showSound();
+      if (clip.paused) play();
     }
     if (cfg.video) {
       if (cfg.poster) clip.poster = cfg.poster;
+      clip.muted = true; clip.loop = true;
       clip.src = cfg.video;
       videoMode(true);
       clip.addEventListener('error', function () { clip.removeAttribute('src'); videoMode(false); layout(); });   // file missing: fall back to booking
-      clip.addEventListener('ended', function () { clip.controls = false; playBtn.hidden = false; });
-      document.getElementById('watch').addEventListener('click', function () { openVideo(true); });
+      clip.addEventListener('ended', function () { fromStart = false; sound(false); });   // played through with sound: back to the silent loop
+      clip.addEventListener('volumechange', showSound);   // the video's own controls can switch the sound too
+      soundBtn.addEventListener('click', function (e) { e.stopPropagation(); sound(clip.muted); });
+      document.getElementById('watch').addEventListener('click', function () { openVideo(true); fromStart = false; sound(true); });
+      play();
     }
 
     /* Clicking the video card opens it big in the middle of the screen with the page blurred behind it.
@@ -785,7 +715,8 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
       root.classList.add('lb-lock');
       frame.removeAttribute('role'); frame.tabIndex = -1;
       lbClose.focus({ preventScroll: true });
-      if (andPlay && hasVideo) play();
+      // controls go on just after this click, so the browser doesn't also count the click as "pause"
+      if (hasVideo) setTimeout(function () { clip.controls = true; if (andPlay) play(); }, 0);
     }
     function closeVideo() {
       if (!isBig() || !lb.classList.contains('open')) return;
@@ -793,7 +724,7 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
       setRect([r.left, r.top, r.width, r.height]);    // shrink back to the card's spot
       frame.classList.remove('is-big');
       lb.classList.remove('open');
-      if (hasVideo) { clip.pause(); clip.controls = false; playBtn.hidden = false; }
+      if (hasVideo) { clip.controls = false; sound(false); }   // back in its spot: keeps playing, sound off
       setTimeout(function () {
         document.getElementById('video').appendChild(frame);
         frame.removeAttribute('style');
@@ -808,7 +739,7 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
       openVideo(true);
     });
     frame.addEventListener('keydown', function (e) {
-      if (!isBig() && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); openVideo(true); }
+      if (e.target === frame && !isBig() && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); openVideo(true); }
     });
     document.getElementById('lb-backdrop').addEventListener('click', closeVideo);
     lbClose.addEventListener('click', closeVideo);
@@ -1212,7 +1143,7 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
     /* ---------- Sentences pop up a touch as they scroll into view (only while scrolling down) ---------- */
     (function () {
       if (!root.classList.contains('anim') || !('IntersectionObserver' in window)) return;
-      var picked = document.querySelectorAll('main section:not(.hero) :is(h2, h3, p, dt, dd, .num, .tag, .timeline li, .box, figcaption, .screen), .foot .wrap > *, .hero :is(h1, .story, .cta)');
+      var picked = document.querySelectorAll('main section:not(.hero) :is(h2, h3, p), .foot .wrap > *, .hero :is(h1, .story, .cta)');
       var all = new Set(picked), els = [];
       picked.forEach(function (el) { for (var a = el.parentElement; a; a = a.parentElement) if (all.has(a)) return; els.push(el); });
       fadeOnScreen = function () {                   // on screen when the fade starts (also after a reload partway down): fades in with the hero
@@ -1231,6 +1162,83 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
         });
       }, { rootMargin: '0px 0px 40px 0px' });   // starts just before a sentence comes into view
       els.forEach(function (el) { io.observe(el); });
+    })();
+
+    /* ---------- Picture rows: each slides across on its own and loops forever.
+       Clicking a picture stops its row (the picture lifts and gets a blue ring); clicking it again starts the row. ---------- */
+    (function () {
+      var SPEED = 40;                                 // pixels per second
+      var rows = [], running = false, last = 0, seen = true;
+      document.querySelectorAll('.belt').forEach(function (belt) {
+        var view = belt.querySelector('.belt-view'), set = view.querySelector('.belt-set');
+        var row = { view: view, set: set, track: null, way: belt.dataset.way === 'right' ? -1 : 1, x: 0, speed: 1, aim: 1, period: 0, on: null };
+        rows.push(row);
+        function pick(shot) {
+          if (row.on) { row.on.classList.remove('on'); row.on.setAttribute('aria-pressed', 'false'); }
+          row.on = shot;
+          if (shot) { shot.classList.add('on'); shot.setAttribute('aria-pressed', 'true'); }
+          row.aim = shot ? 0 : 1;                       // eases to a stop, or back up to speed
+        }
+        set.querySelectorAll('.shot').forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
+        belt.addEventListener('click', function (e) {
+          var shot = e.target.closest('.shot');
+          if (shot) pick(row.on === shot ? null : shot);
+        });
+        if (reduce) return;                            // less motion: the row scrolls sideways by hand instead
+        row.track = document.createElement('div'); row.track.className = 'belt-track';
+        view.insertBefore(row.track, set); row.track.appendChild(set);
+        // keyboard: a picture that gets focus is brought into view
+        belt.addEventListener('focusin', function (e) {
+          var shot = e.target.closest('.shot'); if (!shot || !row.period || !shot.matches(':focus-visible')) return;
+          view.scrollLeft = 0;
+          row.x = Math.max(0, shot.getBoundingClientRect().left - row.track.getBoundingClientRect().left - (view.clientWidth - shot.offsetWidth) / 2);
+          row.speed = 0; if (!row.on) row.aim = 0;
+          draw(row);
+        });
+        belt.addEventListener('focusout', function () { if (!row.on) row.aim = 1; });
+        view.addEventListener('scroll', function () { view.scrollLeft = 0; });
+      });
+      if (reduce || !rows.length) return;
+      function fill() {                                 // enough copies of the pictures to cover the screen while they slide
+        rows.forEach(function (row) {
+          var copies = row.track.querySelectorAll('.belt-set').length;
+          if (copies < 2) addCopy(row);
+          var sets = row.track.querySelectorAll('.belt-set');
+          row.period = sets[1].offsetLeft - sets[0].offsetLeft;
+          var need = Math.ceil(row.view.clientWidth / row.period) + 1;
+          for (var i = sets.length; i <= need; i++) addCopy(row);
+          draw(row);
+        });
+      }
+      function addCopy(row) {
+        var c = row.set.cloneNode(true);
+        c.setAttribute('aria-hidden', 'true');
+        c.querySelectorAll('.shot').forEach(function (b) { b.tabIndex = -1; b.classList.remove('on'); b.setAttribute('aria-pressed', 'false'); });
+        row.track.appendChild(c);
+      }
+      function draw(row) {
+        if (!row.period) return;
+        var off = ((row.x % row.period) + row.period) % row.period;
+        row.track.style.transform = 'translate3d(' + (-off).toFixed(2) + 'px, 0, 0)';
+      }
+      function tick(t) {
+        var dt = last ? Math.min(0.05, (t - last) / 1000) : 0; last = t;
+        rows.forEach(function (row) {
+          row.speed += (row.aim - row.speed) * Math.min(1, dt * 5);
+          row.x += row.way * SPEED * row.speed * dt;
+          draw(row);
+        });
+        if (seen) requestAnimationFrame(tick); else { running = false; last = 0; }
+      }
+      function go() { if (!running && seen) { running = true; requestAnimationFrame(tick); } }
+      fill();
+      window.addEventListener('resize', fill);
+      window.addEventListener('load', fill);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(fill);
+      if ('IntersectionObserver' in window) {          // only moves while the rows are on screen
+        new IntersectionObserver(function (en) { seen = en[0].isIntersecting; go(); }).observe(document.querySelector('.belts'));
+      }
+      go();
     })();
   })();
 </script>
