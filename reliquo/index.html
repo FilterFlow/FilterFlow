@@ -191,7 +191,9 @@ h1, h2, h3, .num, .cost .big { font-synthesis: none; }   /* never fake a bold or
 .hero.placed .story { position: absolute; white-space: nowrap; }
 
 .cta { display: grid; justify-items: start; gap: 12px; }
-.cta-note { margin: 0; font-size: 1rem; line-height: 1.45; color: var(--barn); }
+/* Curved arrow, the same barn red as the header */
+.arrow { position: absolute; left: 0; top: 0; z-index: 3; width: 1px; height: 1px; overflow: visible; pointer-events: none; color: var(--barn); transform-origin: 0 0; }
+.arrow path { fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; }
 
 /* Vertical video card */
 .video {
@@ -317,9 +319,9 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
   /* hero: headline, story, button, vertical video, then the photo */
   .hero { height: auto; container-type: normal; }
   .inner { position: static; display: grid; gap: 36px; padding: 36px var(--side) 0;
-           --f: clamp(3rem, calc(84vw / var(--c)), 5.6rem); }
+           --f: clamp(1.75rem, calc(84vw / var(--c)), 5.6rem); }
   .main, .video, .stage { position: relative; inset: auto; top: auto; left: auto; right: auto; }
-  .main { gap: 24px; }
+  .main { gap: 24px; margin-bottom: 36px; }          /* room for the arrow down to the video card */
   .cta .box { font-size: 0.8rem; padding: 0 20px; max-width: 100%; }
   .arr { transform: rotate(90deg); }                 /* points down at the video card */
   .box:hover .arr { transform: rotate(90deg) translateX(3px); }
@@ -388,6 +390,8 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
 .rz-handle:hover + .rz-tag, .rz-handle:focus-visible + .rz-tag, .rz-tag.on, .rz-tag.show { opacity: 1; }
 .rz-layer.dragging, .rz-layer.dragging * { cursor: nwse-resize; }
 .rz-layer.moving, .rz-layer.moving * { cursor: move; }
+.rz-tip { background: #FFFFFF; border-color: var(--barn); cursor: crosshair; }   /* white dot on the arrow's tip: length and direction */
+.rz-layer.turning, .rz-layer.turning * { cursor: crosshair; }
 </style>
 
 <header class="nav" id="top">
@@ -408,21 +412,19 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
         <!-- HEADLINE: to change it, swap the words inside the three <span class="l"> lines below
              (keep three short lines; leave the small <span class="bl"> markers in place).
              The layout measures the new words by itself. -->
-        <h1><span class="l">Get your<span class="bl" aria-hidden="true"></span></span><span class="l it">evenings<span class="bl" aria-hidden="true"></span></span><span class="l big">back.<span class="bl" aria-hidden="true"></span></span></h1>
+        <h1><span class="l">Let automation<span class="bl" aria-hidden="true"></span></span><span class="l it">handle the<span class="bl" aria-hidden="true"></span></span><span class="l big">small stuff.<span class="bl" aria-hidden="true"></span></span></h1>
 
+        <!-- SMALL TEXT under (or beside) the headline -->
         <div class="story">
-          <p>Your phone rings while you're on a job.</p>
-          <p>You can't answer.</p>
-          <p>The customer calls someone else.</p>
+          <p>Never lose a client again.</p>
+          <p>Here's the fix.</p>
         </div>
 
         <div class="cta">
           <!-- Shown once RELIQUO.video is set -->
           <button class="box when-video" type="button" id="watch" hidden>Watch how Reliquo fixes that<svg class="arr" viewBox="0 0 20 12" aria-hidden="true"><path d="M1 6h17M13 1l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-          <p class="cta-note when-video" hidden>90 seconds. No signup.</p>
           <!-- Shown until then -->
           <a class="box when-novideo" href="https://example.com/book-a-free-call" data-book>Book a free call</a>
-          <p class="cta-note when-novideo">15 minutes by phone or video. No pressure.</p>
         </div>
       </div>
 
@@ -444,6 +446,8 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
         <div class="art" aria-hidden="true"></div>
       </div>
     </div>
+    <!-- Curved arrow pointing at the video (move, resize and turn it with the draft tools) -->
+    <svg class="arrow" id="arrow" aria-hidden="true"><path class="arrow-line"/><path class="arrow-head"/></svg>
   </section>
 
   <section class="band blush" id="how">
@@ -493,7 +497,7 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
       <div>
         <p class="tag">Demo business, not a real client.</p>
         <h2>Joe's Plumbing</h2>
-        <p class="lead">The story from the top of the page, with the helpers switched on.</p>
+        <p class="lead">A missed call on a busy day, with the helpers switched on.</p>
         <ol class="timeline">
           <li><time>2:14 pm</time><span>Joe is under a sink. His phone rings and he can't answer.</span></li>
           <li><time>2:14 pm</time><span>The caller gets a text from Joe's Plumbing right away.</span></li>
@@ -588,7 +592,7 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
         <button type="button" id="rz-reset">Reset all</button>
       </div>
     </div>
-    <p class="hint">Drag a piece to move it. Drag its round handle to resize it.</p>
+    <p class="hint">Drag a piece to move it. Drag its round handle to resize it. Drag the white dot on the arrow's tip to turn or stretch it.</p>
     <p class="readout" id="rz-readout" aria-live="polite"></p>
   </div>
 </div>
@@ -678,7 +682,8 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
     var SIZE_KEY = 'reliquo-draft-sizes', sizes = { desk: {}, phone: {} };
     try { var savedSizes = JSON.parse(localStorage.getItem(SIZE_KEY) || 'null'); if (savedSizes && savedSizes.desk && savedSizes.phone) sizes = savedSizes; } catch (e) {}
     function screenKind() { return window.innerWidth <= 860 ? 'phone' : 'desk'; }
-    var ctaBoxes = cta.querySelectorAll('.box'), ctaNotes = cta.querySelectorAll('.cta-note');
+    var ctaBoxes = cta.querySelectorAll('.box');
+    function shown(list) { for (var i = 0; i < list.length; i++) if (!list[i].hidden) return list[i]; return list[0]; }
     var dragF = 0;                          // while another piece is dragged, the headline holds its size
     var afterLayout = function () {};       // the draft tools hook in here
     function applyTextSizes(sz) {
@@ -688,15 +693,42 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
         b.style.height = sz.btn ? Math.round(sz.btn * 3.75) + 'px' : '';
         b.style.paddingInline = sz.btn ? Math.round(sz.btn * 2.36) + 'px' : '';
       });
-      Array.prototype.forEach.call(ctaNotes, function (n) { n.style.fontSize = sz.note ? sz.note + 'px' : ''; });
     }
     // DRAFT: pieces you dragged somewhere else, stored as an offset from where the layout puts them
-    var movable = { h1: [h1], story: [story], btn: ctaBoxes, note: ctaNotes, video: [video] };
+    var arrow = document.getElementById('arrow');
+    var movable = { h1: [h1], story: [story], btn: ctaBoxes, video: [video], arrow: [arrow] };
     function applyMoves(sz) {
       Object.keys(movable).forEach(function (k) {
         var at = sz.at && sz.at[k];
         Array.prototype.forEach.call(movable[k], function (el) { el.style.translate = at ? at[0] + 'px ' + at[1] + 'px' : ''; });
       });
+    }
+
+    /* Curved arrow: starts beside the button and points at the video card. You can change its length,
+       angle and thickness with the draft tools (saved in sizes[...].arrow). */
+    var arrowLine = arrow.querySelector('.arrow-line'), arrowHead = arrow.querySelector('.arrow-head');
+    var arrowNow = { x: 0, y: 0, len: 200, rot: 0, size: 3 };   // start point inside the hero, length, angle (degrees), thickness
+    function drawArrow() {
+      var L = arrowNow.len, w = arrowNow.size, h = L * 0.08;      // gentle curve: the middle dips by 8% of the length
+      var cx = L / 2, cy = 2 * h, ang = Math.atan2(-cy, L - cx);  // control point, and the direction at the tip
+      var hl = 8 + w * 3.2, spread = 0.5;                         // arrowhead length and half-angle
+      arrowLine.setAttribute('d', 'M0 0 Q' + cx.toFixed(1) + ' ' + cy.toFixed(1) + ' ' + L.toFixed(1) + ' 0');
+      arrowHead.setAttribute('d', 'M' + (L - hl * Math.cos(ang - spread)).toFixed(1) + ' ' + (-hl * Math.sin(ang - spread)).toFixed(1)
+        + ' L' + L.toFixed(1) + ' 0 L' + (L - hl * Math.cos(ang + spread)).toFixed(1) + ' ' + (-hl * Math.sin(ang + spread)).toFixed(1));
+      arrow.style.strokeWidth = w;
+      arrow.style.transform = 'translate(' + arrowNow.x.toFixed(1) + 'px,' + arrowNow.y.toFixed(1) + 'px) rotate(' + arrowNow.rot.toFixed(1) + 'deg)';
+    }
+    function placeArrow() {
+      var a = sizes[screenKind()].arrow || {};
+      var H = hero.getBoundingClientRect(), btn = shown(ctaBoxes).getBoundingClientRect(), V = video.getBoundingClientRect();
+      var sx = btn.right + 18, sy = btn.top + btn.height / 2, ex, ey;
+      if (window.innerWidth > 860) { ex = V.left - 16; ey = clamp(V.top + 40, sy - 40, V.bottom - 50); }   // across to the card
+      else { sx = btn.left + Math.min(40, btn.width / 3); sy = btn.bottom + 14; ex = V.left + V.width * 0.32; ey = V.top - 12; }   // down to the card on phones
+      arrowNow = { x: sx - H.left, y: sy - H.top,
+        len: a.len || Math.max(60, Math.hypot(ex - sx, ey - sy)),
+        rot: a.rot != null ? a.rot : Math.atan2(ey - sy, ex - sx) * 180 / Math.PI,
+        size: a.size || 3 };
+      drawArrow();
     }
 
     function layout() {
@@ -711,6 +743,7 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
         if (sz.h1) inner.style.setProperty('--f', sz.h1 + 'px');
         if (sz.video) video.style.width = Math.round(sz.video * 9 / 16) + 'px';
         applyMoves(sz);
+        placeArrow();
         afterLayout();
         return;
       }
@@ -779,6 +812,7 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
       var bottom = Math.max(cta.getBoundingClientRect().bottom, useA ? story.getBoundingClientRect().bottom : 0) - M.top;
       main.style.top = clamp(edge - top, (H.height - (bottom - top)) / 2 - top, H.height - edge - bottom) + 'px';
       applyMoves(sz);
+      placeArrow();
       afterLayout();
     }
 
@@ -803,18 +837,35 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
       new MutationObserver(function () { layout(); }).observe(root, { attributes: true, attributeFilter: ['data-font'] });
 
       // move and resize: drag a piece (its dashed outline) to move it, drag its round handle to resize it
-      function shown(list) { for (var i = 0; i < list.length; i++) if (!list[i].hidden) return list[i]; return list[0]; }
       function fontPx(el) { return parseFloat(getComputedStyle(el).fontSize); }
+      function arrowRect() {                 // the drawn arrow (its own box is only 1px)
+        var a = arrowLine.getBoundingClientRect(), b = arrowHead.getBoundingClientRect(), pad = 6;
+        var l = Math.min(a.left, b.left) - pad, t = Math.min(a.top, b.top) - pad, r = Math.max(a.right, b.right) + pad, btm = Math.max(a.bottom, b.bottom) + pad;
+        return { left: l, top: t, width: r - l, height: btm - t };
+      }
       var targets = [
         { key: 'h1', label: 'Headline', el: function () { return h1; }, size: function () { return fontPx(h1); }, min: 32, max: 260 },
-        { key: 'story', label: 'Story', el: function () { return story; }, size: function () { return fontPx(story); }, min: 12, max: 40 },
+        { key: 'story', label: 'Small text', el: function () { return story; }, size: function () { return fontPx(story); }, min: 12, max: 40 },
         { key: 'btn', label: 'Button', el: function () { return shown(ctaBoxes); }, size: function () { return fontPx(shown(ctaBoxes)); }, min: 10, max: 28 },
-        { key: 'note', label: 'Small text', el: function () { return shown(ctaNotes); }, size: function () { return fontPx(shown(ctaNotes)); }, min: 11, max: 32 },
-        { key: 'video', label: 'Video', el: function () { return video; }, size: function () { return video.getBoundingClientRect().height; }, min: 160, max: 1200 }
+        { key: 'video', label: 'Video', el: function () { return video; }, size: function () { return video.getBoundingClientRect().height; }, min: 160, max: 1200 },
+        { key: 'arrow', label: 'Arrow', el: function () { return arrow; }, rect: arrowRect, size: function () { return arrowNow.size; }, min: 1.5, max: 14 }
       ];
+      targets.forEach(function (t) { if (!t.rect) t.rect = function () { return t.el().getBoundingClientRect(); }; });
+      function arrowSet(changes) {           // length, angle or thickness of the arrow: only the arrow is redrawn
+        var sz = sizes[screenKind()]; sz.arrow = sz.arrow || {};
+        for (var k in changes) sz.arrow[k] = changes[k];
+        placeArrow(); afterLayout();
+      }
+      function arrowText() {
+        var set = sizes[screenKind()].arrow;
+        return 'Arrow ' + arrowNow.size + 'px thick, ' + Math.round(arrowNow.len) + 'px long, ' + Math.round(arrowNow.rot) + '°' + (set ? '*' : '');
+      }
       var readout = document.getElementById('rz-readout'), toggle = document.getElementById('rz-toggle');
       function save() { try { localStorage.setItem(SIZE_KEY, JSON.stringify(sizes)); } catch (e) {} }
-      function setSize(t, v) { sizes[screenKind()][t.key] = Math.round(clamp(t.min, v, t.max)); save(); layout(); }
+      function setSize(t, v) {
+        if (t.key === 'arrow') { arrowSet({ size: Math.round(clamp(t.min, v, t.max) * 2) / 2 }); save(); return; }
+        sizes[screenKind()][t.key] = Math.round(clamp(t.min, v, t.max)); save(); layout();
+      }
       targets.forEach(function (t) {
         t.box = document.createElement('div'); t.box.className = 'rz-box';
         t.handle = document.createElement('button'); t.handle.type = 'button'; t.handle.className = 'rz-handle';
@@ -845,23 +896,24 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
         t.handle.addEventListener('pointerdown', function (e) {
           e.preventDefault();
           t.handle.setPointerCapture(e.pointerId);
-          var r = t.el().getBoundingClientRect(), start = t.size(), x0 = e.clientX, y0 = e.clientY, lastEv = e, raf = 0;
-          if (t.key !== 'h1' && !sizes[screenKind()].h1) dragF = fontPx(h1);
+          var r = t.rect(), start = t.size(), x0 = e.clientX, y0 = e.clientY, lastEv = e, raf = 0;
+          if (t.key !== 'h1' && t.key !== 'arrow' && !sizes[screenKind()].h1) dragF = fontPx(h1);
           layer.classList.add('dragging'); t.tag.classList.add('on');
           function move(ev) {
             lastEv = ev;
             if (raf) return;
             raf = requestAnimationFrame(function () {
               raf = 0;
-              // drag right or down to grow, left or up to shrink
-              setSize(t, start * (1 + ((lastEv.clientX - x0) / r.width + (lastEv.clientY - y0) / r.height) / 2));
+              // drag right or down to grow, left or up to shrink (the arrow: 1px thicker for every 30px dragged)
+              if (t.key === 'arrow') setSize(t, start + ((lastEv.clientX - x0) + (lastEv.clientY - y0)) / 30);
+              else setSize(t, start * (1 + ((lastEv.clientX - x0) / r.width + (lastEv.clientY - y0) / r.height) / 2));
             });
           }
           function up() {
             t.handle.removeEventListener('pointermove', move); t.handle.removeEventListener('pointerup', up); t.handle.removeEventListener('pointercancel', up);
             if (raf) cancelAnimationFrame(raf);
             dragF = 0; layer.classList.remove('dragging'); t.tag.classList.remove('on');
-            layout();
+            if (t.key === 'arrow') afterLayout(); else layout();
           }
           t.handle.addEventListener('pointermove', move); t.handle.addEventListener('pointerup', up); t.handle.addEventListener('pointercancel', up);
         });
@@ -879,27 +931,63 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
           var k = { ArrowUp: 1.03, ArrowRight: 1.03, ArrowDown: 0.97, ArrowLeft: 0.97 }[e.key];
           if (!k) return;
           var now = t.size();
+          if (t.key === 'arrow') { e.preventDefault(); setSize(t, now + (k > 1 ? 0.5 : -0.5)); return; }
           e.preventDefault(); setSize(t, k > 1 ? Math.max(now * k, now + 1) : Math.min(now * k, now - 1));   // at least 1px per press
         });
+      });
+      // the arrow's tip handle: drag it to change the arrow's length and which way it points
+      var arrowT = targets[targets.length - 1];
+      arrowT.handle.setAttribute('aria-label', 'Arrow thickness (drag, or arrow keys; Shift + arrow keys move it)');
+      var tip = document.createElement('button'); tip.type = 'button'; tip.className = 'rz-handle rz-tip';
+      tip.setAttribute('aria-label', 'Arrow tip: drag to change length and direction (left and right keys turn it, up and down keys change its length)');
+      function arrowOrigin() {               // the arrow's start point, in page coordinates
+        var H = hero.getBoundingClientRect(), at = (sizes[screenKind()].at || {}).arrow || [0, 0];
+        return [H.left + window.scrollX + arrowNow.x + at[0], H.top + window.scrollY + arrowNow.y + at[1]];
+      }
+      tip.addEventListener('pointerdown', function (e) {
+        e.preventDefault(); tip.setPointerCapture(e.pointerId);
+        var o = arrowOrigin();
+        layer.classList.add('turning'); arrowT.tag.classList.add('on');
+        function move(ev) {
+          var dx = ev.clientX + window.scrollX - o[0], dy = ev.clientY + window.scrollY - o[1];
+          arrowSet({ len: Math.round(clamp(40, Math.hypot(dx, dy), 1200)), rot: Math.round(Math.atan2(dy, dx) * 180 / Math.PI) });
+        }
+        function up() {
+          tip.removeEventListener('pointermove', move); tip.removeEventListener('pointerup', up); tip.removeEventListener('pointercancel', up);
+          layer.classList.remove('turning'); arrowT.tag.classList.remove('on');
+          save(); afterLayout();
+        }
+        tip.addEventListener('pointermove', move); tip.addEventListener('pointerup', up); tip.addEventListener('pointercancel', up);
+      });
+      tip.addEventListener('keydown', function (e) {
+        var turn = { ArrowLeft: -3, ArrowRight: 3 }[e.key], grow = { ArrowUp: 10, ArrowDown: -10 }[e.key];
+        if (turn == null && grow == null) return;
+        e.preventDefault();
+        if (turn != null) arrowSet({ rot: Math.round(arrowNow.rot + turn), len: Math.round(arrowNow.len) });
+        else arrowSet({ len: Math.round(clamp(40, arrowNow.len + grow, 1200)), rot: Math.round(arrowNow.rot) });
+        save();
       });
       // outlines underneath, handles on top, so a handle is never covered by another piece's outline
       targets.forEach(function (t) { layer.appendChild(t.box); });
       targets.forEach(function (t) { layer.appendChild(t.handle); layer.appendChild(t.tag); });
+      layer.insertBefore(tip, arrowT.tag);
       function movedBy(t) { var sz = sizes[screenKind()]; return sz.at && sz.at[t.key]; }
       afterLayout = function () {
         var moved = targets.filter(movedBy).map(function (t) { var a = movedBy(t); return t.label.toLowerCase() + ' ' + a[0] + ', ' + a[1]; });
-        readout.textContent = targets.map(function (t) { return t.label + ' ' + Math.round(t.size()) + (sizes[screenKind()][t.key] ? '*' : ''); }).join(' · ')
+        readout.textContent = targets.filter(function (t) { return t.key !== 'arrow'; }).map(function (t) { return t.label + ' ' + Math.round(t.size()) + (sizes[screenKind()][t.key] ? '*' : ''); }).join(' · ')
           + ' px (' + (screenKind() === 'phone' ? 'phone' : 'computer') + '; * = set by you)'
-          + (moved.length ? '. Moved: ' + moved.join(' · ') : '');
+          + (moved.length ? '. Moved: ' + moved.join(' · ') : '') + '. ' + arrowText();
         if (layer.hidden) return;
         targets.forEach(function (t) {
-          var r = t.el().getBoundingClientRect(), x = r.left + window.scrollX, y = r.top + window.scrollY;
+          var r = t.rect(), x = r.left + window.scrollX, y = r.top + window.scrollY;
           t.box.style.left = x + 'px'; t.box.style.top = y + 'px'; t.box.style.width = r.width + 'px'; t.box.style.height = r.height + 'px';
           t.handle.style.left = (x + r.width + 5) + 'px'; t.handle.style.top = (y + r.height + 5) + 'px';
           t.tag.style.left = (x + r.width + 22) + 'px'; t.tag.style.top = (y + r.height - 6) + 'px';
           var a = movedBy(t);
-          t.tag.textContent = t.label + ' ' + Math.round(t.size()) + 'px' + (a ? ' · moved ' + a[0] + ', ' + a[1] : '');
+          t.tag.textContent = (t.key === 'arrow' ? arrowText() : t.label + ' ' + Math.round(t.size()) + 'px') + (a ? ' · moved ' + a[0] + ', ' + a[1] : '');
         });
+        var o = arrowOrigin(), rad = arrowNow.rot * Math.PI / 180;
+        tip.style.left = (o[0] + arrowNow.len * Math.cos(rad)) + 'px'; tip.style.top = (o[1] + arrowNow.len * Math.sin(rad)) + 'px';
       };
       function setResizing(on) {
         layer.hidden = !on; tools.classList.toggle('resizing', on);
