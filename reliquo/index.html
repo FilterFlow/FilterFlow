@@ -67,7 +67,9 @@
   --ink: #22333B;        /* body text */
   --black: #0A0908;      /* near-black: the headline, closing band, footer */
   --rule: rgba(34, 51, 59, 0.2);
-  --nav-bg: rgba(34, 51, 59, 0.94);
+  --nav-bg: #22333B;     /* header bar once you scroll: the same navy as before, now solid so it matches exactly */
+  --sky: #38B6FF;        /* light blue: both "Book a free call" buttons */
+  --sky-hover: #1FA6F5;
 
   --display: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
   --sans: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
@@ -130,15 +132,16 @@ section[id] { scroll-margin-top: calc(var(--navH, 72px) + 8px); }
 .links { display: flex; gap: clamp(20px, 2.8vw, 40px); font-size: 0.88rem; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; }
 .links a { text-decoration: none; padding-block: 8px; white-space: nowrap; }
 .links a:hover { text-decoration: underline; text-underline-offset: 6px; }
-.nav .box { height: 44px; padding: 0 24px; box-shadow: none; }
+.nav .box { height: 44px; padding: 0 24px; box-shadow: none; border-radius: 999px; background: var(--sky); color: var(--barn); }
+.nav .box:hover { background: var(--sky-hover); }
 /* At the top of the page the bar is invisible: black lettering straight on the page, so the hero feels open.
    Once you scroll, the navy bar fades in and the lettering turns white, so it stays readable over everything. */
 .nav { transition: background-color 0.35s ease, color 0.35s ease, -webkit-backdrop-filter 0.35s ease, backdrop-filter 0.35s ease; }
 .nav:not(.solid) { background: transparent; color: var(--black); -webkit-backdrop-filter: none; backdrop-filter: none; }
 .nav:not(.solid) :focus-visible { outline-color: var(--black); }
 .nav .box { transition: background-color 0.35s ease, color 0.35s ease; }
-.nav:not(.solid) .box { background: var(--barn); color: var(--cream); }   /* the header button stays visible on the open page */
-.nav:not(.solid) .box:hover { background: var(--barn-hover); }
+.nav:not(.solid) .box { background: var(--sky); color: var(--barn); }   /* the same light blue whether or not the bar is showing */
+.nav:not(.solid) .box:hover { background: var(--sky-hover); }
 @media (max-width: 960px) { .nav .box, .hero .cta .box { padding: 0 16px; font-size: 0.8rem; } }
 
 /* ---------- Hero ---------- */
@@ -178,7 +181,7 @@ section[id] { scroll-margin-top: calc(var(--navH, 72px) + 8px); }
 .art {
   position: absolute; inset: 0;
   background: url("hero-peach.png") center top / cover no-repeat;
-  filter: hue-rotate(75deg) saturate(0.05) brightness(1.24);
+  filter: url(#pillar-edge) hue-rotate(75deg) saturate(0.05) brightness(1.24);   /* faint outline first, then white */
   -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.7) 14%, #000 32%);
           mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.7) 14%, #000 32%);
   transform: translateX(calc(-100cqw + 100%)) scaleX(-1);   /* the pillars mirrored onto the left side, behind the text */
@@ -200,7 +203,7 @@ h1 {
   color: var(--black);
 }
 h1 .l { display: block; white-space: nowrap; }
-h1 .it { font-style: italic; font-weight: 500; padding-left: 0.6em; color: var(--sand); }
+h1 .it { font-style: italic; font-weight: 500; padding-left: 0.6em; color: var(--barn); }
 h1 .big { font-weight: 800; }
 h1 .bl { display: inline-block; width: 0; height: 0; }   /* zero-size marker: its top is the line's baseline */
 h1, h2, h3, .num, .cost .big { font-synthesis: none; }   /* never fake a bold or italic a font doesn't have */
@@ -217,20 +220,20 @@ h1, h2, h3, .num, .cost .big { font-synthesis: none; }   /* never fake a bold or
 :root[data-font="jost"] h1 { letter-spacing: -0.03em; }
 
 /* The three-line story. On wide screens it sits beside the last headline line (placed by the script). */
-.story { display: grid; gap: 2px; font-size: 1.06rem; line-height: 1.5; color: var(--barn); }
-.story p { margin: 0; }
-.story p:last-child { font-weight: 600; }
+.story { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font-size: 1.06rem; line-height: 1.5; color: var(--barn); }
+.story li { position: relative; padding-left: 18px; text-wrap: pretty; }
+.story li::before { content: ""; position: absolute; left: 0; top: 0.62em; width: 6px; height: 6px; border-radius: 50%; background: var(--sand); }
 .hero.placed .story { position: absolute; white-space: nowrap; }
 
 .cta { display: grid; justify-items: start; gap: 12px; }
 /* Hero button: slate with off-white lettering, rounded, no shadow; same lettering and size as the header's button */
 .hero .cta .box {
   height: 44px; padding: 0 24px; border-radius: 999px;
-  background: var(--barn); color: var(--cream);
+  background: var(--sky); color: var(--barn);
   font: 600 0.9rem/1 var(--sans); letter-spacing: 0.07em; text-transform: uppercase;
   box-shadow: none;
 }
-.hero .cta .box:hover { background: var(--barn-hover); }
+.hero .cta .box:hover { background: var(--sky-hover); }
 /* Curved arrow, the same barn red as the header */
 .arrow { position: absolute; left: 0; top: 0; z-index: 3; width: 1px; height: 1px; overflow: visible; pointer-events: none; color: var(--barn); transform-origin: 0 0; }
 .arrow path { fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; }
@@ -478,6 +481,18 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
 .rz-layer.turning, .rz-layer.turning * { cursor: crosshair; }
 </style>
 
+<!-- Pillar outline: finds the pillars (neutral) against the peach backdrop and adds a faint soft line just outside their edges -->
+<svg width="0" height="0" aria-hidden="true" style="position: absolute">
+  <filter id="pillar-edge" color-interpolation-filters="sRGB" x="0" y="0" width="100%" height="100%">
+    <feColorMatrix in="SourceGraphic" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  -6 0 6 0 1" result="pillars"/>
+    <feGaussianBlur in="pillars" stdDeviation="1.6" result="soft"/>
+    <feComposite in="soft" in2="pillars" operator="out" result="ring"/>
+    <feFlood flood-color="#5E6A70" flood-opacity="0.55"/>
+    <feComposite in2="ring" operator="in" result="edge"/>
+    <feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="edge"/></feMerge>
+  </filter>
+</svg>
+
 <header class="nav" id="top">
   <!-- Logo spot: swap the wordmark for <img src="logo.svg" alt="Reliquo" height="44"> when the logo is ready -->
   <a class="logo" href="#top">Reliquo</a>
@@ -499,10 +514,11 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
         <h1><span class="l">Let automation<span class="bl" aria-hidden="true"></span></span><span class="l it">handle the<span class="bl" aria-hidden="true"></span></span><span class="l big">small stuff.<span class="bl" aria-hidden="true"></span></span></h1>
 
         <!-- SMALL TEXT under (or beside) the headline -->
-        <div class="story">
-          <p>Never lose a client again.</p>
-          <p>Here's the fix.</p>
-        </div>
+        <ul class="story">
+          <li>Your customers reach out while you're on a job.</li>
+          <li>You send a quote and never hear back.</li>
+          <li>Happy customers never leave a review.</li>
+        </ul>
 
         <div class="cta">
           <!-- Shown once RELIQUO.video is set -->
