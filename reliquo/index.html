@@ -33,9 +33,9 @@
   }
 </script>
 <script>
-  /* DRAFT: use the font picked in the draft tools (default Geist) before the page draws */
+  /* DRAFT: use the font picked in the draft tools (default Jost) before the page draws */
   (function () {
-    var v = 'geist';
+    var v = 'jost';
     try { v = localStorage.getItem('reliquo-font-v3') || v; } catch (e) {}
     if (v !== 'bodoni') document.documentElement.setAttribute('data-font', v);
   })();
@@ -46,26 +46,28 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Hanken+Grotesk:wght@400;500;600;700&family=Quicksand:wght@700&family=Geist:wght@100..900&family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Albert+Sans:ital,wght@0,100..900;1,100..900&family=Outfit:wght@100..900&family=Urbanist:ital,wght@0,100..900;1,100..900&family=Sora:wght@100..800&family=Manrope:wght@200..800&family=Jost:ital,wght@0,100..900;1,100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap">
 <style>
 /*
-  Layout: the peach pedestal hero (headline left, vertical video card between the text and the tall pillar),
-  then short bands that alternate the photo's floor colour and cream, ending on a barn-red band with the footer.
-  Deliberately one look (Madden's brand palette), so there is no separate dark theme.
-  Photo is 500 x 889 px, shown down to row 740; short pillar top = row 570, tall pillar left edge = column 336.
+  Layout: the pedestal hero (headline left, vertical video card on the right, the pillar photo mirrored onto the left
+  behind the text), then short bands in taupe, off-white and brown, ending on a near-black band with the footer.
+  Deliberately one look (Madden's palette: near-black, slate, off-white, taupe, brown), so there is no separate dark theme.
+  Photo is 500 x 889 px, shown down to row 740; short pillar top = row 570, tall pillar left edge = column 336
+  (the layout still uses these spots for the video card; only the picture is mirrored).
 */
 :root {
-  --barn: #69200F;       /* header, headings, buttons on cream */
-  --sand: #C78054;       /* "evenings", step numbers */
-  --sand-deep: #9C5A33;  /* sand for small text, so it stays readable */
-  --cream: #FBF3EA;
-  --peach: #E0C0AB;      /* top of the photo */
-  --blush: #E6CFBF;      /* the photo's floor colour, used for bands that follow the hero */
-  --pillar: #E9E7E7;     /* off-white sampled from the lit side of the pillars */
-  --navy: #13203B;       /* deep navy: the hero button */
-  --navy-hover: #213459;
+  --barn: #22333B;       /* slate: header, small text, buttons, arrow, headings (the name is kept from the first palette) */
+  --barn-hover: #2F4652;
+  --sand: #A9927D;       /* taupe: "handle the", the "How it works" band, "free" */
+  --sand-deep: #5E503F;  /* brown: small accent text */
+  --brown: #5E503F;      /* brown: the demo band */
+  --cream: #F2F4F3;      /* off-white: page, light buttons, text on dark */
+  --peach: #F2F4F3;      /* page background (name kept from the first palette) */
+  --blush: #A9927D;      /* band after the hero */
+  --pillar: #F2F4F3;     /* light buttons */
+  --card: #FFFFFF;       /* blank video card */
   --white: #FFFFFF;
-  --ink: #5B3226;        /* body text */
-  --black: #141414;
-  --rule: rgba(105, 32, 15, 0.2);
-  --nav-bg: rgba(105, 32, 15, 0.9);
+  --ink: #22333B;        /* body text */
+  --black: #0A0908;      /* near-black: the headline, closing band, footer */
+  --rule: rgba(34, 51, 59, 0.2);
+  --nav-bg: rgba(34, 51, 59, 0.94);
 
   --display: "Bodoni Moda", "Didot", "Bodoni 72", Georgia, serif;
   --sans: "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;
@@ -106,7 +108,7 @@ section[id] { scroll-margin-top: calc(var(--navH, 72px) + 8px); }
   background: var(--pillar); color: var(--black);
   font: 600 0.9rem/1 var(--sans); letter-spacing: 0.07em; text-transform: uppercase;
   text-decoration: none; border: 0; border-radius: 0; white-space: nowrap; cursor: pointer;
-  box-shadow: 0 12px 26px -18px rgba(105, 32, 15, 0.5);
+  box-shadow: 0 12px 26px -18px rgba(34, 51, 59, 0.5);
 }
 .box:hover { background: #F3F1F1; }
 .arr { width: 20px; height: 12px; flex: none; transition: transform 0.2s ease; }
@@ -139,7 +141,14 @@ section[id] { scroll-margin-top: calc(var(--navH, 72px) + 8px); }
   overflow: hidden;
   isolation: isolate;
   container-type: inline-size;   /* lets the layout use the hero's real width (cqw) */
-  background: linear-gradient(180deg, #E0C0AB 0%, #E2C0AA 40%, #E5C8B5 60%, #E2CABA 85%, var(--blush) 100%);
+  background: var(--cream);
+}
+/* The photo is peach underneath; this filter turns its background off-white and keeps the pillars white.
+   The same filter on the original gradient keeps the hero's background matching the photo. */
+.hero::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: linear-gradient(180deg, #E0C0AB 0%, #E2C0AA 40%, #E5C8B5 60%, #E2CABA 85%, #E6CFBF 100%);
+  filter: hue-rotate(75deg) saturate(0.05) brightness(1.24);
 }
 .inner {
   --g: clamp(14px, 1.8vw, 28px);
@@ -161,8 +170,10 @@ section[id] { scroll-margin-top: calc(var(--navH, 72px) + 8px); }
 .art {
   position: absolute; inset: 0;
   background: url("hero-peach.png") center top / cover no-repeat;
+  filter: hue-rotate(75deg) saturate(0.05) brightness(1.24);
   -webkit-mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.7) 14%, #000 32%);
           mask-image: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.7) 14%, #000 32%);
+  transform: translateX(calc(-100cqw + 100%)) scaleX(-1);   /* the pillars mirrored onto the left side, behind the text */
 }
 
 .main {
@@ -178,7 +189,7 @@ h1 {
   line-height: var(--lh);
   letter-spacing: -0.035em;
   font-variation-settings: "opsz" 96;
-  color: var(--barn);
+  color: var(--black);
 }
 h1 .l { display: block; white-space: nowrap; }
 h1 .it { font-style: italic; font-weight: 500; padding-left: 0.6em; color: var(--sand); }
@@ -204,13 +215,13 @@ h1, h2, h3, .num, .cost .big { font-synthesis: none; }   /* never fake a bold or
 .hero.placed .story { position: absolute; white-space: nowrap; }
 
 .cta { display: grid; justify-items: start; gap: 12px; }
-/* Hero button: deep navy with thick white lettering in normal sentence case */
+/* Hero button: slate with thick off-white lettering in normal sentence case */
 .hero .cta .box {
-  background: var(--navy); color: var(--white);
+  background: var(--barn); color: var(--cream);
   font: 600 1.02rem/1 var(--sans); letter-spacing: 0; text-transform: none;
   box-shadow: 0 16px 30px -18px rgba(19, 32, 59, 0.75);
 }
-.hero .cta .box:hover { background: var(--navy-hover); }
+.hero .cta .box:hover { background: var(--barn-hover); }
 /* Curved arrow, the same barn red as the header */
 .arrow { position: absolute; left: 0; top: 0; z-index: 3; width: 1px; height: 1px; overflow: visible; pointer-events: none; color: var(--barn); transform-origin: 0 0; }
 .arrow path { fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; }
@@ -223,9 +234,9 @@ h1, h2, h3, .num, .cost .big { font-synthesis: none; }   /* never fake a bold or
 }
 .frame {
   position: relative; width: 100%; height: 100%; overflow: hidden;
-  background: var(--cream);
+  background: var(--card);
   border-radius: 6px;
-  box-shadow: 0 34px 50px -30px rgba(105, 32, 15, 0.5), 0 2px 6px -2px rgba(105, 32, 15, 0.12);
+  box-shadow: 0 34px 50px -30px rgba(34, 51, 59, 0.5), 0 2px 6px -2px rgba(34, 51, 59, 0.12);
 }
 .placeholder { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; text-align: center; padding: 18px; }
 .ph-icon { width: 64px; height: 64px; border-radius: 50%; border: 1.5px solid var(--rule); display: grid; place-items: center; color: var(--sand-deep); }
@@ -242,7 +253,10 @@ h1, h2, h3, .num, .cost .big { font-synthesis: none; }   /* never fake a bold or
 /* ---------- Sections below the hero ---------- */
 .wrap { width: min(1200px, 100% - 2 * var(--side)); margin-inline: auto; }
 .band { padding-block: clamp(72px, 8vw, 120px); }
-.band.blush { background: var(--blush); }
+.band.blush { background: var(--blush); --barn: var(--black); --ink: var(--black); --sand: var(--brown); --rule: rgba(10, 9, 8, 0.22); }
+.band.brown { background: var(--brown); color: var(--ink); --barn: var(--cream); --ink: #E7E3DD; --rule: rgba(242, 244, 243, 0.25); }
+.band.brown .screen { --barn: #22333B; --ink: #22333B; --rule: rgba(34, 51, 59, 0.2); }
+.band.brown .msg.you { background: #22333B; color: var(--cream); }
 .band.cream { background: var(--cream); }
 h2 {
   margin: 0;
@@ -281,14 +295,14 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
 .screen {
   background: var(--cream); border: 10px solid var(--barn); border-radius: 34px;
   padding: 18px 14px 22px; display: grid; gap: 10px; align-content: start; min-height: 470px;
-  box-shadow: 0 34px 50px -30px rgba(105, 32, 15, 0.55);
+  box-shadow: 0 34px 50px -30px rgba(34, 51, 59, 0.55);
 }
 .screen-top { display: grid; justify-items: center; gap: 2px; padding-bottom: 12px; border-bottom: 1px solid var(--rule); margin-bottom: 4px; }
 .screen-top b { font-size: 1rem; color: var(--black); }
 .screen-top span, .stamp { font-size: 0.78rem; color: var(--ink); }
 .stamp { justify-self: center; }
 .msg { margin: 0; max-width: 84%; padding: 10px 14px; border-radius: 18px; font-size: 0.95rem; line-height: 1.4; }
-.msg.them { justify-self: start; background: var(--pillar); color: var(--black); border-bottom-left-radius: 6px; }
+.msg.them { justify-self: start; background: var(--white); color: var(--black); border-bottom-left-radius: 6px; }
 .msg.you { justify-self: end; background: var(--barn); color: var(--cream); border-bottom-right-radius: 6px; }
 .phone figcaption { text-align: center; font-size: 0.9rem; color: var(--ink); }
 
@@ -308,7 +322,7 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
 .qa p { margin: 0; color: var(--ink); }
 
 /* Final call + footer */
-.final { background: var(--barn); color: var(--cream); padding-block: clamp(72px, 8vw, 112px); }
+.final { background: var(--black); color: var(--cream); padding-block: clamp(72px, 8vw, 112px); }
 .final .wrap { display: grid; grid-template-columns: minmax(0, 7fr) minmax(0, 5fr); gap: 28px 48px; align-items: end; }
 .final h2 { color: var(--cream); font-size: clamp(2.8rem, 6vw, 5.2rem); }
 .final h2 em { font-style: italic; font-weight: 500; color: var(--sand); }
@@ -316,7 +330,7 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
 .final-side p { margin: 0; font-size: 1.15rem; line-height: 1.5; }
 .final .box { box-shadow: none; }
 .final :focus-visible, .foot :focus-visible { outline-color: var(--cream); }
-.foot { background: var(--barn); color: var(--cream); font-size: 0.95rem; }
+.foot { background: var(--black); color: var(--cream); font-size: 0.95rem; }
 .foot .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 36px; padding-block: 22px 32px; border-top: 1px solid rgba(251, 243, 234, 0.22); }
 .foot .logo { font-size: 1.35rem; min-height: 40px; margin-right: auto; }
 .mail { display: inline-flex; align-items: center; gap: 12px; flex-wrap: wrap; }
@@ -349,7 +363,7 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
   .box:hover .arr { transform: rotate(90deg) translateX(3px); }
   .video { height: auto; width: min(300px, 78vw); justify-self: center; }
   .stage { height: 380px; aspect-ratio: auto; margin-inline: calc(-1 * var(--side)); }
-  .art { background-size: cover; background-position: center 72%;
+  .art { background-size: cover; background-position: center 72%; transform: scaleX(-1);
     -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 30%);
             mask-image: linear-gradient(180deg, transparent 0%, #000 30%); }
 
@@ -368,17 +382,17 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
 .lightbox { position: fixed; inset: 0; z-index: 100; }
 .lb-backdrop {   /* the blur itself eases in and out, so closing un-blurs smoothly */
   position: absolute; inset: 0; cursor: zoom-out;
-  background: rgba(40, 15, 8, 0);
+  background: rgba(10, 9, 8, 0);
   -webkit-backdrop-filter: blur(0px); backdrop-filter: blur(0px);
   transition: background-color 0.45s ease, -webkit-backdrop-filter 0.45s ease, backdrop-filter 0.45s ease;
 }
-.lightbox.open .lb-backdrop { background: rgba(40, 15, 8, 0.3); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+.lightbox.open .lb-backdrop { background: rgba(10, 9, 8, 0.3); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
 .lightbox.open .lb-close { opacity: 1; }
 .lightbox .frame {
   position: fixed; cursor: default;
   transition: left 0.45s cubic-bezier(0.2, 0.7, 0.2, 1), top 0.45s cubic-bezier(0.2, 0.7, 0.2, 1), width 0.45s cubic-bezier(0.2, 0.7, 0.2, 1), height 0.45s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.45s ease;
 }
-.lightbox .frame.is-big { box-shadow: 0 40px 80px -30px rgba(40, 15, 8, 0.6); }
+.lightbox .frame.is-big { box-shadow: 0 40px 80px -30px rgba(10, 9, 8, 0.6); }
 .lb-close {
   position: fixed; top: calc(16px + env(safe-area-inset-top, 0px)); right: 16px;
   width: 44px; height: 44px; border: 0; border-radius: 50%;
@@ -408,7 +422,7 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
   position: fixed; z-index: 40; left: 16px; right: 16px; bottom: calc(12px + env(safe-area-inset-bottom, 0px));
   max-height: calc(100% - 110px); overflow: auto;
   background: #FFFFFF; color: #2B1A14;
-  border: 1px solid rgba(105, 32, 15, 0.18); box-shadow: 0 18px 40px -18px rgba(40, 15, 8, 0.45);
+  border: 1px solid rgba(34, 51, 59, 0.18); box-shadow: 0 18px 40px -18px rgba(10, 9, 8, 0.45);
   padding: 8px 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 20px;
   font: 500 0.86rem/1.3 "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;   /* stays the same whichever font is picked */
 }
@@ -422,7 +436,7 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
 .tools h4 { margin: 0; font: 600 0.7rem/1 "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif; letter-spacing: 0.08em; text-transform: uppercase; color: #7A5A4E; }
 .tools .link { background: none; border: 0; padding: 4px 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; color: #5A3B30; font: inherit; }
 .tools .row { display: flex; flex-wrap: wrap; gap: 6px; }
-.tools .row button { background: transparent; border: 1px solid rgba(105, 32, 15, 0.28); color: #2B1A14; padding: 5px 8px; cursor: pointer; font: 500 0.92rem/1.2 "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif; border-radius: 0; }
+.tools .row button { background: transparent; border: 1px solid rgba(34, 51, 59, 0.28); color: #2B1A14; padding: 5px 8px; cursor: pointer; font: 500 0.92rem/1.2 "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif; border-radius: 0; }
 .tools .row button[aria-pressed="true"] { background: var(--barn); color: var(--cream); border-color: var(--barn); }
 .tools .row [data-font-v="geist"] { font-family: "Geist", sans-serif; font-weight: 300; }
 .tools .row [data-font-v="host"] { font-family: "Host Grotesk", sans-serif; font-weight: 300; }
@@ -440,8 +454,8 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
 @media (max-width: 1320px) { .tools h4 { display: none; } .tools .row button { font-size: 0.8rem; padding: 4px 6px; } }   /* keep the bar to one row on laptops */
 @media (max-width: 1180px) { .tools-head b { display: none; } .tools, .tools-body { column-gap: 12px; } }
 .rz-layer { position: absolute; left: 0; top: 0; width: 0; height: 0; z-index: 45; }
-.rz-box { position: absolute; outline: 1.5px dashed rgba(105, 32, 15, 0.6); outline-offset: 4px; cursor: move; touch-action: none; }
-.rz-box:hover { background: rgba(105, 32, 15, 0.06); }
+.rz-box { position: absolute; outline: 1.5px dashed rgba(34, 51, 59, 0.6); outline-offset: 4px; cursor: move; touch-action: none; }
+.rz-box:hover { background: rgba(34, 51, 59, 0.06); }
 .rz-handle {
   position: absolute; width: 24px; height: 24px; margin: -12px 0 0 -12px; padding: 0;
   border-radius: 50%; background: var(--barn); border: 3px solid #FFFFFF; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
@@ -554,7 +568,7 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
     </div>
   </section>
 
-  <section class="band blush" id="example">
+  <section class="band brown" id="example">
     <div class="wrap split example">
       <div>
         <p class="tag">Demo business, not a real client.</p>
@@ -950,8 +964,8 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
         try { localStorage.setItem('reliquo-font-v3', v); } catch (e) {}
       }
       fontBtns.forEach(function (b) { b.addEventListener('click', function () { pickFont(b.dataset.fontV); }); });
-      var savedFont = fonts[0];
-      try { savedFont = localStorage.getItem('reliquo-font-v3') || fonts[0]; } catch (e) {}
+      var savedFont = 'jost';
+      try { savedFont = localStorage.getItem('reliquo-font-v3') || 'jost'; } catch (e) {}
       pickFont(savedFont);
       new MutationObserver(function () { layout(); }).observe(root, { attributes: true, attributeFilter: ['data-font'] });
 
