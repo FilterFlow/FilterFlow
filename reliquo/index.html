@@ -219,8 +219,10 @@ h1, h2, h3, .num, .cost .big { font-synthesis: none; }   /* never fake a bold or
 :root[data-font="sora"] h1 { letter-spacing: -0.05em; }
 :root[data-font="jost"] h1 { letter-spacing: -0.03em; }
 
-/* The three-line story. On wide screens it sits beside the last headline line (placed by the script). */
-.story { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font-size: 1.06rem; line-height: 1.5; color: var(--barn); }
+/* The small text: three problems, then the bold line the arrow starts from. */
+.story { font-size: 1.06rem; line-height: 1.5; color: var(--barn); }
+.story ul { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.story .fix { margin: 10px 0 0; font-weight: 700; }
 .story li { position: relative; padding-left: 18px; text-wrap: pretty; }
 .story li::before { content: ""; position: absolute; left: 0; top: 0.62em; width: 6px; height: 6px; border-radius: 50%; background: var(--sand); }
 .hero.placed .story { position: absolute; white-space: nowrap; }
@@ -513,12 +515,15 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
              The layout measures the new words by itself. -->
         <h1><span class="l">Let automation<span class="bl" aria-hidden="true"></span></span><span class="l it">handle the<span class="bl" aria-hidden="true"></span></span><span class="l big">small stuff.<span class="bl" aria-hidden="true"></span></span></h1>
 
-        <!-- SMALL TEXT under (or beside) the headline -->
-        <ul class="story">
-          <li>Your customers reach out while you're on a job.</li>
-          <li>You send a quote and never hear back.</li>
-          <li>Happy customers never leave a review.</li>
-        </ul>
+        <!-- SMALL TEXT under (or beside) the headline. The arrow starts from the bold last line. -->
+        <div class="story">
+          <ul>
+            <li>Your customers reach out while you're on a job.</li>
+            <li>You send a quote and never hear back.</li>
+            <li>Happy customers never leave a review.</li>
+          </ul>
+          <p class="fix">Here's the fix.</p>
+        </div>
 
         <div class="cta">
           <!-- Shown once RELIQUO.video is set -->
@@ -865,12 +870,13 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
       });
     }
 
-    /* Curved arrow: starts beside the button and points at the video card. You can change its length,
+    /* Curved arrow: starts beside "Here's the fix." and points at the video card. You can change its length,
        angle and thickness with the draft tools (saved in sizes[...].arrow). */
     var arrowLine = arrow.querySelector('.arrow-line'), arrowHead = arrow.querySelector('.arrow-head');
-    var arrowNow = { x: 0, y: 0, len: 200, rot: 0, size: 3 };   // start point inside the hero, length, angle (degrees), thickness
+    var fixLine = story.querySelector('.fix');
+    var arrowNow = { x: 0, y: 0, len: 200, rot: 0, size: 3, bend: 0.08 };   // start point inside the hero, length, angle (degrees), thickness, curve
     function drawArrow() {
-      var L = arrowNow.len, w = arrowNow.size, h = L * 0.08;      // gentle curve: the middle dips by 8% of the length
+      var L = arrowNow.len, w = arrowNow.size, h = L * arrowNow.bend;   // gentle curve: the middle bows out by 8% of the length (the other way on phones)
       var cx = L / 2, cy = 2 * h, ang = Math.atan2(-cy, L - cx);  // control point, and the direction at the tip
       var hl = 8 + w * 3.2, spread = 0.5;                         // arrowhead length and half-angle
       arrowLine.setAttribute('d', 'M0 0 Q' + cx.toFixed(1) + ' ' + cy.toFixed(1) + ' ' + L.toFixed(1) + ' 0');
@@ -879,16 +885,33 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
       arrow.style.strokeWidth = w;
       arrow.style.transform = 'translate(' + arrowNow.x.toFixed(1) + 'px,' + arrowNow.y.toFixed(1) + 'px) rotate(' + arrowNow.rot.toFixed(1) + 'deg)';
     }
+    function curveHits(sx, sy, ex, ey, bend, r) {   // would the default arrow curve cross this box?
+      var L = Math.hypot(ex - sx, ey - sy), a = Math.atan2(ey - sy, ex - sx), cs = Math.cos(a), sn = Math.sin(a);
+      for (var i = 0; i <= 40; i++) {
+        var t = i / 40, x = t * L, y = 4 * L * bend * t * (1 - t);
+        var px = sx + x * cs - y * sn, py = sy + x * sn + y * cs;
+        if (px > r.left - 10 && px < r.right + 10 && py > r.top - 10 && py < r.bottom + 10) return true;
+      }
+      return false;
+    }
     function placeArrow() {
       var a = sizes[screenKind()].arrow || {};
-      var H = hero.getBoundingClientRect(), btn = shown(ctaBoxes).getBoundingClientRect(), V = video.getBoundingClientRect();
-      var sx = btn.right + 18, sy = btn.top + btn.height / 2, ex, ey;
+      var H = hero.getBoundingClientRect(), from = box(fixLine), V = video.getBoundingClientRect();
+      var sx = from.right + 16, sy = from.top + from.height / 2, ex, ey, bend = 0.08;
       if (window.innerWidth > 860) { ex = V.left - 16; ey = clamp(V.top + 40, sy - 40, V.bottom - 50); }   // across to the card
-      else { sx = btn.left + Math.min(40, btn.width / 3); sy = btn.bottom + 14; ex = V.left + V.width * 0.32; ey = V.top - 12; }   // down to the card on phones
+      else {
+        ey = V.top - 12; bend = -0.2;                                // on phones: out to the right, past the button, then down to the card
+        var btn = shown(ctaBoxes).getBoundingClientRect();
+        ex = V.left + V.width * 0.7;
+        if (curveHits(sx, sy, ex, ey, bend, btn)) ex = V.left + V.width * 0.82;
+        if (curveHits(sx, sy, ex, ey, bend, btn)) {                  // a wide button is in the way: start under the button instead
+          sx = btn.left + Math.min(40, btn.width / 3); sy = btn.bottom + 14; ex = V.left + V.width * 0.32; bend = 0.08;
+        }
+      }
       arrowNow = { x: sx - H.left, y: sy - H.top,
         len: a.len || Math.max(60, Math.hypot(ex - sx, ey - sy)),
         rot: a.rot != null ? a.rot : Math.atan2(ey - sy, ex - sx) * 180 / Math.PI,
-        size: a.size || 3 };
+        size: a.size || 3, bend: bend };
       drawArrow();
     }
 
