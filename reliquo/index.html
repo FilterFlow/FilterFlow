@@ -26,7 +26,10 @@
      (skipped for people who prefer less motion; shown after 1.5s no matter what) */
   if (!window.matchMedia || !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
     document.documentElement.classList.add('anim');
-    setTimeout(function () { document.documentElement.classList.add('anim-go'); }, 1500);
+    setTimeout(function () {
+      document.documentElement.classList.add('anim-go');
+      setTimeout(function () { document.documentElement.classList.add('anim-done'); }, 2000);
+    }, 1500);
   }
 </script>
 <script>
@@ -40,7 +43,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Hanken+Grotesk:wght@400;500;600;700&family=Quicksand:wght@700&family=Geist:wght@100..900&family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Albert+Sans:ital,wght@0,100..900;1,100..900&family=Outfit:wght@100..900&family=Urbanist:ital,wght@0,100..900;1,100..900&family=Sora:wght@100..800&family=Manrope:wght@200..800&family=Jost:ital,wght@0,100..900;1,100..900&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Hanken+Grotesk:wght@400;500;600;700&family=Quicksand:wght@700&family=Geist:wght@100..900&family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Albert+Sans:ital,wght@0,100..900;1,100..900&family=Outfit:wght@100..900&family=Urbanist:ital,wght@0,100..900;1,100..900&family=Sora:wght@100..800&family=Manrope:wght@200..800&family=Jost:ital,wght@0,100..900;1,100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap">
 <style>
 /*
   Layout: the peach pedestal hero (headline left, vertical video card between the text and the tall pillar),
@@ -84,6 +87,7 @@
 :root[data-font="urbanist"] { --display: "Urbanist", "Helvetica Neue", Arial, sans-serif; --sans: "Urbanist", "Helvetica Neue", Arial, sans-serif; --lh: 1; --cap: 0.71; --gd: 0.24; }
 :root[data-font="sora"]     { --display: "Sora", "Helvetica Neue", Arial, sans-serif; --sans: "Sora", "Helvetica Neue", Arial, sans-serif; --lh: 1.02; --cap: 0.73; --gd: 0.24; }
 :root[data-font="manrope"]  { --display: "Manrope", "Helvetica Neue", Arial, sans-serif; --sans: "Manrope", "Helvetica Neue", Arial, sans-serif; --lh: 1; --cap: 0.73; --gd: 0.24; }
+:root[data-font="inter"]    { --display: "Inter", "Helvetica Neue", Arial, sans-serif; --sans: "Inter", "Helvetica Neue", Arial, sans-serif; --lh: 1; --cap: 0.74; --gd: 0.24; }
 :root[data-font="jost"]     { --display: "Jost", Futura, "Century Gothic", sans-serif; --sans: "Jost", Futura, "Century Gothic", sans-serif; --lh: 0.95; --cap: 0.72; --gd: 0.23; }
 
 * { box-sizing: border-box; }
@@ -186,10 +190,10 @@ h1, h2, h3, .num, .cost .big { font-synthesis: none; }   /* never fake a bold or
 :root[data-font] h1 { font-variation-settings: normal; }
 :root[data-font] h1 .it { font-weight: 400; }
 :root[data-font] h1 .big { font-weight: 700; }
-:root:is([data-font="geist"], [data-font="host"], [data-font="albert"], [data-font="outfit"], [data-font="urbanist"], [data-font="sora"], [data-font="manrope"]) h1 { font-weight: 300; letter-spacing: -0.04em; }
-:root:is([data-font="geist"], [data-font="host"], [data-font="albert"], [data-font="outfit"], [data-font="urbanist"], [data-font="sora"], [data-font="manrope"]) h1 .it { font-weight: 300; }
-:root:is([data-font="geist"], [data-font="host"], [data-font="albert"], [data-font="outfit"], [data-font="urbanist"], [data-font="sora"], [data-font="manrope"]) h1 .big { font-weight: 500; }
-:root:is([data-font="geist"], [data-font="host"], [data-font="albert"], [data-font="outfit"], [data-font="urbanist"], [data-font="sora"], [data-font="manrope"]) h2 { font-weight: 400; letter-spacing: -0.035em; }
+:root:is([data-font="geist"], [data-font="host"], [data-font="albert"], [data-font="outfit"], [data-font="urbanist"], [data-font="sora"], [data-font="manrope"], [data-font="inter"]) h1 { font-weight: 300; letter-spacing: -0.04em; }
+:root:is([data-font="geist"], [data-font="host"], [data-font="albert"], [data-font="outfit"], [data-font="urbanist"], [data-font="sora"], [data-font="manrope"], [data-font="inter"]) h1 .it { font-weight: 300; }
+:root:is([data-font="geist"], [data-font="host"], [data-font="albert"], [data-font="outfit"], [data-font="urbanist"], [data-font="sora"], [data-font="manrope"], [data-font="inter"]) h1 .big { font-weight: 500; }
+:root:is([data-font="geist"], [data-font="host"], [data-font="albert"], [data-font="outfit"], [data-font="urbanist"], [data-font="sora"], [data-font="manrope"], [data-font="inter"]) h2 { font-weight: 400; letter-spacing: -0.035em; }
 :root[data-font="sora"] h1 { letter-spacing: -0.05em; }
 :root[data-font="jost"] h1 { letter-spacing: -0.03em; }
 
@@ -362,24 +366,25 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
 /* ---------- Big video view ---------- */
 .frame[role="button"] { cursor: zoom-in; }
 .lightbox { position: fixed; inset: 0; z-index: 100; }
-.lb-backdrop {
+.lb-backdrop {   /* the blur itself eases in and out, so closing un-blurs smoothly */
   position: absolute; inset: 0; cursor: zoom-out;
-  background: rgba(40, 15, 8, 0.3);
-  -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
-  opacity: 0; transition: opacity 0.3s ease;
+  background: rgba(40, 15, 8, 0);
+  -webkit-backdrop-filter: blur(0px); backdrop-filter: blur(0px);
+  transition: background-color 0.45s ease, -webkit-backdrop-filter 0.45s ease, backdrop-filter 0.45s ease;
 }
-.lightbox.open .lb-backdrop, .lightbox.open .lb-close { opacity: 1; }
+.lightbox.open .lb-backdrop { background: rgba(40, 15, 8, 0.3); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px); }
+.lightbox.open .lb-close { opacity: 1; }
 .lightbox .frame {
   position: fixed; cursor: default;
-  box-shadow: 0 40px 80px -30px rgba(40, 15, 8, 0.6);
-  transition: left 0.36s cubic-bezier(0.2, 0.7, 0.2, 1), top 0.36s cubic-bezier(0.2, 0.7, 0.2, 1), width 0.36s cubic-bezier(0.2, 0.7, 0.2, 1), height 0.36s cubic-bezier(0.2, 0.7, 0.2, 1);
+  transition: left 0.45s cubic-bezier(0.2, 0.7, 0.2, 1), top 0.45s cubic-bezier(0.2, 0.7, 0.2, 1), width 0.45s cubic-bezier(0.2, 0.7, 0.2, 1), height 0.45s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.45s ease;
 }
+.lightbox .frame.is-big { box-shadow: 0 40px 80px -30px rgba(40, 15, 8, 0.6); }
 .lb-close {
   position: fixed; top: calc(16px + env(safe-area-inset-top, 0px)); right: 16px;
   width: 44px; height: 44px; border: 0; border-radius: 50%;
   background: var(--cream); color: var(--barn); font: 400 1.7rem/1 var(--sans); cursor: pointer;
   box-shadow: 0 6px 18px -8px rgba(0, 0, 0, 0.4);
-  opacity: 0; transition: opacity 0.3s ease;
+  opacity: 0; transition: opacity 0.45s ease;
 }
 .lb-close:focus-visible { outline-color: var(--cream); }
 .lb-lock { overflow: hidden; }
@@ -387,10 +392,14 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
 /* ---------- Motion: the hero fades in from a slight blur; sentences below pop up a touch as they scroll in ---------- */
 @keyframes blurIn { from { opacity: 0; filter: blur(6px); } to { opacity: 1; filter: none; } }
 @keyframes popUp { from { transform: translateY(10px); } to { transform: none; } }
-.anim:not(.anim-go) :is(.nav :is(.logo, .links a, .box), .hero :is(h1, .story, .cta, .arrow, .placeholder, .play-btn),
+.anim:not(.anim-go) :is(.nav :is(.logo, .links a, .box), .hero :is(h1, .story, .cta, .arrow, .video),
   main section:not(.hero) :is(h2, h3, p, dt, dd, .num, .tag, .timeline li, .box, figcaption, .screen), .foot .wrap > *) { opacity: 0; }   /* a moment, until the layout is ready */
-.anim-go .nav :is(.logo, .links a, .box), .anim-go .hero :is(h1, .story, .cta, .arrow, .placeholder, .play-btn), .anim-go .pre { animation: blurIn 0.65s ease-out backwards; }
-:root.anim .pop { animation: popUp 0.45s cubic-bezier(0.2, 0.7, 0.3, 1) backwards; }
+/* text and buttons first... */
+.anim-go:not(.anim-done) :is(.nav :is(.logo, .links a, .box), .hero :is(h1, .story, .cta), .pre) { animation: blurIn 1s ease-out backwards; }
+/* ...then the video card, with the arrow pointing at it, 0.8s later. ("anim-done" stops these once they have played,
+   so nothing replays when the video goes back into its spot.) */
+.anim-go:not(.anim-done) .hero :is(.video, .arrow) { animation: blurIn 1s ease-out 0.8s backwards; }
+:root.anim .pop { animation: popUp 0.6s cubic-bezier(0.2, 0.7, 0.3, 1) backwards; }
 @media (prefers-reduced-motion: reduce) { .lb-backdrop, .lb-close, .lightbox .frame { transition: none; } }
 
 /* ---------- DRAFT TOOLS: font picker + drag to move and resize. Delete this block, the tools markup and the tools script before launch. ---------- */
@@ -422,6 +431,7 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
 .tools .row [data-font-v="urbanist"] { font-family: "Urbanist", sans-serif; font-weight: 300; }
 .tools .row [data-font-v="sora"] { font-family: "Sora", sans-serif; font-weight: 300; }
 .tools .row [data-font-v="manrope"] { font-family: "Manrope", sans-serif; font-weight: 300; }
+.tools .row [data-font-v="inter"] { font-family: "Inter", sans-serif; font-weight: 300; }
 .tools .row [data-font-v="jost"] { font-family: "Jost", sans-serif; }
 .tools .row [data-font-v="bodoni"] { font-family: "Bodoni Moda", serif; }
 .tools .readout { margin: 0; color: #5A3B30; font-size: 0.8rem; font-variant-numeric: tabular-nums; }
@@ -633,6 +643,7 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
         <button type="button" data-font-v="urbanist" aria-pressed="false">Urbanist</button>
         <button type="button" data-font-v="sora" aria-pressed="false">Sora</button>
         <button type="button" data-font-v="manrope" aria-pressed="false">Manrope</button>
+        <button type="button" data-font-v="inter" aria-pressed="false">Inter</button>
         <button type="button" data-font-v="jost" aria-pressed="false">Jost</button>
         <button type="button" data-font-v="bodoni" aria-pressed="false">Original (Bodoni)</button>
       </div>
@@ -726,6 +737,7 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
       setRect([r.left, r.top, r.width, r.height]);    // start exactly where the card was...
       void frame.offsetWidth;
       setRect(bigRect());                              // ...and grow to the middle of the screen
+      frame.classList.add('is-big');
       lb.classList.add('open');
       root.classList.add('lb-lock');
       frame.removeAttribute('role'); frame.tabIndex = -1;
@@ -736,6 +748,7 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
       if (!isBig() || !lb.classList.contains('open')) return;
       var r = document.getElementById('video').getBoundingClientRect();
       setRect([r.left, r.top, r.width, r.height]);    // shrink back to the card's spot
+      frame.classList.remove('is-big');
       lb.classList.remove('open');
       if (hasVideo) { clip.pause(); clip.controls = false; playBtn.hidden = false; }
       setTimeout(function () {
@@ -745,7 +758,7 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
         root.classList.remove('lb-lock');
         frame.setAttribute('role', 'button'); frame.tabIndex = 0;
         frame.focus({ preventScroll: true });
-      }, reduce ? 0 : 360);
+      }, reduce ? 0 : 470);
     }
     frame.addEventListener('click', function (e) {
       if (isBig()) { if (hasVideo && e.target.closest('.play-btn')) play(); return; }   // clicks on the big video never close it
@@ -1121,7 +1134,11 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
 
     // start the hero fade once the fonts and the layout are ready, so the fade is actually seen
     var fadeOnScreen = function () {};      // set below: text already on screen fades in with the hero
-    function heroIn() { if (root.classList.contains('anim-go')) return; layout(); fadeOnScreen(); root.classList.add('anim-go'); }
+    function heroIn() {
+      if (root.classList.contains('anim-go')) return;
+      layout(); fadeOnScreen(); root.classList.add('anim-go');
+      setTimeout(function () { root.classList.add('anim-done'); }, 2000);   // the fades have played: they never replay
+    }
     // wait for the fonts and the page load (a reload partway down jumps to its spot on load), but never more than 0.9s
     var loaded = new Promise(function (r) { if (document.readyState === 'complete') r(); else window.addEventListener('load', r); });
     var fontsReady = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
