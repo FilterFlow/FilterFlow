@@ -131,6 +131,14 @@ section[id] { scroll-margin-top: calc(var(--navH, 72px) + 8px); }
 .links a { text-decoration: none; padding-block: 8px; white-space: nowrap; }
 .links a:hover { text-decoration: underline; text-underline-offset: 6px; }
 .nav .box { height: 44px; padding: 0 24px; box-shadow: none; }
+/* At the top of the page the bar is invisible: black lettering straight on the page, so the hero feels open.
+   Once you scroll, the navy bar fades in and the lettering turns white, so it stays readable over everything. */
+.nav { transition: background-color 0.35s ease, color 0.35s ease, -webkit-backdrop-filter 0.35s ease, backdrop-filter 0.35s ease; }
+.nav:not(.solid) { background: transparent; color: var(--black); -webkit-backdrop-filter: none; backdrop-filter: none; }
+.nav:not(.solid) :focus-visible { outline-color: var(--black); }
+.nav .box { transition: background-color 0.35s ease, color 0.35s ease; }
+.nav:not(.solid) .box { background: var(--barn); color: var(--cream); }   /* the header button stays visible on the open page */
+.nav:not(.solid) .box:hover { background: var(--barn-hover); }
 @media (max-width: 960px) { .nav .box { padding: 0 16px; font-size: 0.8rem; } }
 
 /* ---------- Hero ---------- */
@@ -792,6 +800,10 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
        one gap above the short pillar; the text block is centred up and down on the page. */
     var IMG_H = 740, SHORT_TOP = 570, TALL_LEFT = 336;
     var nav = document.querySelector('.nav'), inner = hero.querySelector('.inner'), main = hero.querySelector('.main');
+    // the header bar appears once you scroll away from the top
+    function navBar() { nav.classList.toggle('solid', window.scrollY > 8); }
+    window.addEventListener('scroll', navBar, { passive: true });
+    navBar();
     var h1 = main.querySelector('h1'), story = main.querySelector('.story'), cta = main.querySelector('.cta');
     var video = document.getElementById('video'), stage = hero.querySelector('.stage');
     var lines = h1.querySelectorAll('.l'), first = lines[0], mid = lines[lines.length - 2], last = lines[lines.length - 1];
