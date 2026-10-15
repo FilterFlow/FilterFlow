@@ -30,17 +30,17 @@
   }
 </script>
 <script>
-  /* DRAFT: use the font picked in the draft tools (default Space Mono) before the page draws */
+  /* DRAFT: use the font picked in the draft tools (default Geist) before the page draws */
   (function () {
-    var v = 'spacemono';
-    try { v = localStorage.getItem('reliquo-font-v2') || v; } catch (e) {}
+    var v = 'geist';
+    try { v = localStorage.getItem('reliquo-font-v3') || v; } catch (e) {}
     if (v !== 'bodoni') document.documentElement.setAttribute('data-font', v);
   })();
 </script>
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Hanken+Grotesk:wght@400;500;600;700&family=Quicksand:wght@700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Space+Grotesk:wght@300..700&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Azeret+Mono:ital,wght@0,100..900;1,100..900&family=Outfit:wght@100..900&family=Jost:ital,wght@0,100..900;1,100..900&family=Syne:wght@400..800&family=Manrope:wght@200..800&family=Major+Mono+Display&family=Xanh+Mono:ital@0;1&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Hanken+Grotesk:wght@400;500;600;700&family=Quicksand:wght@700&family=Geist:wght@100..900&family=Host+Grotesk:ital,wght@0,300..800;1,300..800&family=Albert+Sans:ital,wght@0,100..900;1,100..900&family=Outfit:wght@100..900&family=Urbanist:ital,wght@0,100..900;1,100..900&family=Sora:wght@100..800&family=Manrope:wght@200..800&family=Jost:ital,wght@0,100..900;1,100..900&display=swap">
 <style>
 /*
   Layout: the peach pedestal hero (headline left, vertical video card between the text and the tall pillar),
@@ -56,6 +56,9 @@
   --peach: #E0C0AB;      /* top of the photo */
   --blush: #E6CFBF;      /* the photo's floor colour, used for bands that follow the hero */
   --pillar: #E9E7E7;     /* off-white sampled from the lit side of the pillars */
+  --navy: #13203B;       /* deep navy: the hero button */
+  --navy-hover: #213459;
+  --white: #FFFFFF;
   --ink: #5B3226;        /* body text */
   --black: #141414;
   --rule: rgba(105, 32, 15, 0.2);
@@ -73,15 +76,15 @@
   color-scheme: light;
 }
 /* DRAFT font options, picked in the draft tools bar. Each sets the headline font (--display) and the text font (--sans).
-   --c is measured by the page itself; --cap and --gd were measured from each font's letters. */
-:root[data-font="spacemono"] { --display: "Space Mono", ui-monospace, monospace; --sans: "Space Grotesk", "Helvetica Neue", Arial, sans-serif; --lh: 1; --cap: 0.73; --gd: 0.21; }
-:root[data-font="dmmono"]    { --display: "DM Mono", ui-monospace, monospace; --sans: "DM Sans", "Helvetica Neue", Arial, sans-serif; --lh: 1; --cap: 0.72; --gd: 0.24; }
-:root[data-font="plexmono"]  { --display: "IBM Plex Mono", ui-monospace, monospace; --sans: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif; --lh: 1; --cap: 0.72; --gd: 0.21; }
-:root[data-font="azeret"]    { --display: "Azeret Mono", ui-monospace, monospace; --sans: "Outfit", "Helvetica Neue", Arial, sans-serif; --lh: 1; --cap: 0.72; --gd: 0.20; }
-:root[data-font="jost"]      { --display: "Jost", Futura, "Century Gothic", sans-serif; --sans: "Jost", Futura, "Century Gothic", sans-serif; --lh: 0.95; --cap: 0.72; --gd: 0.23; }
-:root[data-font="syne"]      { --display: "Syne", "Helvetica Neue", Arial, sans-serif; --sans: "Manrope", "Helvetica Neue", Arial, sans-serif; --lh: 0.95; --cap: 0.67; --gd: 0.21; }
-:root[data-font="majormono"] { --display: "Major Mono Display", ui-monospace, monospace; --sans: "DM Mono", ui-monospace, monospace; --lh: 1; --cap: 0.73; --gd: 0.05; }
-:root[data-font="xanhmono"]  { --display: "Xanh Mono", ui-monospace, monospace; --sans: "DM Sans", "Helvetica Neue", Arial, sans-serif; --lh: 0.95; --cap: 0.76; --gd: 0.22; }
+   --c is measured by the page itself; --cap was measured from each font's letters, --gd is a typical descender depth. */
+:root[data-font="geist"]    { --display: "Geist", "Helvetica Neue", Arial, sans-serif; --sans: "Geist", "Helvetica Neue", Arial, sans-serif; --lh: 1; --cap: 0.72; --gd: 0.24; }
+:root[data-font="host"]     { --display: "Host Grotesk", "Helvetica Neue", Arial, sans-serif; --sans: "Host Grotesk", "Helvetica Neue", Arial, sans-serif; --lh: 1; --cap: 0.71; --gd: 0.24; }
+:root[data-font="albert"]   { --display: "Albert Sans", "Helvetica Neue", Arial, sans-serif; --sans: "Albert Sans", "Helvetica Neue", Arial, sans-serif; --lh: 1; --cap: 0.71; --gd: 0.24; }
+:root[data-font="outfit"]   { --display: "Outfit", "Helvetica Neue", Arial, sans-serif; --sans: "Outfit", "Helvetica Neue", Arial, sans-serif; --lh: 1; --cap: 0.70; --gd: 0.24; }
+:root[data-font="urbanist"] { --display: "Urbanist", "Helvetica Neue", Arial, sans-serif; --sans: "Urbanist", "Helvetica Neue", Arial, sans-serif; --lh: 1; --cap: 0.71; --gd: 0.24; }
+:root[data-font="sora"]     { --display: "Sora", "Helvetica Neue", Arial, sans-serif; --sans: "Sora", "Helvetica Neue", Arial, sans-serif; --lh: 1.02; --cap: 0.73; --gd: 0.24; }
+:root[data-font="manrope"]  { --display: "Manrope", "Helvetica Neue", Arial, sans-serif; --sans: "Manrope", "Helvetica Neue", Arial, sans-serif; --lh: 1; --cap: 0.73; --gd: 0.24; }
+:root[data-font="jost"]     { --display: "Jost", Futura, "Century Gothic", sans-serif; --sans: "Jost", Futura, "Century Gothic", sans-serif; --lh: 0.95; --cap: 0.72; --gd: 0.23; }
 
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
@@ -178,19 +181,17 @@ h1 .it { font-style: italic; font-weight: 500; padding-left: 0.6em; color: var(-
 h1 .big { font-weight: 800; }
 h1 .bl { display: inline-block; width: 0; height: 0; }   /* zero-size marker: its top is the line's baseline */
 h1, h2, h3, .num, .cost .big { font-synthesis: none; }   /* never fake a bold or italic a font doesn't have */
-/* DRAFT font options: spacing and weights per font */
+/* DRAFT font options: spacing and weights per font. The thin ones keep the whole headline light, like Squarespace's,
+   with the last line a little heavier. */
 :root[data-font] h1 { font-variation-settings: normal; }
 :root[data-font] h1 .it { font-weight: 400; }
 :root[data-font] h1 .big { font-weight: 700; }
-:root[data-font="spacemono"] h1, :root[data-font="dmmono"] h1, :root[data-font="azeret"] h1 { letter-spacing: -0.06em; }
-:root[data-font="plexmono"] h1 { letter-spacing: -0.05em; }
-:root[data-font="majormono"] h1 { letter-spacing: -0.04em; }
-:root[data-font="jost"] h1, :root[data-font="syne"] h1, :root[data-font="xanhmono"] h1 { letter-spacing: -0.03em; }
-:root[data-font="dmmono"] h1 .big { font-weight: 500; }
-:root[data-font="azeret"] h1 .big, :root[data-font="syne"] h1 .big { font-weight: 800; }
-:root[data-font="majormono"] h1 .big, :root[data-font="xanhmono"] h1 .big { font-weight: 400; }
-/* monospace spaces are as wide as a letter, so close up the gap in "Get your" */
-:root:is([data-font="spacemono"], [data-font="dmmono"], [data-font="plexmono"], [data-font="azeret"], [data-font="majormono"], [data-font="xanhmono"]) h1 { word-spacing: -0.25em; }
+:root:is([data-font="geist"], [data-font="host"], [data-font="albert"], [data-font="outfit"], [data-font="urbanist"], [data-font="sora"], [data-font="manrope"]) h1 { font-weight: 300; letter-spacing: -0.04em; }
+:root:is([data-font="geist"], [data-font="host"], [data-font="albert"], [data-font="outfit"], [data-font="urbanist"], [data-font="sora"], [data-font="manrope"]) h1 .it { font-weight: 300; }
+:root:is([data-font="geist"], [data-font="host"], [data-font="albert"], [data-font="outfit"], [data-font="urbanist"], [data-font="sora"], [data-font="manrope"]) h1 .big { font-weight: 500; }
+:root:is([data-font="geist"], [data-font="host"], [data-font="albert"], [data-font="outfit"], [data-font="urbanist"], [data-font="sora"], [data-font="manrope"]) h2 { font-weight: 400; letter-spacing: -0.035em; }
+:root[data-font="sora"] h1 { letter-spacing: -0.05em; }
+:root[data-font="jost"] h1 { letter-spacing: -0.03em; }
 
 /* The three-line story. On wide screens it sits beside the last headline line (placed by the script). */
 .story { display: grid; gap: 2px; font-size: 1.06rem; line-height: 1.5; color: var(--barn); }
@@ -199,6 +200,13 @@ h1, h2, h3, .num, .cost .big { font-synthesis: none; }   /* never fake a bold or
 .hero.placed .story { position: absolute; white-space: nowrap; }
 
 .cta { display: grid; justify-items: start; gap: 12px; }
+/* Hero button: deep navy with thick white lettering in normal sentence case */
+.hero .cta .box {
+  background: var(--navy); color: var(--white);
+  font: 600 1.02rem/1 var(--sans); letter-spacing: 0; text-transform: none;
+  box-shadow: 0 16px 30px -18px rgba(19, 32, 59, 0.75);
+}
+.hero .cta .box:hover { background: var(--navy-hover); }
 /* Curved arrow, the same barn red as the header */
 .arrow { position: absolute; left: 0; top: 0; z-index: 3; width: 1px; height: 1px; overflow: visible; pointer-events: none; color: var(--barn); transform-origin: 0 0; }
 .arrow path { fill: none; stroke: currentColor; stroke-linecap: round; stroke-linejoin: round; }
@@ -316,6 +324,7 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
 @media (max-width: 1000px) {
   .qa { grid-template-columns: minmax(0, 1fr); }
   .cta .box { font-size: 0.8rem; padding: 0 22px; }
+  .hero .cta .box { font-size: 0.95rem; }
 }
 @media (max-width: 860px) {
   /* header: logo + button on top, links in a row underneath */
@@ -331,6 +340,7 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
   .main, .video, .stage { position: relative; inset: auto; top: auto; left: auto; right: auto; }
   .main { gap: 24px; margin-bottom: 36px; }          /* room for the arrow down to the video card */
   .cta .box { font-size: 0.8rem; padding: 0 20px; max-width: 100%; }
+  .hero .cta .box { font-size: 0.95rem; padding: 0 22px; }
   .arr { transform: rotate(90deg); }                 /* points down at the video card */
   .box:hover .arr { transform: rotate(90deg) translateX(3px); }
   .video { height: auto; width: min(300px, 78vw); justify-self: center; }
@@ -375,11 +385,12 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
 .lb-lock { overflow: hidden; }
 
 /* ---------- Motion: the hero fades in from a slight blur; sentences below pop up a touch as they scroll in ---------- */
-@keyframes blurIn { from { opacity: 0; filter: blur(5px); } to { opacity: 1; filter: none; } }
-@keyframes popUp { from { transform: translateY(8px); } to { transform: none; } }
-.anim:not(.anim-go) .nav :is(.logo, .links a, .box), .anim:not(.anim-go) .hero :is(h1, .story, .cta, .arrow) { opacity: 0; }   /* a moment, until the layout is ready */
-.anim-go .nav :is(.logo, .links a, .box), .anim-go .hero :is(h1, .story, .cta, .arrow) { animation: blurIn 0.4s ease-out backwards; }
-:root.anim .pop { animation: popUp 0.3s cubic-bezier(0.2, 0.7, 0.3, 1) backwards; }
+@keyframes blurIn { from { opacity: 0; filter: blur(6px); } to { opacity: 1; filter: none; } }
+@keyframes popUp { from { transform: translateY(10px); } to { transform: none; } }
+.anim:not(.anim-go) :is(.nav :is(.logo, .links a, .box), .hero :is(h1, .story, .cta, .arrow, .placeholder, .play-btn),
+  main section:not(.hero) :is(h2, h3, p, dt, dd, .num, .tag, .timeline li, .box, figcaption, .screen), .foot .wrap > *) { opacity: 0; }   /* a moment, until the layout is ready */
+.anim-go .nav :is(.logo, .links a, .box), .anim-go .hero :is(h1, .story, .cta, .arrow, .placeholder, .play-btn), .anim-go .pre { animation: blurIn 0.65s ease-out backwards; }
+:root.anim .pop { animation: popUp 0.45s cubic-bezier(0.2, 0.7, 0.3, 1) backwards; }
 @media (prefers-reduced-motion: reduce) { .lb-backdrop, .lb-close, .lightbox .frame { transition: none; } }
 
 /* ---------- DRAFT TOOLS: font picker + drag to move and resize. Delete this block, the tools markup and the tools script before launch. ---------- */
@@ -404,14 +415,14 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
 .tools .row { display: flex; flex-wrap: wrap; gap: 6px; }
 .tools .row button { background: transparent; border: 1px solid rgba(105, 32, 15, 0.28); color: #2B1A14; padding: 5px 8px; cursor: pointer; font: 500 0.92rem/1.2 "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif; border-radius: 0; }
 .tools .row button[aria-pressed="true"] { background: var(--barn); color: var(--cream); border-color: var(--barn); }
-.tools .row [data-font-v="spacemono"] { font-family: "Space Mono", monospace; }
-.tools .row [data-font-v="dmmono"] { font-family: "DM Mono", monospace; }
-.tools .row [data-font-v="plexmono"] { font-family: "IBM Plex Mono", monospace; }
-.tools .row [data-font-v="azeret"] { font-family: "Azeret Mono", monospace; }
+.tools .row [data-font-v="geist"] { font-family: "Geist", sans-serif; font-weight: 300; }
+.tools .row [data-font-v="host"] { font-family: "Host Grotesk", sans-serif; font-weight: 300; }
+.tools .row [data-font-v="albert"] { font-family: "Albert Sans", sans-serif; font-weight: 300; }
+.tools .row [data-font-v="outfit"] { font-family: "Outfit", sans-serif; font-weight: 300; }
+.tools .row [data-font-v="urbanist"] { font-family: "Urbanist", sans-serif; font-weight: 300; }
+.tools .row [data-font-v="sora"] { font-family: "Sora", sans-serif; font-weight: 300; }
+.tools .row [data-font-v="manrope"] { font-family: "Manrope", sans-serif; font-weight: 300; }
 .tools .row [data-font-v="jost"] { font-family: "Jost", sans-serif; }
-.tools .row [data-font-v="syne"] { font-family: "Syne", sans-serif; font-weight: 700; }
-.tools .row [data-font-v="majormono"] { font-family: "Major Mono Display", monospace; }
-.tools .row [data-font-v="xanhmono"] { font-family: "Xanh Mono", monospace; }
 .tools .row [data-font-v="bodoni"] { font-family: "Bodoni Moda", serif; }
 .tools .readout { margin: 0; color: #5A3B30; font-size: 0.8rem; font-variant-numeric: tabular-nums; }
 .tools .hint { margin: 0; color: #2B1A14; font-size: 0.8rem; font-weight: 600; }
@@ -615,14 +626,14 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
     <div class="tools-fonts">
       <h4>Fonts</h4>
       <div class="row" role="group" aria-label="Fonts">
-        <button type="button" data-font-v="spacemono" aria-pressed="true">Space Mono</button>
-        <button type="button" data-font-v="dmmono" aria-pressed="false">DM Mono</button>
-        <button type="button" data-font-v="plexmono" aria-pressed="false">Plex Mono</button>
-        <button type="button" data-font-v="azeret" aria-pressed="false">Azeret Mono</button>
+        <button type="button" data-font-v="geist" aria-pressed="true">Geist</button>
+        <button type="button" data-font-v="host" aria-pressed="false">Host Grotesk</button>
+        <button type="button" data-font-v="albert" aria-pressed="false">Albert Sans</button>
+        <button type="button" data-font-v="outfit" aria-pressed="false">Outfit</button>
+        <button type="button" data-font-v="urbanist" aria-pressed="false">Urbanist</button>
+        <button type="button" data-font-v="sora" aria-pressed="false">Sora</button>
+        <button type="button" data-font-v="manrope" aria-pressed="false">Manrope</button>
         <button type="button" data-font-v="jost" aria-pressed="false">Jost</button>
-        <button type="button" data-font-v="syne" aria-pressed="false">Syne</button>
-        <button type="button" data-font-v="majormono" aria-pressed="false">Major Mono</button>
-        <button type="button" data-font-v="xanhmono" aria-pressed="false">Xanh Mono</button>
         <button type="button" data-font-v="bodoni" aria-pressed="false">Original (Bodoni)</button>
       </div>
     </div>
@@ -923,11 +934,11 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
         if (fonts.indexOf(v) === -1) v = fonts[0];
         if (v === 'bodoni') root.removeAttribute('data-font'); else root.setAttribute('data-font', v);
         fontBtns.forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.fontV === v ? 'true' : 'false'); });
-        try { localStorage.setItem('reliquo-font-v2', v); } catch (e) {}
+        try { localStorage.setItem('reliquo-font-v3', v); } catch (e) {}
       }
       fontBtns.forEach(function (b) { b.addEventListener('click', function () { pickFont(b.dataset.fontV); }); });
       var savedFont = fonts[0];
-      try { savedFont = localStorage.getItem('reliquo-font-v2') || fonts[0]; } catch (e) {}
+      try { savedFont = localStorage.getItem('reliquo-font-v3') || fonts[0]; } catch (e) {}
       pickFont(savedFont);
       new MutationObserver(function () { layout(); }).observe(root, { attributes: true, attributeFilter: ['data-font'] });
 
@@ -1108,10 +1119,13 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
     if (document.fonts && document.fonts.addEventListener) document.fonts.addEventListener('loadingdone', layout);
     [300, 1000, 2500].forEach(function (t) { setTimeout(layout, t); });   // in case a font arrives late
 
-    // start the hero fade once the fonts and the layout are ready (at most 0.7s), so the fade is actually seen
-    function heroIn() { if (root.classList.contains('anim-go')) return; layout(); root.classList.add('anim-go'); }
-    if (document.fonts && document.fonts.ready) Promise.race([document.fonts.ready, new Promise(function (r) { setTimeout(r, 700); })]).then(heroIn);
-    else heroIn();
+    // start the hero fade once the fonts and the layout are ready, so the fade is actually seen
+    var fadeOnScreen = function () {};      // set below: text already on screen fades in with the hero
+    function heroIn() { if (root.classList.contains('anim-go')) return; layout(); fadeOnScreen(); root.classList.add('anim-go'); }
+    // wait for the fonts and the page load (a reload partway down jumps to its spot on load), but never more than 0.9s
+    var loaded = new Promise(function (r) { if (document.readyState === 'complete') r(); else window.addEventListener('load', r); });
+    var fontsReady = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
+    Promise.race([Promise.all([fontsReady, loaded]), new Promise(function (r) { setTimeout(r, 900); })]).then(function () { requestAnimationFrame(heroIn); });
 
     /* ---------- Sentences pop up a touch as they scroll into view (only while scrolling down) ---------- */
     (function () {
@@ -1119,8 +1133,14 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
       var picked = document.querySelectorAll('main section:not(.hero) :is(h2, h3, p, dt, dd, .num, .tag, .timeline li, .box, figcaption, .screen), .foot .wrap > *, .hero :is(h1, .story, .cta)');
       var all = new Set(picked), els = [];
       picked.forEach(function (el) { for (var a = el.parentElement; a; a = a.parentElement) if (all.has(a)) return; els.push(el); });
-      els.forEach(function (el) { if (el.getBoundingClientRect().top < window.innerHeight) el.dataset.popped = '1'; });   // already on screen when the page opens
+      fadeOnScreen = function () {                   // on screen when the fade starts (also after a reload partway down): fades in with the hero
+        els.forEach(function (el) {
+          var r = el.getBoundingClientRect();
+          if (r.top < window.innerHeight && r.bottom > 0) { el.dataset.popped = '1'; if (!el.closest('.hero')) el.classList.add('pre'); }
+        });
+      };
       var io = new IntersectionObserver(function (entries) {
+        if (!root.classList.contains('anim-go')) return;   // nothing pops before the page has faded in
         entries.forEach(function (en) {
           var el = en.target, fromBelow = en.boundingClientRect.top > (en.rootBounds ? en.rootBounds.top : 0);
           if (en.isIntersecting) {
