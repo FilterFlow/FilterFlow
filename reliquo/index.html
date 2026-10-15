@@ -21,9 +21,18 @@
   };
 </script>
 
+<script>
+  /* DRAFT: use the font picked in the draft tools (default Space Mono) before the page draws */
+  (function () {
+    var v = 'spacemono';
+    try { v = localStorage.getItem('reliquo-font-v2') || v; } catch (e) {}
+    if (v !== 'bodoni') document.documentElement.setAttribute('data-font', v);
+  })();
+</script>
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Libre+Bodoni:ital,wght@0,400..700;1,400..700&family=DM+Serif+Display:ital@0;1&family=Instrument+Serif:ital@0;1&family=Fraunces:ital,opsz,wght,SOFT,WONK@0,9..144,300..800,0..100,0..1;1,9..144,300..800,0..100,0..1&family=Newsreader:ital,opsz,wght@0,6..72,300..800;1,6..72,300..800&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=Hanken+Grotesk:wght@400;500;600;700&family=Quicksand:wght@700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400..900;1,6..96,400..900&family=Hanken+Grotesk:wght@400;500;600;700&family=Quicksand:wght@700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&family=Space+Grotesk:wght@300..700&family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Azeret+Mono:ital,wght@0,100..900;1,100..900&family=Outfit:wght@100..900&family=Jost:ital,wght@0,100..900;1,100..900&family=Syne:wght@400..800&family=Manrope:wght@200..800&family=Major+Mono+Display&family=Xanh+Mono:ital@0;1&display=swap">
 <style>
 /*
   Layout: the peach pedestal hero (headline left, vertical video card between the text and the tall pillar),
@@ -55,14 +64,16 @@
   --c: 4.26; --lh: 0.92; --cap: 0.77; --gd: 0.27;
   color-scheme: light;
 }
-/* DRAFT font options, picked in the draft tools panel (bottom right). --c is measured by the page itself;
-   --cap and --gd were measured from each font's letters. */
-:root[data-font="librebodoni"] { --display: "Libre Bodoni", "Bodoni 72", Georgia, serif; --lh: 0.95; --cap: 0.77; --gd: 0.32; }
-:root[data-font="dmserif"]     { --display: "DM Serif Display", Georgia, serif; --lh: 0.95; --cap: 0.69; --gd: 0.24; }
-:root[data-font="instrument"]  { --display: "Instrument Serif", Georgia, serif; --lh: 0.92; --cap: 0.74; --gd: 0.22; }
-:root[data-font="fraunces"]    { --display: "Fraunces", Georgia, serif; --lh: 0.95; --cap: 0.72; --gd: 0.25; }
-:root[data-font="newsreader"]  { --display: "Newsreader", Georgia, serif; --lh: 0.95; --cap: 0.75; --gd: 0.23; }
-:root[data-font="garamond"]    { --display: "EB Garamond", Garamond, Georgia, serif; --lh: 0.95; --cap: 0.68; --gd: 0.29; }
+/* DRAFT font options, picked in the draft tools bar. Each sets the headline font (--display) and the text font (--sans).
+   --c is measured by the page itself; --cap and --gd were measured from each font's letters. */
+:root[data-font="spacemono"] { --display: "Space Mono", ui-monospace, monospace; --sans: "Space Grotesk", "Helvetica Neue", Arial, sans-serif; --lh: 1; --cap: 0.73; --gd: 0.21; }
+:root[data-font="dmmono"]    { --display: "DM Mono", ui-monospace, monospace; --sans: "DM Sans", "Helvetica Neue", Arial, sans-serif; --lh: 1; --cap: 0.72; --gd: 0.24; }
+:root[data-font="plexmono"]  { --display: "IBM Plex Mono", ui-monospace, monospace; --sans: "IBM Plex Sans", "Helvetica Neue", Arial, sans-serif; --lh: 1; --cap: 0.72; --gd: 0.21; }
+:root[data-font="azeret"]    { --display: "Azeret Mono", ui-monospace, monospace; --sans: "Outfit", "Helvetica Neue", Arial, sans-serif; --lh: 1; --cap: 0.72; --gd: 0.20; }
+:root[data-font="jost"]      { --display: "Jost", Futura, "Century Gothic", sans-serif; --sans: "Jost", Futura, "Century Gothic", sans-serif; --lh: 0.95; --cap: 0.72; --gd: 0.23; }
+:root[data-font="syne"]      { --display: "Syne", "Helvetica Neue", Arial, sans-serif; --sans: "Manrope", "Helvetica Neue", Arial, sans-serif; --lh: 0.95; --cap: 0.67; --gd: 0.21; }
+:root[data-font="majormono"] { --display: "Major Mono Display", ui-monospace, monospace; --sans: "DM Mono", ui-monospace, monospace; --lh: 1; --cap: 0.73; --gd: 0.05; }
+:root[data-font="xanhmono"]  { --display: "Xanh Mono", ui-monospace, monospace; --sans: "DM Sans", "Helvetica Neue", Arial, sans-serif; --lh: 0.95; --cap: 0.76; --gd: 0.22; }
 
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
@@ -163,15 +174,15 @@ h1, h2, h3, .num, .cost .big { font-synthesis: none; }   /* never fake a bold or
 :root[data-font] h1 { font-variation-settings: normal; }
 :root[data-font] h1 .it { font-weight: 400; }
 :root[data-font] h1 .big { font-weight: 700; }
-:root[data-font="librebodoni"] h1 { letter-spacing: -0.02em; }
-:root[data-font="dmserif"] h1 { letter-spacing: -0.02em; }
-:root[data-font="instrument"] h1 { letter-spacing: -0.01em; }
-:root[data-font="dmserif"] h1 .big, :root[data-font="instrument"] h1 .big,
-:root[data-font="dmserif"] :is(h2, h3), :root[data-font="instrument"] :is(h2, h3) { font-weight: 400; }
-:root[data-font="fraunces"] h1 { letter-spacing: -0.015em; font-variation-settings: "opsz" 96, "SOFT" 50, "WONK" 0; }
-:root[data-font="fraunces"] :is(h2, h3, .num) { font-variation-settings: "opsz" 28, "SOFT" 50, "WONK" 0; }
-:root[data-font="newsreader"] h1 { letter-spacing: -0.03em; font-variation-settings: "opsz" 72; }
-:root[data-font="garamond"] h1 { letter-spacing: -0.015em; }
+:root[data-font="spacemono"] h1, :root[data-font="dmmono"] h1, :root[data-font="azeret"] h1 { letter-spacing: -0.06em; }
+:root[data-font="plexmono"] h1 { letter-spacing: -0.05em; }
+:root[data-font="majormono"] h1 { letter-spacing: -0.04em; }
+:root[data-font="jost"] h1, :root[data-font="syne"] h1, :root[data-font="xanhmono"] h1 { letter-spacing: -0.03em; }
+:root[data-font="dmmono"] h1 .big { font-weight: 500; }
+:root[data-font="azeret"] h1 .big, :root[data-font="syne"] h1 .big { font-weight: 800; }
+:root[data-font="majormono"] h1 .big, :root[data-font="xanhmono"] h1 .big { font-weight: 400; }
+/* monospace spaces are as wide as a letter, so close up the gap in "Get your" */
+:root:is([data-font="spacemono"], [data-font="dmmono"], [data-font="plexmono"], [data-font="azeret"], [data-font="majormono"], [data-font="xanhmono"]) h1 { word-spacing: -0.25em; }
 
 /* The three-line story. On wide screens it sits beside the last headline line (placed by the script). */
 .story { display: grid; gap: 2px; font-size: 1.06rem; line-height: 1.5; color: var(--barn); }
@@ -336,7 +347,7 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
   background: #FFFFFF; color: #2B1A14;
   border: 1px solid rgba(105, 32, 15, 0.18); box-shadow: 0 18px 40px -18px rgba(40, 15, 8, 0.45);
   padding: 8px 14px; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 20px;
-  font: 500 0.86rem/1.3 var(--sans);
+  font: 500 0.86rem/1.3 "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif;   /* stays the same whichever font is picked */
 }
 .tools-head { display: flex; align-items: center; gap: 12px; }
 .tools-head b { font-weight: 700; }
@@ -345,22 +356,24 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
 .tools.closed { left: auto; }
 .tools.closed .tools-body, .tools.closed .tools-head b { display: none; }
 .tools.resizing .tools-fonts:not(.tools-sizes) { display: none; }          /* compact while resizing */
-.tools h4 { margin: 0; font: 600 0.7rem/1 var(--sans); letter-spacing: 0.08em; text-transform: uppercase; color: #7A5A4E; }
+.tools h4 { margin: 0; font: 600 0.7rem/1 "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif; letter-spacing: 0.08em; text-transform: uppercase; color: #7A5A4E; }
 .tools .link { background: none; border: 0; padding: 4px 0; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; color: #5A3B30; font: inherit; }
 .tools .row { display: flex; flex-wrap: wrap; gap: 6px; }
-.tools .row button { background: transparent; border: 1px solid rgba(105, 32, 15, 0.28); color: #2B1A14; padding: 5px 8px; cursor: pointer; font: 500 0.92rem/1.2 var(--sans); border-radius: 0; }
+.tools .row button { background: transparent; border: 1px solid rgba(105, 32, 15, 0.28); color: #2B1A14; padding: 5px 8px; cursor: pointer; font: 500 0.92rem/1.2 "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif; border-radius: 0; }
 .tools .row button[aria-pressed="true"] { background: var(--barn); color: var(--cream); border-color: var(--barn); }
+.tools .row [data-font-v="spacemono"] { font-family: "Space Mono", monospace; }
+.tools .row [data-font-v="dmmono"] { font-family: "DM Mono", monospace; }
+.tools .row [data-font-v="plexmono"] { font-family: "IBM Plex Mono", monospace; }
+.tools .row [data-font-v="azeret"] { font-family: "Azeret Mono", monospace; }
+.tools .row [data-font-v="jost"] { font-family: "Jost", sans-serif; }
+.tools .row [data-font-v="syne"] { font-family: "Syne", sans-serif; font-weight: 700; }
+.tools .row [data-font-v="majormono"] { font-family: "Major Mono Display", monospace; }
+.tools .row [data-font-v="xanhmono"] { font-family: "Xanh Mono", monospace; }
 .tools .row [data-font-v="bodoni"] { font-family: "Bodoni Moda", serif; }
-.tools .row [data-font-v="librebodoni"] { font-family: "Libre Bodoni", serif; }
-.tools .row [data-font-v="dmserif"] { font-family: "DM Serif Display", serif; }
-.tools .row [data-font-v="instrument"] { font-family: "Instrument Serif", serif; font-size: 1.05rem; }
-.tools .row [data-font-v="fraunces"] { font-family: "Fraunces", serif; }
-.tools .row [data-font-v="newsreader"] { font-family: "Newsreader", serif; }
-.tools .row [data-font-v="garamond"] { font-family: "EB Garamond", serif; font-size: 1.02rem; }
 .tools .readout { margin: 0; color: #5A3B30; font-size: 0.8rem; font-variant-numeric: tabular-nums; }
 .tools .hint { margin: 0; color: #2B1A14; font-size: 0.8rem; font-weight: 600; }
 .tools:not(.resizing) :is(.readout, .hint) { display: none; }   /* tips and numbers show while you edit */
-@media (max-width: 1320px) { .tools h4 { display: none; } }            /* keep the bar to one row on laptops */
+@media (max-width: 1320px) { .tools h4 { display: none; } .tools .row button { font-size: 0.8rem; padding: 4px 6px; } }   /* keep the bar to one row on laptops */
 @media (max-width: 1180px) { .tools-head b { display: none; } .tools, .tools-body { column-gap: 12px; } }
 .rz-layer { position: absolute; left: 0; top: 0; width: 0; height: 0; z-index: 45; }
 .rz-box { position: absolute; outline: 1.5px dashed rgba(105, 32, 15, 0.6); outline-offset: 4px; cursor: move; touch-action: none; }
@@ -371,7 +384,7 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
   cursor: nwse-resize; touch-action: none;
 }
 .rz-handle:focus-visible { outline: 2px solid var(--barn); outline-offset: 3px; }
-.rz-tag { position: absolute; padding: 4px 7px; background: var(--barn); color: var(--cream); font: 600 0.74rem/1 var(--sans); white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 0.15s; }
+.rz-tag { position: absolute; padding: 4px 7px; background: var(--barn); color: var(--cream); font: 600 0.74rem/1 "Hanken Grotesk", "Helvetica Neue", Arial, sans-serif; white-space: nowrap; pointer-events: none; opacity: 0; transition: opacity 0.15s; }
 .rz-handle:hover + .rz-tag, .rz-handle:focus-visible + .rz-tag, .rz-tag.on, .rz-tag.show { opacity: 1; }
 .rz-layer.dragging, .rz-layer.dragging * { cursor: nwse-resize; }
 .rz-layer.moving, .rz-layer.moving * { cursor: move; }
@@ -555,15 +568,17 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
   <div class="tools-head"><b>Draft tools</b><button type="button" class="link" id="tools-toggle">Hide</button></div>
   <div class="tools-body">
     <div class="tools-fonts">
-      <h4>Headline font</h4>
-      <div class="row" role="group" aria-label="Headline font">
-        <button type="button" data-font-v="bodoni" aria-pressed="true">Current (Bodoni)</button>
-        <button type="button" data-font-v="librebodoni" aria-pressed="false">Libre Bodoni</button>
-        <button type="button" data-font-v="dmserif" aria-pressed="false">DM Serif</button>
-        <button type="button" data-font-v="instrument" aria-pressed="false">Instrument Serif</button>
-        <button type="button" data-font-v="fraunces" aria-pressed="false">Fraunces</button>
-        <button type="button" data-font-v="newsreader" aria-pressed="false">Newsreader</button>
-        <button type="button" data-font-v="garamond" aria-pressed="false">EB Garamond</button>
+      <h4>Fonts</h4>
+      <div class="row" role="group" aria-label="Fonts">
+        <button type="button" data-font-v="spacemono" aria-pressed="true">Space Mono</button>
+        <button type="button" data-font-v="dmmono" aria-pressed="false">DM Mono</button>
+        <button type="button" data-font-v="plexmono" aria-pressed="false">Plex Mono</button>
+        <button type="button" data-font-v="azeret" aria-pressed="false">Azeret Mono</button>
+        <button type="button" data-font-v="jost" aria-pressed="false">Jost</button>
+        <button type="button" data-font-v="syne" aria-pressed="false">Syne</button>
+        <button type="button" data-font-v="majormono" aria-pressed="false">Major Mono</button>
+        <button type="button" data-font-v="xanhmono" aria-pressed="false">Xanh Mono</button>
+        <button type="button" data-font-v="bodoni" aria-pressed="false">Original (Bodoni)</button>
       </div>
     </div>
     <div class="tools-fonts tools-sizes">
@@ -776,14 +791,14 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
       var fontBtns = tools.querySelectorAll('[data-font-v]');
       var fonts = Array.prototype.map.call(fontBtns, function (b) { return b.dataset.fontV; });
       function pickFont(v) {
-        if (fonts.indexOf(v) === -1) v = 'bodoni';
+        if (fonts.indexOf(v) === -1) v = fonts[0];
         if (v === 'bodoni') root.removeAttribute('data-font'); else root.setAttribute('data-font', v);
         fontBtns.forEach(function (b) { b.setAttribute('aria-pressed', b.dataset.fontV === v ? 'true' : 'false'); });
-        try { localStorage.setItem('reliquo-headline-font', v); } catch (e) {}
+        try { localStorage.setItem('reliquo-font-v2', v); } catch (e) {}
       }
       fontBtns.forEach(function (b) { b.addEventListener('click', function () { pickFont(b.dataset.fontV); }); });
-      var savedFont = 'bodoni';
-      try { savedFont = localStorage.getItem('reliquo-headline-font') || 'bodoni'; } catch (e) {}
+      var savedFont = fonts[0];
+      try { savedFont = localStorage.getItem('reliquo-font-v2') || fonts[0]; } catch (e) {}
       pickFont(savedFont);
       new MutationObserver(function () { layout(); }).observe(root, { attributes: true, attributeFilter: ['data-font'] });
 
