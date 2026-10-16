@@ -325,13 +325,19 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
 }
 .shot img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .shot .ph { position: absolute; left: 14px; bottom: 12px; font: 500 0.8rem/1 var(--sans); color: #A3ABA8; }
-/* the picture under the mouse grows so it's easier to see, with the light blue ring; the one you clicked stays big and its row stops */
+/* the picture under the mouse grows so it's easier to see, with the light blue ring, and its row stops; the others slide apart
+   by half the growth plus a little, so nothing overlaps. The one you clicked stays big until you click it again. */
+.shot { --push: calc((var(--zoom) - 1) * var(--shot) / 2 + 12px); }
 .shot.hov, .shot.on { z-index: 2; transform: scale(var(--zoom)); box-shadow: 0 0 0 3px var(--sky), 0 22px 40px -18px rgba(0, 0, 0, 0.7); }
+.belt-view.hovering .shot.on:not(.hov) { box-shadow: 0 0 0 3px var(--sky); }   /* while you hover another one, it shrinks back and moves aside (below), keeping its ring */
+.shot.pl { transform: translateX(calc(var(--push) * -1)); }
+.shot.pr { transform: translateX(var(--push)); }
 .band.dark .shot:focus-visible { outline: 3px solid var(--sky); outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) {   /* no sliding: the rows scroll sideways by hand instead */
   .belt-view { overflow-x: auto; -webkit-mask-image: none; mask-image: none; padding-inline: var(--side); }
   .shot { transition: none; }
-  .shot.on, .shot:hover { transform: none; box-shadow: 0 0 0 3px var(--sky); }
+  .shot.on, .shot:hover, .shot.pl, .shot.pr { transform: none; }
+  .shot.on, .shot:hover { box-shadow: 0 0 0 3px var(--sky); }
 }
 @media (max-width: 860px) { .belts { --shot: clamp(200px, 62vw, 280px); } }
 
@@ -1369,20 +1375,32 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
     })();
 
     /* ---------- Picture rows: each slides across on its own and loops forever.
-       Clicking a picture stops its row (the picture lifts and gets a blue ring); clicking it again starts the row. ---------- */
+       Hovering a picture stops its row; the picture grows (light blue ring) and the others slide apart so nothing overlaps.
+       Clicking a picture keeps it that way after the mouse leaves; clicking it again starts the row. ---------- */
     (function () {
       var SPEED = 40;                                 // pixels per second
       var rows = [], running = false, last = 0, seen = true;
       var ptr = null;                                 // where the mouse is: the picture under it grows, even while the row slides past
+      function spread(row) {                          // pictures left of the big one move left, pictures right of it move right
+        var spot = row.hov || row.on, shots = Array.prototype.slice.call((row.track || row.set).querySelectorAll('.shot'));
+        var at = spot ? shots.indexOf(spot) : -1;
+        shots.forEach(function (sh, k) { sh.classList.toggle('pl', at >= 0 && k < at); sh.classList.toggle('pr', at >= 0 && k > at); });
+        row.view.classList.toggle('hovering', !!row.hov);
+      }
       function hover(row, shot) {
+        shot = shot || null;
         if (row.hov === shot) return;
         if (row.hov) row.hov.classList.remove('hov');
-        row.hov = shot || null;
+        row.hov = shot;
         if (shot) shot.classList.add('hov');
+        clearTimeout(row.resume);
+        if (shot) row.aim = 0;                        // the row stops while you look at a picture...
+        else if (!row.on) row.resume = setTimeout(function () { if (!row.hov && !row.on) row.aim = 1; }, 350);   // ...and starts again a moment after you move off
+        spread(row);
       }
       document.querySelectorAll('.belt').forEach(function (belt) {
         var view = belt.querySelector('.belt-view'), set = view.querySelector('.belt-set');
-        var row = { view: view, set: set, track: null, way: belt.dataset.way === 'right' ? -1 : 1, x: 0, speed: 1, aim: 1, period: 0, on: null, hov: null };
+        var row = { view: view, set: set, track: null, way: belt.dataset.way === 'right' ? -1 : 1, x: 0, speed: 1, aim: 1, period: 0, on: null, hov: null, resume: 0 };
         rows.push(row);
         view.addEventListener('pointermove', function (e) { if (e.pointerType === 'mouse') ptr = { x: e.clientX, y: e.clientY, row: row }; });
         view.addEventListener('pointerleave', function () { if (ptr && ptr.row === row) ptr = null; hover(row, null); });
@@ -1390,7 +1408,8 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
           if (row.on) { row.on.classList.remove('on'); row.on.setAttribute('aria-pressed', 'false'); }
           row.on = shot;
           if (shot) { shot.classList.add('on'); shot.setAttribute('aria-pressed', 'true'); }
-          row.aim = shot ? 0 : 1;                       // eases to a stop, or back up to speed
+          row.aim = shot || row.hov ? 0 : 1;            // eases to a stop, or back up to speed (not while the mouse is on a picture)
+          spread(row);
         }
         set.querySelectorAll('.shot').forEach(function (b) { b.setAttribute('aria-pressed', 'false'); });
         belt.addEventListener('click', function (e) {
@@ -1408,7 +1427,7 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
           row.speed = 0; if (!row.on) row.aim = 0;
           draw(row);
         });
-        belt.addEventListener('focusout', function () { if (!row.on) row.aim = 1; });
+        belt.addEventListener('focusout', function () { if (!row.on && !row.hov) row.aim = 1; });
         view.addEventListener('scroll', function () { view.scrollLeft = 0; });
       });
       if (reduce || !rows.length) return;
@@ -1426,7 +1445,7 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
       function addCopy(row) {
         var c = row.set.cloneNode(true);
         c.setAttribute('aria-hidden', 'true');
-        c.querySelectorAll('.shot').forEach(function (b) { b.tabIndex = -1; b.classList.remove('on', 'hov'); b.setAttribute('aria-pressed', 'false'); });
+        c.querySelectorAll('.shot').forEach(function (b) { b.tabIndex = -1; b.classList.remove('on', 'hov', 'pl', 'pr'); b.setAttribute('aria-pressed', 'false'); });
         row.track.appendChild(c);
       }
       function draw(row) {
