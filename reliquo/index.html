@@ -16,7 +16,7 @@
     // 2. Your booking page (Calendly, Cal.com, etc.). Every "Book a free call" button uses it.
     booking: "https://example.com/book-a-free-call",
 
-    // 3. The email shown in the footer (placeholder for now).
+    // 3. Your email (placeholder for now): shown in the contact section and footer, and where contact notes are sent.
     email: "hello@reliquo.ca"
   };
 </script>
@@ -305,12 +305,13 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
 /* What we automate: black band with three rows of pictures that slide across on their own */
 .band.dark { background: var(--black); color: var(--cream); --barn: var(--cream); --ink: #C3CAC7; --rule: rgba(242, 244, 243, 0.18); }
 .band.dark :focus-visible { outline-color: var(--cream); }
-.belts { display: grid; gap: clamp(30px, 3.4vw, 48px); margin-top: clamp(44px, 5vw, 72px); --shot: clamp(220px, 20vw, 300px); --gap: clamp(14px, 1.5vw, 20px); }
-.belt { display: grid; gap: 14px; }
-.belt-name { display: flex; align-items: baseline; gap: 14px; font: 600 0.84rem/1.2 var(--sans); letter-spacing: 0.08em; text-transform: uppercase; color: var(--cream); }
-.belt-name span { color: var(--ink); font-variant-numeric: tabular-nums; }
-.belt-view {   /* full width of the screen; the pictures fade in and out at the edges */
-  overflow: hidden; padding-block: 14px;
+.band.dark .lead { font-size: clamp(1.3rem, 1.9vw, 1.75rem); line-height: 1.45; max-width: 30ch; }   /* bigger, same weight */
+.belts { display: grid; gap: clamp(12px, 1.6vw, 24px); margin-top: clamp(40px, 4.6vw, 64px); --shot: clamp(220px, 20vw, 300px); --gap: clamp(14px, 1.5vw, 20px); --zoom: 1.22; }
+.belt { display: grid; gap: 4px; }
+.belt-name { display: flex; align-items: center; gap: 12px; font: 600 0.84rem/1.2 var(--sans); letter-spacing: 0.08em; text-transform: uppercase; color: var(--cream); }
+.star { width: 1.5em; height: 1.5em; flex: none; color: var(--sky); }
+.belt-view {   /* full width of the screen; the pictures fade in and out at the edges, with room above and below for one to grow */
+  overflow: hidden; padding-block: 34px;
   -webkit-mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
           mask-image: linear-gradient(90deg, transparent, #000 5%, #000 95%, transparent);
 }
@@ -318,24 +319,83 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
 .belt-track { will-change: transform; }
 .belt-set { list-style: none; margin: 0; padding: 0; flex: none; }
 .shot {
-  position: relative; display: block; width: var(--shot); aspect-ratio: 4 / 3; padding: 0; border: 0; border-radius: 10px;
+  position: relative; z-index: 0; display: block; width: var(--shot); aspect-ratio: 4 / 3; padding: 0; border: 0; border-radius: 10px;
   background: var(--white); overflow: hidden; cursor: pointer;
   transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.2, 1), box-shadow 0.35s ease;
 }
 .shot img { display: block; width: 100%; height: 100%; object-fit: cover; }
 .shot .ph { position: absolute; left: 14px; bottom: 12px; font: 500 0.8rem/1 var(--sans); color: #A3ABA8; }
-.shot.on { transform: translateY(-4px) scale(1.03); box-shadow: 0 0 0 3px var(--sky); }   /* the picture you clicked: its row stops */
+/* the picture under the mouse grows so it's easier to see, with the light blue ring; the one you clicked stays big and its row stops */
+.shot.hov, .shot.on { z-index: 2; transform: scale(var(--zoom)); box-shadow: 0 0 0 3px var(--sky), 0 22px 40px -18px rgba(0, 0, 0, 0.7); }
 .band.dark .shot:focus-visible { outline: 3px solid var(--sky); outline-offset: 3px; }
 @media (prefers-reduced-motion: reduce) {   /* no sliding: the rows scroll sideways by hand instead */
   .belt-view { overflow-x: auto; -webkit-mask-image: none; mask-image: none; padding-inline: var(--side); }
   .shot { transition: none; }
+  .shot.on, .shot:hover { transform: none; box-shadow: 0 0 0 3px var(--sky); }
 }
 @media (max-width: 860px) { .belts { --shot: clamp(200px, 62vw, 280px); } }
+
+/* Contact: a tilted moving strip, a big headline that rises letter by letter, and a note card */
+.contact { position: relative; z-index: 1; background: var(--cream); color: var(--ink); padding-bottom: clamp(80px, 9vw, 140px); }
+.ticker-wrap { overflow-x: clip; margin-top: -24px; padding-block: 10px; }   /* the strip overlaps the black section a little */
+.ticker {
+  width: 108%; margin-left: -4%; transform: rotate(-2deg);
+  background: var(--sky); color: var(--black); padding-block: 15px; overflow: hidden; white-space: nowrap;
+  font: 700 clamp(0.9rem, 1.25vw, 1.1rem)/1 var(--sans); letter-spacing: 0.1em; text-transform: uppercase;
+  box-shadow: 0 14px 28px -18px rgba(10, 9, 8, 0.6);
+}
+.ticker-track { display: inline-flex; animation: tick 34s linear infinite; }
+.ticker-track span { display: inline-flex; align-items: center; gap: 24px; padding-right: 24px; }
+.ticker .star { width: 1.25em; height: 1.25em; color: var(--white); }
+@keyframes tick { to { transform: translateX(-50%); } }
+.contact-grid { display: grid; grid-template-columns: minmax(0, 6fr) minmax(0, 5fr); gap: 48px clamp(32px, 6vw, 96px); align-items: center; padding-top: clamp(64px, 8vw, 116px); }
+.contact-side { display: grid; gap: 24px; justify-items: start; }
+.talk { font-size: clamp(3.6rem, 9vw, 8.4rem); line-height: 1; letter-spacing: -0.045em; font-weight: 700; color: var(--black); overflow: hidden; padding-block: 0.06em 0.12em; margin-block: -0.06em -0.12em; }
+.talk .w { display: inline-block; white-space: nowrap; }
+.talk .ch { display: inline-block; transition: transform 0.75s cubic-bezier(0.34, 1.45, 0.64, 1) calc(var(--i) * 45ms); }
+.talk .dot { color: var(--sky); }
+:root.anim .talk:not(.up) .ch { transform: translateY(115%); }   /* each letter waits below the line, then jumps up into place */
+.contact-line { margin: 0; font-size: clamp(1.2rem, 1.6vw, 1.45rem); line-height: 1.45; max-width: 30ch; color: var(--ink); }
+.contact-ways { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 26px; }
+.contact .box { height: 48px; padding: 0 26px; border-radius: 999px; background: var(--sky); color: var(--barn); box-shadow: none; }
+.contact .box:hover { background: var(--sky-hover); }
+.mail-copy { display: inline-flex; align-items: center; gap: 10px; padding: 6px 0; border: 0; background: none; cursor: pointer; color: var(--black); font: 500 1.05rem/1.2 var(--sans); }
+.mail-copy .em { border-bottom: 2px solid var(--sky); padding-bottom: 2px; }
+.mail-copy .tip { font: 600 0.72rem/1 var(--sans); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink); }
+.note {   /* the form: a white card that drops in tilted and straightens when you use it */
+  display: grid; gap: 1.15em; padding: clamp(24px, 3vw, 40px); border-radius: 20px; background: var(--white);
+  font-size: 1rem; transform: rotate(-1.5deg);
+  box-shadow: 0 34px 60px -34px rgba(10, 9, 8, 0.45), 0 2px 8px -2px rgba(10, 9, 8, 0.12);
+  transition: transform 0.9s cubic-bezier(0.34, 1.3, 0.64, 1);
+}
+:root.anim .note:not(.up) { transform: translateY(46px) rotate(5deg); }
+.note:hover, .note:focus-within { transform: rotate(0deg); }
+.note h3 { font-family: var(--display); font-size: 1.55em; font-weight: 700; letter-spacing: -0.02em; color: var(--black); }
+.note label { display: grid; gap: 0.3em; font: 600 0.74em/1.2 var(--sans); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink); }
+.note input, .note textarea {
+  width: 100%; padding: 0.45em 0; border: 0; border-bottom: 2px solid var(--rule); border-radius: 0; background: transparent;
+  font: 400 1.4em/1.4 var(--sans); letter-spacing: 0; text-transform: none; color: var(--black); outline: none;
+  transition: border-color 0.2s ease;
+}
+.note textarea { resize: vertical; min-height: 4.4em; }
+.note input:focus, .note textarea:focus { border-bottom-color: var(--sky); }
+.note .send { justify-self: start; height: 3em; padding: 0 1.7em; font-size: 0.9em; }
+.plane { width: 1.35em; height: 1.35em; flex: none; transition: transform 0.2s ease; }
+.send:hover .plane { transform: translate(3px, -3px); }
+.note.sent .plane { animation: fly 0.9s cubic-bezier(0.5, 0, 0.75, 0) forwards; }   /* the paper plane flies off when you send */
+@keyframes fly { 30% { transform: translate(-4px, 4px) rotate(8deg); } 100% { transform: translate(180px, -120px) rotate(-18deg) scale(0.5); opacity: 0; } }
+.note-status { margin: 0; min-height: 1.4em; font-size: 0.95em; line-height: 1.45; color: var(--ink); }
+.note-status a { color: var(--black); font-weight: 600; text-decoration-color: var(--sky); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+@media (max-width: 860px) {
+  .contact-grid { grid-template-columns: minmax(0, 1fr); }
+  .note { transform: rotate(-1deg); }
+}
+@media (prefers-reduced-motion: reduce) { .ticker-track { animation: none; } .talk .ch, .note, .rise { transition: none; } }
 
 /* Footer */
 .foot :focus-visible { outline-color: var(--cream); }
 .foot { background: var(--black); color: var(--cream); font-size: 0.95rem; }
-.foot .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 36px; padding-block: 22px 32px; border-top: 1px solid rgba(251, 243, 234, 0.22); }
+.foot .wrap { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 36px; padding-block: 34px 38px; }
 .foot .logo { font-size: 1.35rem; min-height: 40px; margin-right: auto; }
 .mail { display: inline-flex; align-items: center; gap: 12px; flex-wrap: wrap; }
 .mail span { user-select: all; overflow-wrap: anywhere; }
@@ -397,17 +457,19 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
 .lb-close:focus-visible { outline-color: var(--cream); }
 .lb-lock { overflow: hidden; }
 
-/* ---------- Motion: the hero fades in from a slight blur; sentences below pop up a touch as they scroll in ---------- */
+/* ---------- Motion: the hero fades in from a slight blur and jumps up; below the hero, text and pictures rise into place ---------- */
 @keyframes blurIn { from { opacity: 0; filter: blur(6px); } to { opacity: 1; filter: none; } }
-@keyframes popUp { from { transform: translateY(10px); } to { transform: none; } }
-.anim:not(.anim-go) :is(.nav :is(.logo, .links a, .box), .hero :is(h1, .story, .cta, .arrow, .video),
-  main section:not(.hero) :is(h2, h3, p), .foot .wrap > *) { opacity: 0; }   /* a moment, until the layout is ready */
-/* text and buttons first... */
-.anim-go:not(.anim-done) :is(.nav :is(.logo, .links a, .box), .hero :is(h1, .story, .cta), .pre) { animation: blurIn 1s ease-out backwards; }
+@keyframes blurUp { from { opacity: 0; filter: blur(6px); transform: translateY(30px); } to { opacity: 1; filter: none; transform: none; } }
+.anim:not(.anim-go) :is(.nav :is(.logo, .links a, .box), .hero :is(.main, .arrow, .video)) { opacity: 0; }   /* a moment, until the layout is ready */
+/* text and buttons first (the hero's headline, small text and button jump up 30px together as they clear)... */
+.anim-go:not(.anim-done) .nav :is(.logo, .links a, .box) { animation: blurIn 1s ease-out backwards; }
+.anim-go:not(.anim-done) .hero .main { animation: blurUp 1s cubic-bezier(0.2, 0.7, 0.25, 1) backwards; }
 /* ...then the video card, with the arrow pointing at it, 0.8s later. ("anim-done" stops these once they have played,
    so nothing replays when the video goes back into its spot.) */
 .anim-go:not(.anim-done) .hero :is(.video, .arrow) { animation: blurIn 1s ease-out 0.8s backwards; }
-:root.anim .pop { animation: popUp 0.6s cubic-bezier(0.2, 0.7, 0.3, 1) backwards; }
+/* below the hero: no fade; each piece sits 15px low and rises into place once you've scrolled a bit past it */
+.rise { transition: transform 0.8s cubic-bezier(0.2, 0.75, 0.25, 1); }
+:root.anim .rise:not(.up) { transform: translateY(15px); }
 @media (prefers-reduced-motion: reduce) { .lb-backdrop, .lb-close, .lightbox .frame { transition: none; } }
 
 /* ---------- DRAFT TOOLS: font picker + drag to move and resize. Delete this block, the tools markup and the tools script before launch. ---------- */
@@ -481,6 +543,7 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
   <a class="logo" href="#top">Reliquo</a>
   <nav class="links" aria-label="Main">
     <a href="#automate">What we automate</a>
+    <a href="#contact">Contact</a>
   </nav>
   <a class="box" href="https://example.com/book-a-free-call" data-book>Book a free call</a>
 </header>
@@ -542,49 +605,69 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
   <!-- WHAT WE AUTOMATE: three rows of pictures that slide across on their own, one row per helper.
        Each white block is a spot for a picture. To add one, put it inside the block's button, e.g.
        <button class="shot" type="button" aria-label="Instant replies, picture 1"><img src="reply-1.jpg" alt="..."></button>
-       (and delete the <span class="ph"> placeholder). Clicking a picture stops its row; clicking it again starts it. -->
+       (and delete the <span class="ph"> placeholder). Hovering a picture makes it bigger; clicking it stops its row; clicking it again starts it. -->
   <section class="band dark" id="automate" aria-labelledby="automate-title">
     <div class="wrap head">
-      <h2 id="automate-title">What we automate</h2>
-      <p class="lead">Small helpers that work in the background while you're on the job.</p>
+      <h2 id="automate-title" class="rise">What we automate</h2>
+      <p class="lead rise">Small helpers that work in the background while you're on the job.</p>
     </div>
     <div class="belts">
       <div class="belt" data-way="left">
-        <h3 class="wrap belt-name"><span>01</span>Instant replies</h3>
-        <div class="belt-view">
+        <h3 class="wrap belt-name rise"><svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z" fill="currentColor"/></svg>Instant replies</h3>
+        <div class="belt-view rise">
           <ul class="belt-set">
             <li><button class="shot" type="button" aria-label="Instant replies, picture 1"><span class="ph">Picture 1</span></button></li>
             <li><button class="shot" type="button" aria-label="Instant replies, picture 2"><span class="ph">Picture 2</span></button></li>
             <li><button class="shot" type="button" aria-label="Instant replies, picture 3"><span class="ph">Picture 3</span></button></li>
-            <li><button class="shot" type="button" aria-label="Instant replies, picture 4"><span class="ph">Picture 4</span></button></li>
-            <li><button class="shot" type="button" aria-label="Instant replies, picture 5"><span class="ph">Picture 5</span></button></li>
           </ul>
         </div>
       </div>
       <div class="belt" data-way="right">
-        <h3 class="wrap belt-name"><span>02</span>Quote follow-ups</h3>
-        <div class="belt-view">
+        <h3 class="wrap belt-name rise"><svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z" fill="currentColor"/></svg>Quote follow-ups</h3>
+        <div class="belt-view rise">
           <ul class="belt-set">
             <li><button class="shot" type="button" aria-label="Quote follow-ups, picture 1"><span class="ph">Picture 1</span></button></li>
             <li><button class="shot" type="button" aria-label="Quote follow-ups, picture 2"><span class="ph">Picture 2</span></button></li>
             <li><button class="shot" type="button" aria-label="Quote follow-ups, picture 3"><span class="ph">Picture 3</span></button></li>
-            <li><button class="shot" type="button" aria-label="Quote follow-ups, picture 4"><span class="ph">Picture 4</span></button></li>
-            <li><button class="shot" type="button" aria-label="Quote follow-ups, picture 5"><span class="ph">Picture 5</span></button></li>
           </ul>
         </div>
       </div>
       <div class="belt" data-way="left">
-        <h3 class="wrap belt-name"><span>03</span>Review requests</h3>
-        <div class="belt-view">
+        <h3 class="wrap belt-name rise"><svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z" fill="currentColor"/></svg>Review requests</h3>
+        <div class="belt-view rise">
           <ul class="belt-set">
             <li><button class="shot" type="button" aria-label="Review requests, picture 1"><span class="ph">Picture 1</span></button></li>
             <li><button class="shot" type="button" aria-label="Review requests, picture 2"><span class="ph">Picture 2</span></button></li>
             <li><button class="shot" type="button" aria-label="Review requests, picture 3"><span class="ph">Picture 3</span></button></li>
-            <li><button class="shot" type="button" aria-label="Review requests, picture 4"><span class="ph">Picture 4</span></button></li>
-            <li><button class="shot" type="button" aria-label="Review requests, picture 5"><span class="ph">Picture 5</span></button></li>
           </ul>
         </div>
       </div>
+    </div>
+  </section>
+  <!-- CONTACT: a moving strip, a big "Let's talk." that rises letter by letter, ways to reach you, and a note-card form.
+       The form opens the visitor's email app with their message addressed to RELIQUO.email (at the top of this file).
+       To have messages arrive without the email app, connect the form to a form service later. -->
+  <section class="contact" id="contact" aria-labelledby="contact-title">
+    <div class="ticker-wrap" aria-hidden="true">
+      <div class="ticker"><div class="ticker-track"><span>Let's talk<svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z" fill="currentColor"/></svg></span><span>Free 15-minute call<svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z" fill="currentColor"/></svg></span><span>By phone or video<svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z" fill="currentColor"/></svg></span><span>No pressure<svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z" fill="currentColor"/></svg></span><span>Winnipeg, Manitoba<svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z" fill="currentColor"/></svg></span><span>Let's talk<svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z" fill="currentColor"/></svg></span><span>Free 15-minute call<svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z" fill="currentColor"/></svg></span><span>By phone or video<svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z" fill="currentColor"/></svg></span><span>No pressure<svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z" fill="currentColor"/></svg></span><span>Winnipeg, Manitoba<svg class="star" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.6l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z" fill="currentColor"/></svg></span></div></div>
+    </div>
+    <div class="wrap contact-grid">
+      <div class="contact-side">
+        <h2 class="talk reveal" id="contact-title" data-letters>Let's talk.</h2>
+        <p class="contact-line rise">Tell us what eats up your week. We'll show you what can run on its own.</p>
+        <div class="contact-ways rise">
+          <a class="box" href="https://example.com/book-a-free-call" data-book>Book a free call</a>
+          <button class="mail-copy" type="button" data-copy-email><span class="em" data-email>hello@reliquo.ca</span><span class="tip">Copy</span></button>
+        </div>
+      </div>
+      <form class="note reveal" id="contact-form" novalidate>
+        <h3>Send a quick note</h3>
+        <label>Your name<input name="name" type="text" autocomplete="name" required></label>
+        <label>Phone or email<input name="reach" type="text" autocomplete="email" required></label>
+        <label>What would you like off your plate?<textarea name="msg" rows="3"></textarea></label>
+        <button class="box send" type="submit"><span>Send it</span><svg class="plane" viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 11.2 21 3.4l-5.6 17.2-4.2-6.7-8.7-2.7Zm8.7 2.7 9.8-10.5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" stroke-linecap="round"/></svg></button>
+        <p class="note-status" role="status"></p>
+      </form>
     </div>
   </section>
 </main>
@@ -655,6 +738,39 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
       try { navigator.clipboard.writeText(emailEl.textContent).then(function () { copyStatus.textContent = 'Copied.'; }, selectIt); }
       catch (e) { selectIt(); }
     });
+
+    /* ---------- Contact: the email from the settings, a copy button, and the note card ----------
+       Sending the note opens the visitor's email app with the message written out and addressed to RELIQUO.email. */
+    document.querySelectorAll('[data-email]').forEach(function (el) { if (cfg.email) el.textContent = cfg.email; });
+    document.querySelectorAll('[data-copy-email]').forEach(function (btn) {
+      var tip = btn.querySelector('.tip'), em = btn.querySelector('.em'), t = 0;
+      function say(text) { tip.textContent = text; clearTimeout(t); t = setTimeout(function () { tip.textContent = 'Copy'; }, 2400); }
+      btn.addEventListener('click', function () {
+        function selectIt() { var r = document.createRange(); r.selectNodeContents(em); var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r); say('Selected: press Ctrl+C'); }
+        try { navigator.clipboard.writeText(em.textContent).then(function () { say('Copied'); }, selectIt); } catch (e) { selectIt(); }
+      });
+    });
+    var note = document.getElementById('contact-form');
+    if (note) {
+      var noteStatus = note.querySelector('.note-status');
+      note.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var name = note.elements.name.value.trim(), reach = note.elements.reach.value.trim(), msg = note.elements.msg.value.trim();
+        if (!name || !reach) {
+          noteStatus.textContent = 'Add your name and a phone number or email, so we can get back to you.';
+          (name ? note.elements.reach : note.elements.name).focus();
+          return;
+        }
+        var url = 'mailto:' + (cfg.email || 'hello@reliquo.ca')
+          + '?subject=' + encodeURIComponent('Reliquo: a note from ' + name)
+          + '&body=' + encodeURIComponent('Name: ' + name + '\nPhone or email: ' + reach + '\n\n' + (msg || ''));
+        note.classList.remove('sent'); void note.offsetWidth; note.classList.add('sent');   // the paper plane flies off
+        noteStatus.textContent = 'Your note is ready in your email app. Just press send. ';
+        var again = document.createElement('a'); again.href = url; again.textContent = "Didn't open? Click here.";
+        noteStatus.appendChild(again);
+        setTimeout(function () { window.location.href = url; }, 700);
+      });
+    }
 
     /* ---------- Video: plays on its own with the sound off, with a big button to turn the sound on.
        "Watch how Reliquo fixes that" when a file is set, "Book a free call" until then ---------- */
@@ -813,6 +929,10 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
       extras.push({ key: 'name' + (i + 1), label: 'Row ' + (i + 1) + ' name', els: [b.querySelector('.belt-name')], kind: 'text', min: 9, max: 48 });
       extras.push({ key: 'pics' + (i + 1), label: 'Row ' + (i + 1) + ' pictures', els: [b.querySelector('.belt-view')], kind: 'pics', min: 100, max: 760 });
     });
+    extras.push({ key: 'ticker', label: 'Moving strip', els: [document.querySelector('.ticker')], kind: 'text', whole: true, min: 9, max: 40 });
+    extras.push({ key: 'ctitle', label: 'Contact title', els: [document.querySelector('.talk')], kind: 'text', min: 28, max: 260 });
+    extras.push({ key: 'cline', label: 'Contact text', els: [document.querySelector('.contact-line')], kind: 'text', min: 11, max: 44 });
+    extras.push({ key: 'card', label: 'Contact card', els: [document.querySelector('.note')], kind: 'text', whole: true, min: 10, max: 30 });
     extras.push({ key: 'flogo', label: 'Footer logo', els: [document.querySelector('.foot .logo')], kind: 'text', min: 12, max: 70 });
     extras.push({ key: 'ftext', label: 'Footer text', els: Array.prototype.slice.call(document.querySelectorAll('.foot .wrap > span')), kind: 'text', min: 9, max: 32 });
     extras = extras.filter(function (x) { return x.els.length && x.els[0]; });
@@ -864,12 +984,15 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
     }
     function placeArrow() {
       var a = sizes[screenKind()].arrow || {};
-      var H = hero.getBoundingClientRect(), from = box(fixLine), V = video.getBoundingClientRect();
+      // while the hero text is still jumping in, measure where it will land (its jump is still in its position)
+      var jump = new DOMMatrix(getComputedStyle(main).transform).m42 || 0;
+      function landed(r) { return { left: r.left, right: r.right, width: r.width, height: r.height, top: r.top - jump, bottom: r.bottom - jump }; }
+      var H = hero.getBoundingClientRect(), from = landed(box(fixLine)), V = video.getBoundingClientRect();
       var sx = from.right + 16, sy = from.top + from.height / 2, ex, ey, bend = 0.08;
       if (window.innerWidth > 860) { ex = V.left - 16; ey = clamp(V.top + 40, sy - 40, V.bottom - 50); }   // across to the card
       else {
         ey = V.top - 12; bend = -0.2;                                // on phones: out to the right, past the button, then down to the card
-        var btn = shown(ctaBoxes).getBoundingClientRect();
+        var btn = landed(shown(ctaBoxes).getBoundingClientRect());
         ex = V.left + V.width * 0.7;
         if (curveHits(sx, sy, ex, ey, bend, btn)) ex = V.left + V.width * 0.82;
         if (curveHits(sx, sy, ex, ey, bend, btn)) {                  // a wide button is in the way: start under the button instead
@@ -1017,7 +1140,7 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
         var pics = x.kind === 'pics';
         function firstShot() { return x.els[0].querySelector('.shot'); }
         targets.push({ key: x.key, label: x.label, el: function () { return x.els[0]; },
-          rect: function () { return inkRect(x.els, x.kind === 'text'); },
+          rect: function () { return inkRect(x.els, x.kind === 'text' && !x.whole); },
           ref: pics ? function () { return firstShot().getBoundingClientRect(); } : null,   // resizing pictures follows one picture, not the whole row
           size: pics ? function () { return firstShot().offsetWidth; } : function () { return fontPx(x.els[0]); },
           min: x.min, max: x.max });
@@ -1197,10 +1320,10 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
     [300, 1000, 2500].forEach(function (t) { setTimeout(layout, t); });   // in case a font arrives late
 
     // start the hero fade once the fonts and the layout are ready, so the fade is actually seen
-    var fadeOnScreen = function () {};      // set below: text already on screen fades in with the hero
+    var riseOnScreen = function () {};      // set below: pieces already on screen rise as the page loads in
     function heroIn() {
       if (root.classList.contains('anim-go')) return;
-      layout(); fadeOnScreen(); root.classList.add('anim-go');
+      layout(); riseOnScreen(); root.classList.add('anim-go');
       setTimeout(function () { root.classList.add('anim-done'); }, 2000);   // the fades have played: they never replay
     }
     // wait for the fonts and the page load (a reload partway down jumps to its spot on load), but never more than 0.9s
@@ -1208,28 +1331,41 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
     var fontsReady = document.fonts && document.fonts.ready ? document.fonts.ready : Promise.resolve();
     Promise.race([Promise.all([fontsReady, loaded]), new Promise(function (r) { setTimeout(r, 900); })]).then(function () { requestAnimationFrame(heroIn); });
 
-    /* ---------- Sentences pop up a touch as they scroll into view (only while scrolling down) ---------- */
+    /* ---------- Below the hero: text and pictures rise into place (no fade) once you've scrolled a bit past them.
+       They sink back down only after leaving through the bottom of the screen, so they rise again next time. ---------- */
     (function () {
-      if (!root.classList.contains('anim') || !('IntersectionObserver' in window)) return;
-      var picked = document.querySelectorAll('main section:not(.hero) :is(h2, h3, p), .foot .wrap > *, .hero :is(h1, .story, .cta)');
-      var all = new Set(picked), els = [];
-      picked.forEach(function (el) { for (var a = el.parentElement; a; a = a.parentElement) if (all.has(a)) return; els.push(el); });
-      fadeOnScreen = function () {                   // on screen when the fade starts (also after a reload partway down): fades in with the hero
-        els.forEach(function (el) {
-          var r = el.getBoundingClientRect();
-          if (r.top < window.innerHeight && r.bottom > 0) { el.dataset.popped = '1'; if (!el.closest('.hero')) el.classList.add('pre'); }
+      // the big "Let's talk." is split into letters, so each one can jump up on its own
+      document.querySelectorAll('[data-letters]').forEach(function (el) {
+        var text = el.textContent, i = 0;
+        el.setAttribute('aria-label', text);
+        el.textContent = '';
+        text.split(' ').forEach(function (word, wi) {
+          if (wi) el.appendChild(document.createTextNode(' '));
+          var w = document.createElement('span'); w.className = 'w'; w.setAttribute('aria-hidden', 'true');
+          word.split('').forEach(function (c) {
+            var ch = document.createElement('span'); ch.className = 'ch' + (c === '.' ? ' dot' : ''); ch.textContent = c;
+            ch.style.setProperty('--i', i++); w.appendChild(ch);
+          });
+          el.appendChild(w);
         });
-      };
-      var io = new IntersectionObserver(function (entries) {
-        if (!root.classList.contains('anim-go')) return;   // nothing pops before the page has faded in
+      });
+      var els = document.querySelectorAll('.rise, .reveal');
+      if (!root.classList.contains('anim') || !('IntersectionObserver' in window)) { els.forEach(function (el) { el.classList.add('up'); }); return; }
+      var LINE = 0.78;                                // rises once its top passes 78% of the way down the screen
+      var go = new IntersectionObserver(function (entries) {
+        if (!root.classList.contains('anim-go')) return;   // nothing moves before the page has loaded in
+        entries.forEach(function (en) { if (en.isIntersecting) en.target.classList.add('up'); });
+      }, { rootMargin: '0px 0px -' + Math.round((1 - LINE) * 100) + '% 0px' });
+      var back = new IntersectionObserver(function (entries) {
         entries.forEach(function (en) {
-          var el = en.target, fromBelow = en.boundingClientRect.top > (en.rootBounds ? en.rootBounds.top : 0);
-          if (en.isIntersecting) {
-            if (fromBelow && !el.dataset.popped) { el.classList.remove('pop'); void el.offsetWidth; el.classList.add('pop'); el.dataset.popped = '1'; }
-          } else if (fromBelow) { delete el.dataset.popped; el.classList.remove('pop'); }   // back below the screen: it can pop again
+          var below = en.boundingClientRect.top >= (en.rootBounds ? en.rootBounds.bottom : window.innerHeight);
+          if (!en.isIntersecting && below) en.target.classList.remove('up');
         });
-      }, { rootMargin: '0px 0px 40px 0px' });   // starts just before a sentence comes into view
-      els.forEach(function (el) { io.observe(el); });
+      });
+      els.forEach(function (el) { go.observe(el); back.observe(el); });
+      riseOnScreen = function () {                     // when the page loads in (also after a reload partway down)
+        els.forEach(function (el) { if (el.getBoundingClientRect().top < window.innerHeight * LINE) el.classList.add('up'); });
+      };
     })();
 
     /* ---------- Picture rows: each slides across on its own and loops forever.
@@ -1237,10 +1373,19 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
     (function () {
       var SPEED = 40;                                 // pixels per second
       var rows = [], running = false, last = 0, seen = true;
+      var ptr = null;                                 // where the mouse is: the picture under it grows, even while the row slides past
+      function hover(row, shot) {
+        if (row.hov === shot) return;
+        if (row.hov) row.hov.classList.remove('hov');
+        row.hov = shot || null;
+        if (shot) shot.classList.add('hov');
+      }
       document.querySelectorAll('.belt').forEach(function (belt) {
         var view = belt.querySelector('.belt-view'), set = view.querySelector('.belt-set');
-        var row = { view: view, set: set, track: null, way: belt.dataset.way === 'right' ? -1 : 1, x: 0, speed: 1, aim: 1, period: 0, on: null };
+        var row = { view: view, set: set, track: null, way: belt.dataset.way === 'right' ? -1 : 1, x: 0, speed: 1, aim: 1, period: 0, on: null, hov: null };
         rows.push(row);
+        view.addEventListener('pointermove', function (e) { if (e.pointerType === 'mouse') ptr = { x: e.clientX, y: e.clientY, row: row }; });
+        view.addEventListener('pointerleave', function () { if (ptr && ptr.row === row) ptr = null; hover(row, null); });
         function pick(shot) {
           if (row.on) { row.on.classList.remove('on'); row.on.setAttribute('aria-pressed', 'false'); }
           row.on = shot;
@@ -1281,7 +1426,7 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
       function addCopy(row) {
         var c = row.set.cloneNode(true);
         c.setAttribute('aria-hidden', 'true');
-        c.querySelectorAll('.shot').forEach(function (b) { b.tabIndex = -1; b.classList.remove('on'); b.setAttribute('aria-pressed', 'false'); });
+        c.querySelectorAll('.shot').forEach(function (b) { b.tabIndex = -1; b.classList.remove('on', 'hov'); b.setAttribute('aria-pressed', 'false'); });
         row.track.appendChild(c);
       }
       function draw(row) {
@@ -1296,6 +1441,10 @@ h3 { margin: 0; font-family: var(--display); font-weight: 600; font-size: 1.6rem
           row.x += row.way * SPEED * row.speed * dt;
           draw(row);
         });
+        if (ptr) {
+          var under = document.elementFromPoint(ptr.x, ptr.y);
+          hover(ptr.row, under && ptr.row.view.contains(under) ? under.closest('.shot') : null);
+        }
         if (seen) requestAnimationFrame(tick); else { running = false; last = 0; }
       }
       function go() { if (!running && seen) { running = true; requestAnimationFrame(tick); } }
